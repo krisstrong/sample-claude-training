@@ -1,28 +1,35 @@
-# Claude Skills
+# Sample Claude Training
+### Technology Services · Acadia University
 
-Custom skills for [Claude Code](https://claude.ai/code) — reusable instructions that extend Claude's behavior for specific tasks.
+A hands-on training series for Technology Services staff on using Claude AI in everyday IT work. The series covers every major interface and use case — from writing scripts and analyzing logs to reviewing code and producing on-brand documentation.
 
-## What are skills?
+---
 
-Skills are markdown files stored in `.claude/skills/`. Claude Code loads them automatically and uses them when the task matches the skill's purpose.
+## Getting Started
 
-## Skills in this repo
+Open **Module 1** in any browser to begin. Each module links to the next, so you can work through the series in order or jump to any topic that's relevant to your work. No installation required — all files are self-contained HTML.
 
-### `file-naming` — Final Deliverable Naming Convention
+For instructor-led sessions, use the included PowerPoint presentation which covers all ten modules in a single 23-slide deck.
 
-Enforces a consistent naming format for all final deliverable files:
+---
 
-```
-DEPARTMENT OR COMPANY - SHORT NAME OF FILE - YYYYMMDD
-```
+## Modules
 
-**Examples:**
-- `Marketing - Q2 Campaign Brief - 20260628.pdf`
-- `Acme Corp - Executive Summary - 20260628.docx`
-- `Finance - Budget Forecast FY27 - 20260628.xlsx`
+1. **Introduction to Claude** — What Claude is, how it fits into IT work, the three interfaces, and key concepts
+2. **Desktop App, Terminal & VS Code** — Getting started with each interface and when to use which
+3. **Using Skills** — How to invoke, install, and create reusable `/skill-name` workflows
+4. **Permissions & Configuration** — The permission model, `settings.json`, hooks, and the `/config` command
+5. **Git with Claude** — Commit messages, code review, merge conflict resolution, and built-in safety guardrails
+6. **Script Writing** — Generating and debugging PowerShell, Bash, and Python scripts
+7. **Data Management** — Analyzing CSV/JSON, writing SQL, parsing logs, and anonymizing data
+8. **Documentation** — README files, runbooks, API docs, and user-facing help articles
+9. **Common IT Workflows** — Troubleshooting, security review, ticket triage, and drafting communications
+10. **Best Practices & Security** — Data privacy (FERPA, PIPEDA), what not to share, and reviewing Claude's output
 
-**Trigger:** Ask Claude to name, save, rename, or finalize a file and it will apply this convention automatically — prompting you for any missing details before confirming the new name.
+---
 
-## Usage
+## About This Series
 
-Copy the `.claude/skills/` folder into your project root, or into `~/.claude/skills/` to make the skills available globally across all projects.
+All materials are styled with the Acadia University house theme and follow the Technology Services file-naming standard. The HTML modules are self-contained with no external dependencies beyond Google Fonts.
+
+Produced by Technology Services · Acadia University · 2026
