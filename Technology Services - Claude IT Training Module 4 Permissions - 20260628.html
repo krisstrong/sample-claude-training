@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 — Permissions and Configuration | Claude IT Training | Technology Services</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia University</div>
+    <h1>Claude AI Training — Technology Services</h1>
+    <span class="module-badge">Module 4 of 10</span>
+  </div>
+</header>
+
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a> &rsaquo; Module 4 — Permissions and Configuration
+  </div>
+</nav>
+
+<main class="container">
+
+  <h1>Module 4 — Permissions and Configuration</h1>
+  <p class="caption">Estimated reading time: 25 minutes &nbsp;&middot;&nbsp; Skill level: Intermediate</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ol>
+      <li><a href="#section-41">How Claude's Permission Model Works</a></li>
+      <li><a href="#section-42">The Settings Files</a></li>
+      <li><a href="#section-43">Common Permissions for IT Work</a></li>
+      <li><a href="#section-44">The /config Command</a></li>
+      <li><a href="#section-45">The update-config Skill</a></li>
+      <li><a href="#section-46">Hooks &mdash; Automated Behaviors</a></li>
+      <li><a href="#section-47">Permission Best Practices</a></li>
+    </ol>
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-41">4.1 How Claude's Permission Model Works</h2>
+
+  <p>Claude Code is a capable agent that can execute real shell commands, edit files, make network requests, and interact with external services. This power comes with responsibility: before Claude takes any action that could affect your system, it checks whether that action is permitted.</p>
+
+  <p>The permission system exists to protect you from three categories of risk:</p>
+
+  <div class="grid-3">
+    <div class="icon-card">
+      <div class="icon">&#9888;&#65039;</div>
+      <h3>Accidental Changes</h3>
+      <p>Preventing unintended modifications to files, databases, or configurations you did not mean to change.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128272;</div>
+      <h3>Scope Creep</h3>
+      <p>Keeping Claude's actions within the boundaries appropriate for the current task and project.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128737;&#65039;</div>
+      <h3>Security Boundaries</h3>
+      <p>Ensuring sensitive operations like destructive commands or network calls require explicit approval.</p>
+    </div>
+  </div>
+
+  <h3>Three Decision States</h3>
+  <p>Every action Claude might take falls into one of three categories, configured in <code>settings.json</code>:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>State</th>
+        <th>Behaviour</th>
+        <th>Configured by</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge--green">Allow</span></td>
+        <td>Claude performs this action without asking. You have pre-approved it.</td>
+        <td>The <code>permissions.allow</code> list in <code>settings.json</code></td>
+      </tr>
+      <tr>
+        <td><span class="badge badge--blue">Ask</span></td>
+        <td>Claude pauses and displays a permission prompt in the chat before proceeding. You approve or deny in the moment.</td>
+        <td>Default for any action not listed in allow or deny</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge--red">Deny</span></td>
+        <td>Claude refuses to perform this action regardless of what you ask. It is permanently blocked.</td>
+        <td>The <code>permissions.deny</code> list in <code>settings.json</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Mental Model</div>
+    Think of the permission model as a three-tier filter. Claude checks the <strong>deny</strong> list first — if the action matches a deny rule, it stops immediately. Then it checks the <strong>allow</strong> list — if there is a match, it proceeds without prompting. If neither list matches, it <strong>asks</strong> you in the moment. Deny always wins over allow.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-42">4.2 The Settings Files</h2>
+
+  <p>Claude Code reads its configuration from JSON files stored in predictable locations. Understanding the settings hierarchy lets you set global defaults once and override them per-project or per-person as needed.</p>
+
+  <h3>The Settings Hierarchy</h3>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>&#127758; Global Settings</h3>
+      <p><strong>Path:</strong><br><code>C:\Users\USERNAME\<br>.claude\settings.json</code></p>
+      <p>Applies to every project you open on this machine. Use for permissions and preferences that should always be available regardless of project context.</p>
+    </div>
+    <div class="card">
+      <h3>&#128193; Project Settings</h3>
+      <p><strong>Path:</strong><br><code>[Project Root]\<br>.claude\settings.json</code></p>
+      <p>Applies only when working in this project. Overrides global settings. Committed to git — shared with the whole team.</p>
+    </div>
+    <div class="card">
+      <h3>&#128100; Local Overrides</h3>
+      <p><strong>Path:</strong><br><code>[Project Root]\<br>.claude\settings.local.json</code></p>
+      <p>Personal overrides for this project. Same format as <code>settings.json</code>, but <strong>not committed to git</strong>. Used for your own preferences that should not affect teammates.</p>
+    </div>
+  </div>
+
+  <p>Settings are merged in order from lowest to highest priority: <strong>global &rarr; project &rarr; local</strong>. If the same permission appears in both global and project settings, the project setting wins.</p>
+
+  <h3>The settings.json Structure</h3>
+  <p>The file is standard JSON. The two primary keys are <code>permissions</code> and <code>hooks</code>. Permission patterns use a <code>Tool(glob)</code> syntax — the tool name followed by a glob pattern that matches the tool's input.</p>
+
+  <div class="code-header">
+    <span>.claude/settings.json</span>
+    <span>JSON</span>
+  </div>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(python *)",
+      "Read(*)",
+      "Write(*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(format *)",
+      "Bash(diskpart *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint --silent"
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+
+  <h3>Understanding Permission Patterns</h3>
+  <p>Permission patterns follow the format <code>ToolName(pattern)</code>. The <code>*</code> wildcard matches any characters. Here are the common tools you will configure permissions for:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tool Name</th>
+        <th>What It Controls</th>
+        <th>Example Pattern</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Bash</code></td>
+        <td>Shell command execution (PowerShell, cmd, bash)</td>
+        <td><code>Bash(git *)</code></td>
+      </tr>
+      <tr>
+        <td><code>Read</code></td>
+        <td>Reading file contents from disk</td>
+        <td><code>Read(*)</code></td>
+      </tr>
+      <tr>
+        <td><code>Write</code></td>
+        <td>Writing or creating files on disk</td>
+        <td><code>Write(src/*)</code></td>
+      </tr>
+      <tr>
+        <td><code>Edit</code></td>
+        <td>Making targeted edits to existing files</td>
+        <td><code>Edit(*)</code></td>
+      </tr>
+      <tr>
+        <td><code>Glob</code></td>
+        <td>File pattern matching and directory listing</td>
+        <td><code>Glob(*)</code></td>
+      </tr>
+      <tr>
+        <td><code>WebFetch</code></td>
+        <td>Fetching content from URLs</td>
+        <td><code>WebFetch(https://acadia.ca/*)</code></td>
+      </tr>
+      <tr>
+        <td><code>mcp__*</code></td>
+        <td>MCP server tool calls (email, calendar, Drive, etc.)</td>
+        <td><code>mcp__gmail__send_email(*)</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <h2 id="section-43">4.3 Common Permissions for IT Work</h2>
+
+  <p>The following table covers the permissions Technology Services staff most commonly configure. Risk levels reflect the potential impact if Claude uses the permission unexpectedly or incorrectly.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Permission</th>
+        <th>Pattern</th>
+        <th>Use Case</th>
+        <th>Risk</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Read any file</td>
+        <td><code>Read(*)</code></td>
+        <td>Claude reads your code, configs, and documentation. Nearly always safe to allow globally.</td>
+        <td><span class="badge badge--green">Low</span></td>
+      </tr>
+      <tr>
+        <td>Write any file</td>
+        <td><code>Write(*)</code></td>
+        <td>Claude creates or overwrites files anywhere on the filesystem. Consider restricting to <code>Write(src/*)</code> for sensitive projects.</td>
+        <td><span class="badge badge--blue">Medium</span></td>
+      </tr>
+      <tr>
+        <td>Edit any file</td>
+        <td><code>Edit(*)</code></td>
+        <td>Claude makes targeted string replacements in existing files. Safer than Write since it only modifies specified sections.</td>
+        <td><span class="badge badge--green">Low</span></td>
+      </tr>
+      <tr>
+        <td>All git commands</td>
+        <td><code>Bash(git *)</code></td>
+        <td>Commits, branching, history inspection, push/pull. Claude cannot bypass git hooks, so your existing safeguards still apply.</td>
+        <td><span class="badge badge--green">Low&ndash;Medium</span></td>
+      </tr>
+      <tr>
+        <td>PowerShell</td>
+        <td><code>Bash(powershell *)</code></td>
+        <td>Windows administration, automation scripts, registry access. Review carefully — PowerShell can reach nearly anything on Windows.</td>
+        <td><span class="badge badge--blue">Medium</span></td>
+      </tr>
+      <tr>
+        <td>npm commands</td>
+        <td><code>Bash(npm *)</code></td>
+        <td>Installing packages, running build scripts, running tests. Low risk if you trust your <code>package.json</code> scripts.</td>
+        <td><span class="badge badge--green">Low</span></td>
+      </tr>
+      <tr>
+        <td>Python scripts</td>
+        <td><code>Bash(python *)</code></td>
+        <td>Running data processing, automation, and utility scripts. Risk depends entirely on what the scripts do.</td>
+        <td><span class="badge badge--blue">Medium</span></td>
+      </tr>
+      <tr>
+        <td>Directory listing</td>
+        <td><code>Bash(ls *)</code>, <code>Bash(dir *)</code></td>
+        <td>Browsing files and directory structures. Read-only and essentially harmless.</td>
+        <td><span class="badge badge--green">Low</span></td>
+      </tr>
+      <tr>
+        <td>Network diagnostics</td>
+        <td><code>Bash(ping *)</code>, <code>Bash(nslookup *)</code>, <code>Bash(tracert *)</code></td>
+        <td>Diagnosing connectivity, resolving DNS, tracing routes. Useful for network troubleshooting workflows.</td>
+        <td><span class="badge badge--green">Low</span></td>
+      </tr>
+      <tr>
+        <td>curl / Invoke-WebRequest</td>
+        <td><code>Bash(curl *)</code>, <code>Bash(Invoke-WebRequest *)</code></td>
+        <td>Making HTTP requests to APIs or downloading resources. Can exfiltrate data if used carelessly — allow only for specific hostnames if possible.</td>
+        <td><span class="badge badge--blue">Medium</span></td>
+      </tr>
+      <tr>
+        <td>Docker commands</td>
+        <td><code>Bash(docker *)</code></td>
+        <td>Container management for development environments. Docker has elevated privileges on the host — use with awareness.</td>
+        <td><span class="badge badge--blue">Medium</span></td>
+      </tr>
+      <tr>
+        <td>File deletion</td>
+        <td><code>Bash(Remove-Item *)</code></td>
+        <td>Deleting files. Restrict to <code>Bash(Remove-Item *.tmp)</code> or similar rather than allowing broad deletion.</td>
+        <td><span class="badge badge--red">High</span></td>
+      </tr>
+      <tr>
+        <td>Recursive deletion</td>
+        <td><em>Never allow</em></td>
+        <td>Commands like <code>rm -rf</code> or <code>Remove-Item -Recurse -Force</code> applied broadly. Place in the <code>deny</code> list rather than leaving on ask.</td>
+        <td><span class="badge badge--red">High</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Pattern Scoping Tip</div>
+    Patterns support glob wildcards. Instead of allowing all Python scripts with <code>Bash(python *)</code>, you can narrow the scope to scripts in your project: <code>Bash(python scripts/*)</code>. This limits Claude to running scripts only from a known safe location.
+  </div>
+
+  <h3>Recommended Starter Configuration for Technology Services</h3>
+  <p>The following <code>settings.json</code> provides a balanced starting point for most Technology Services workloads — read access everywhere, write access with prompts for non-source files, standard dev-tool commands pre-approved, and destructive commands blocked:</p>
+
+  <div class="code-header">
+    <span>Recommended starter: C:\Users\USERNAME\.claude\settings.json</span>
+    <span>JSON</span>
+  </div>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(node *)",
+      "Bash(python *)",
+      "Bash(ls *)",
+      "Bash(dir *)",
+      "Bash(Get-ChildItem *)",
+      "Bash(ping *)",
+      "Bash(nslookup *)",
+      "Bash(tracert *)",
+      "Bash(ipconfig *)",
+      "Bash(netstat *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(Remove-Item -Recurse -Force C:\\Windows*)",
+      "Bash(Remove-Item -Recurse -Force C:\\Users*)",
+      "Bash(format *)",
+      "Bash(diskpart *)",
+      "Bash(reg delete *)"
+    ]
+  }
+}
+</code></pre>
+
+  <!-- ============================================================ -->
+  <h2 id="section-44">4.4 The /config Command</h2>
+
+  <p>The <code>/config</code> command opens an interactive settings panel inside the Claude chat interface. It is the quickest way to adjust permissions on the fly without manually editing JSON files.</p>
+
+  <h3>What /config Can Do</h3>
+  <ul>
+    <li>View all current permission allow and deny lists</li>
+    <li>Toggle individual permissions on or off</li>
+    <li>Choose whether a change applies globally or to the current project only</li>
+    <li>View and modify hook configurations</li>
+    <li>Set Claude's model preference and verbosity level</li>
+  </ul>
+
+  <h3>Live Example — Using /config</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <span class="claude-ui-dot" style="background:#FF5F57;"></span>
+      <span class="claude-ui-dot" style="background:#FFBD2E;"></span>
+      <span class="claude-ui-dot" style="background:#28C840;"></span>
+      <span class="claude-ui-title">Claude Code &mdash; helpdesk-portal</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">/config</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <strong>Claude Code Settings</strong><br><br>
+          <strong>Current Permissions &mdash; Project Scope (.claude/settings.json)</strong><br><br>
+          <strong>Allowed:</strong><br>
+          &nbsp;&nbsp;&#10003;&nbsp; <code>Read(*)</code><br>
+          &nbsp;&nbsp;&#10003;&nbsp; <code>Edit(*)</code><br>
+          &nbsp;&nbsp;&#10003;&nbsp; <code>Bash(git *)</code><br>
+          &nbsp;&nbsp;&#10003;&nbsp; <code>Bash(npm *)</code><br><br>
+          <strong>Denied:</strong><br>
+          &nbsp;&nbsp;&#10007;&nbsp; <code>Bash(rm -rf *)</code><br><br>
+          <strong>What would you like to change?</strong> You can say things like:<br>
+          &bull; "Allow PowerShell commands"<br>
+          &bull; "Deny all curl commands"<br>
+          &bull; "Move the git permission to global settings"<br>
+          &bull; "Show me the hook configuration"
+        </div>
+      </div>
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Allow PowerShell commands for this project only</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          I'll add <code>Bash(powershell *)</code> to the allow list in <code>.claude/settings.json</code> (project scope only).<br><br>
+          <strong>Change preview:</strong><br>
+          <code>"allow": [ ..., "Bash(powershell *)" ]</code><br><br>
+          Shall I apply this change?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Scope Awareness</div>
+    Always confirm which settings file Claude is targeting before accepting a configuration change. "Project scope" writes to <code>.claude/settings.json</code> (committed to git, shared with team). "Global scope" writes to <code>C:\Users\USERNAME\.claude\settings.json</code> (personal, applies everywhere). "Local scope" writes to <code>.claude/settings.local.json</code> (personal, not committed).
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-45">4.5 The update-config Skill</h2>
+
+  <p>The <code>/update-config</code> skill is a specialized skill that handles settings and configuration tasks via natural language. While <code>/config</code> provides an interactive panel, <code>/update-config</code> is better suited for complex configuration tasks — especially setting up hooks, which require precise JSON structure.</p>
+
+  <h3>When to Use /update-config vs /config</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Use <code>/config</code> when&hellip;</th>
+        <th>Use <code>/update-config</code> when&hellip;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>You want to quickly toggle a permission on or off</td>
+        <td>You want to describe a behaviour in plain English and let Claude figure out the correct JSON</td>
+      </tr>
+      <tr>
+        <td>You are browsing current settings</td>
+        <td>You are setting up hooks (complex JSON structure)</td>
+      </tr>
+      <tr>
+        <td>You need a simple allow/deny change</td>
+        <td>You want to move permissions between global/project/local scope</td>
+      </tr>
+      <tr>
+        <td>You know the exact permission pattern</td>
+        <td>You know the behaviour you want but not the exact pattern</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Example /update-config Requests</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <span class="claude-ui-dot" style="background:#FF5F57;"></span>
+      <span class="claude-ui-dot" style="background:#FFBD2E;"></span>
+      <span class="claude-ui-dot" style="background:#28C840;"></span>
+      <span class="claude-ui-title">Claude Code &mdash; helpdesk-portal</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">/update-config Set up a hook that runs our linting script whenever Claude writes a file, and another that shows a desktop notification when Claude finishes a long task.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          I'll set up two hooks in your project's <code>.claude/settings.json</code>:<br><br>
+          <strong>1. PostToolUse hook on Write</strong> &mdash; runs <code>npm run lint --silent</code> after every file write<br>
+          <strong>2. Stop hook</strong> &mdash; sends a Windows toast notification using <code>msg * "Claude has finished"</code><br><br>
+          Here is the configuration I will add to <code>.claude/settings.json</code>:<br><br>
+          <code style="display:block;white-space:pre;background:#2C3348;color:#CDD5E0;padding:12px;border-radius:6px;font-size:0.82rem;margin-top:8px;">
+"hooks": {
+  "PostToolUse": [{
+    "matcher": "Write",
+    "hooks": [{
+      "type": "command",
+      "command": "npm run lint --silent"
+    }]
+  }],
+  "Stop": [{
+    "hooks": [{
+      "type": "command",
+      "command": "msg * \"Claude has finished\""
+    }]
+  }]
+}</code><br>
+          Shall I apply this change?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Natural Language Request Examples</h3>
+
+  <ul>
+    <li><code>/update-config</code> <strong>Allow all npm commands</strong> &mdash; adds <code>Bash(npm *)</code> to the allow list</li>
+    <li><code>/update-config</code> <strong>Block all file writes outside the src directory</strong> &mdash; adds a deny rule scoped to <code>Write</code> outside <code>src/*</code></li>
+    <li><code>/update-config</code> <strong>Move the git permission to global settings</strong> &mdash; removes from project and adds to <code>~/.claude/settings.json</code></li>
+    <li><code>/update-config</code> <strong>Run tests before Claude makes any commit</strong> &mdash; sets up a <code>PreToolUse</code> hook on <code>Bash(git commit *)</code></li>
+    <li><code>/update-config</code> <strong>Show me all my current hooks</strong> &mdash; reads and displays the hooks configuration in a readable format</li>
+  </ul>
+
+  <!-- ============================================================ -->
+  <h2 id="section-46">4.6 Hooks &mdash; Automated Behaviors</h2>
+
+  <p>Hooks are shell commands that run automatically at specific points in Claude's workflow — before a tool runs, after a tool completes, or when Claude's response ends. They are the mechanism for implementing "from now on, whenever Claude does X, also do Y" behaviours.</p>
+
+  <h3>Hook Event Types</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>When It Fires</th>
+        <th>Common Uses</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>PreToolUse</code></td>
+        <td>Before Claude runs any tool call</td>
+        <td>Run tests before committing, log tool usage, validate that a command is safe before executing it</td>
+      </tr>
+      <tr>
+        <td><code>PostToolUse</code></td>
+        <td>After a tool call completes successfully</td>
+        <td>Run linting after file writes, sync files after edits, send audit log entries after bash commands</td>
+      </tr>
+      <tr>
+        <td><code>Stop</code></td>
+        <td>When Claude finishes generating its response</td>
+        <td>Desktop notifications, logging, summarising what Claude did, triggering downstream processes</td>
+      </tr>
+      <tr>
+        <td><code>Notification</code></td>
+        <td>When Claude generates an internal notification</td>
+        <td>Routing Claude's internal status updates to external systems</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Hook Structure</h3>
+  <p>Each hook has a <strong>matcher</strong> (which tool or event to watch) and one or more <strong>hook definitions</strong> (commands to run). The <code>matcher</code> accepts the same tool name patterns used in permissions.</p>
+
+  <div class="code-header">
+    <span>.claude/settings.json &mdash; Full hooks example</span>
+    <span>JSON</span>
+  </div>
+<pre><code>{
+  "permissions": {
+    "allow": ["Read(*)", "Edit(*)", "Write(*)", "Bash(git *)"]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo Running: $CLAUDE_TOOL_INPUT"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint --silent"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -Command \"[System.Windows.Forms.MessageBox]::Show('Claude has finished')\""
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+
+  <h3>Available Hook Environment Variables</h3>
+  <p>Claude passes context to hook commands through environment variables you can use in your hook scripts:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Contains</th>
+        <th>Example Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>$CLAUDE_TOOL_NAME</code></td>
+        <td>The name of the tool that fired the hook</td>
+        <td><code>Write</code></td>
+      </tr>
+      <tr>
+        <td><code>$CLAUDE_TOOL_INPUT</code></td>
+        <td>The full input passed to the tool (JSON string)</td>
+        <td><code>{"file_path": "src/app.js"}</code></td>
+      </tr>
+      <tr>
+        <td><code>$CLAUDE_TOOL_OUTPUT</code></td>
+        <td>The tool's result (PostToolUse only)</td>
+        <td><code>File written successfully</code></td>
+      </tr>
+      <tr>
+        <td><code>$CLAUDE_PROJECT_DIR</code></td>
+        <td>The current project root directory</td>
+        <td><code>C:\Projects\helpdesk-portal</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Practical Hook Recipes for Technology Services</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>&#128195; Auto-lint on File Write</h3>
+      <p>Runs your project's linter automatically every time Claude edits source code. Catches style violations before they reach git.</p>
+<pre style="margin-top:8px;"><code>"PostToolUse": [{
+  "matcher": "Write",
+  "hooks": [{
+    "type": "command",
+    "command": "npm run lint --silent"
+  }]
+}]</code></pre>
+    </div>
+    <div class="card">
+      <h3>&#9989; Run Tests Before Commit</h3>
+      <p>Ensures the test suite passes before Claude is allowed to commit. If tests fail, the commit is blocked and Claude is informed.</p>
+<pre style="margin-top:8px;"><code>"PreToolUse": [{
+  "matcher": "Bash(git commit*)",
+  "hooks": [{
+    "type": "command",
+    "command": "npm test -- --run"
+  }]
+}]</code></pre>
+    </div>
+    <div class="card">
+      <h3>&#128276; Desktop Notification</h3>
+      <p>Pops a Windows notification when Claude finishes a long task, so you can step away and come back when done.</p>
+<pre style="margin-top:8px;"><code>"Stop": [{
+  "hooks": [{
+    "type": "command",
+    "command": "powershell -Command Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Claude finished')"
+  }]
+}]</code></pre>
+    </div>
+    <div class="card">
+      <h3>&#128221; Audit Log</h3>
+      <p>Appends a timestamped entry to a log file every time Claude executes a shell command. Useful for IT compliance and change tracking.</p>
+<pre style="margin-top:8px;"><code>"PostToolUse": [{
+  "matcher": "Bash",
+  "hooks": [{
+    "type": "command",
+    "command": "echo %date% %time% $CLAUDE_TOOL_INPUT >> C:\\Logs\\claude-audit.log"
+  }]
+}]</code></pre>
+    </div>
+  </div>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Hook Failures</div>
+    If a hook command exits with a non-zero exit code, Claude treats this as a signal that the preceding action should be blocked or reviewed. Design hook commands carefully: a failing linter should exit non-zero to block the commit, but a failing notification script should exit zero so it does not interrupt Claude's workflow unexpectedly.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-47">4.7 Permission Best Practices</h2>
+
+  <h3>The Principle of Least Privilege</h3>
+  <p>Grant Claude the minimum permissions it needs to accomplish the task at hand. It is much easier to add a permission when you need it than to audit the damage from an overly permissive configuration.</p>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Never Allow These Globally</div>
+    The following patterns are dangerous enough that they should <em>never</em> appear in your global <code>allow</code> list, and should explicitly appear in your <code>deny</code> list as a safety net:<br><br>
+    <code>Bash(rm -rf *)</code> &nbsp;&mdash;&nbsp; recursive deletion on Unix/WSL<br>
+    <code>Bash(Remove-Item -Recurse -Force *)</code> &nbsp;&mdash;&nbsp; recursive deletion on Windows<br>
+    <code>Bash(format *)</code> &nbsp;&mdash;&nbsp; disk formatting<br>
+    <code>Bash(diskpart *)</code> &nbsp;&mdash;&nbsp; partition management<br>
+    <code>Bash(reg delete *)</code> &nbsp;&mdash;&nbsp; registry deletion<br><br>
+    Even if you trust Claude, placing these in the deny list protects you against prompt injection attacks — malicious content in a file Claude reads that attempts to trick Claude into executing destructive commands.
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Use Project-Level Settings for Project-Specific Permissions</div>
+    If a permission is only needed in one project (e.g., <code>Bash(docker *)</code> for your containerised app), put it in that project's <code>.claude/settings.json</code>, not your global settings. This limits the blast radius of any misconfiguration and makes your global settings clean and minimal.
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Start Deny-by-Default, Add as Needed</div>
+    The safest approach is to start with a minimal global <code>settings.json</code> (just <code>Read(*)</code> and <code>Edit(*)</code> allowed) and add permissions as Claude prompts you for them during real work. After a week of normal usage, you will have a permission set that reflects exactly what you actually need — with no unnecessary attack surface.
+  </div>
+
+  <h3>Personal vs. Shared Permissions</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Shared team permissions go in <code>.claude/settings.json</code></strong> (committed to git). These are permissions every team member needs to work on the project — git commands, npm scripts, the project's specific test runner.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Your personal permissions go in <code>.claude/settings.local.json</code></strong> (not committed). Add this file to <code>.gitignore</code> to ensure your personal overrides never accidentally affect teammates.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Machine-wide defaults go in your global <code>~/.claude/settings.json</code>.</strong> Keep this file minimal — it applies to every project, including future ones you haven't created yet.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Adding settings.local.json to .gitignore</h3>
+
+  <div class="code-header">
+    <span>.gitignore</span>
+    <span>gitignore</span>
+  </div>
+<pre><code># Claude Code personal settings — do not commit
+.claude/settings.local.json
+</code></pre>
+
+  <h3>Regular Permission Audits</h3>
+  <p>Permissions accumulate over time. Schedule a brief quarterly review of your <code>settings.json</code> files to remove permissions that are no longer needed and verify that deny lists still cover the critical cases.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Audit Question</th>
+        <th>Action if "No"</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Do I still use every command in my allow list regularly?</td>
+        <td>Remove unused entries</td>
+      </tr>
+      <tr>
+        <td>Is my deny list still protecting against destructive commands?</td>
+        <td>Add any missing dangerous patterns</td>
+      </tr>
+      <tr>
+        <td>Are project-specific permissions in the project file (not global)?</td>
+        <td>Move permissions to the correct scope</td>
+      </tr>
+      <tr>
+        <td>Is <code>settings.local.json</code> in <code>.gitignore</code> for all projects?</td>
+        <td>Add the gitignore entry</td>
+      </tr>
+      <tr>
+        <td>Do my hooks still do what I intended when I wrote them?</td>
+        <td>Test each hook manually and update as needed</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Next Steps</div>
+    With permissions and configuration under your belt, Module 5 covers working with <strong>Git</strong> through Claude — how to use Claude to help with commits, branches, pull requests, code reviews, and managing your repository history effectively.
+  </div>
+
+</main>
+
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 3 Skills - 20260628.html">&#8592; Previous: Module 3 &mdash; Skills</a>
+    <span>Module 4 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 5 Git - 20260628.html">Next: Module 5 &mdash; Git &#8594;</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span><strong>Technology Services</strong> &middot; Acadia University</span>
+    <span>Claude IT Training &middot; 2026 &middot; Module 4 of 10</span>
+  </div>
+</footer>
+
+</body>
+</html>

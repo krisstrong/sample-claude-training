@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 9: Common IT Workflows — Claude IT Training | Acadia Technology Services</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+</style>
+</head>
+<body>
+
+<!-- Site Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia</div>
+    <h1>Technology Services — Claude AI Training</h1>
+    <span class="module-badge">Module 9 of 10</span>
+  </div>
+</header>
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a>
+    &rsaquo; Module 9: Common IT Workflows
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container">
+
+  <h1>Common IT Workflows</h1>
+  <p style="color:var(--color-muted);font-size:0.95rem;margin-bottom:var(--space-6);">Module 9 of 10 &mdash; Technology Services Claude AI Training Series &mdash; June 28, 2026</p>
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <h4>In This Module</h4>
+    <ol>
+      <li><a href="#s91">Claude in the IT Day-to-Day</a></li>
+      <li><a href="#s92">Troubleshooting Assistance</a></li>
+      <li><a href="#s93">Log Analysis</a></li>
+      <li><a href="#s94">Security Reviews with /security-review</a></li>
+      <li><a href="#s95">Ticket and Issue Summarization</a></li>
+      <li><a href="#s96">Writing Professional IT Communications</a></li>
+      <li><a href="#s97">Change Management and Planning</a></li>
+      <li><a href="#s98">Writing User Help Articles</a></li>
+    </ol>
+  </div>
+
+  <!-- 9.1 -->
+  <h2 id="s91">9.1 Claude in the IT Day-to-Day</h2>
+
+  <p>Technology Services staff handle a high volume of mixed work every day — troubleshooting tickets, writing documentation, reviewing code, drafting communications, and managing change. Claude does not replace the judgement that makes IT professionals effective. It handles the mechanical, time-consuming work so that judgement can be applied where it matters most.</p>
+
+  <p>Think of Claude as a skilled assistant who is always available, never loses patience with repetitive tasks, and can instantly recall documentation for thousands of technologies — but who always needs a human to review the result before it becomes real. Claude can search for the right command, draft the explanation, and interpret the error message. You decide whether the output is correct and safe to act on.</p>
+
+  <div class="grid-3">
+    <div class="icon-card">
+      <div class="icon">&#128269;</div>
+      <h3>Find the Command</h3>
+      <p style="font-size:0.88rem;">Ask Claude for the exact PowerShell or bash syntax you need instead of searching Stack Overflow for ten minutes.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128203;</div>
+      <h3>Draft the Communication</h3>
+      <p style="font-size:0.88rem;">Maintenance windows, vendor escalations, plain-English explanations — Claude drafts in seconds.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128202;</div>
+      <h3>Read the Logs</h3>
+      <p style="font-size:0.88rem;">Paste a wall of log output and ask Claude what went wrong. It reads faster than any human.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128736;</div>
+      <h3>Interpret Errors</h3>
+      <p style="font-size:0.88rem;">Unknown error code? Paste it and let Claude explain the cause and likely fix.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128221;</div>
+      <h3>Summarize Tickets</h3>
+      <p style="font-size:0.88rem;">Long email chains and incident threads distilled into a clear, structured summary.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128196;</div>
+      <h3>Plan the Change</h3>
+      <p style="font-size:0.88rem;">Change requests, pre-flight checklists, and rollback procedures written systematically.</p>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Guiding Principle</div>
+    Claude handles the mechanical work. You provide the context, judgement, and authorization. The combination is far more effective than either alone.
+  </div>
+
+  <!-- 9.2 -->
+  <h2 id="s92">9.2 Troubleshooting Assistance</h2>
+
+  <p>When a user reports an issue, Claude can be a first-line reference before you even pick up the phone. Describe the symptom, the affected system, and any recent changes, and Claude will suggest a structured troubleshooting path — pointing you to the right commands, settings, and logs to check.</p>
+
+  <h3>Example: Network Drive Access After Windows Update</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F56;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#27C93F;"></div>
+      <span class="claude-ui-title">Claude — Troubleshooting Session</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">A user reports they can't connect to network drives after Windows Update KB5034441. What should I check?</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>KB5034441 (January 2024 security update) is known to affect SMB authentication in some environments. Here's a structured troubleshooting path:</p>
+          <p><strong>1. Verify Group Policy Application</strong><br>
+          Run <code>gpresult /r</code> on the affected machine and look for any drive-mapping policies that may now be blocked. Check for errors in the output.</p>
+          <p><strong>2. Check DNS Resolution</strong><br>
+          Run <code>nslookup fileserver.acadiau.ca</code> and confirm it resolves correctly. A DNS failure will look like a network drive issue. Also try <code>ping fileserver.acadiau.ca -4</code>.</p>
+          <p><strong>3. Verify SMB Settings</strong><br>
+          Run <code>Get-SmbClientConfiguration | Select-Object EnableSecuritySignature, RequireSecuritySignature</code> — this update enforces SMB signing more aggressively. If the server doesn't support signing, the connection will fail.</p>
+          <p><strong>4. Test Manual Connection</strong><br>
+          Try <code>net use Z: \\fileserver\share /user:domain\username</code> from a command prompt. The error message returned is more specific than the generic Windows error dialog.</p>
+          <p><strong>5. Check Event Logs</strong><br>
+          Run <code>Get-EventLog -LogName System -Source "srv" -Newest 20</code> on the file server to look for SMB session or authentication errors around the time of failure.</p>
+          <p style="margin-bottom:0;"><strong>Most likely cause:</strong> SMB signing mismatch. KB5034441 changed the default SMB signing behavior. Confirm server-side signing settings match the new client requirements.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The Iterative Troubleshooting Loop</h3>
+
+  <p>Troubleshooting with Claude is an iterative cycle. Start with the symptom, run the suggested diagnostics, and paste the output back for interpretation. Claude adjusts its analysis based on what you find.</p>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Describe the symptom</strong> — include the error message, affected system, OS version, and any recent changes (updates, config changes, new deployments).</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Claude identifies likely causes</strong> — it cross-references the symptom against known issues and suggests diagnostic commands ranked by likelihood.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Run the diagnostics</strong> — execute the suggested commands on the affected system.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Paste the output back</strong> — Claude interprets the results and narrows the diagnosis.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Repeat until resolved</strong> — each round gives Claude more information to work with.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Example: Interpreting netstat Output</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F56;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#27C93F;"></div>
+      <span class="claude-ui-title">Claude — Network Diagnostics</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">I ran <code>netstat -ano</code> on the problematic server. Here's the output: [paste]. Are there any unusual connections I should be concerned about?</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>Looking at the netstat output, a few things stand out worth investigating:</p>
+          <p><strong>Connections I'd flag for review:</strong></p>
+          <ul style="margin-bottom:var(--space-2);">
+            <li>Any <code>ESTABLISHED</code> connections on port 445 (SMB) from unexpected external IP ranges — SMB should only be internal</li>
+            <li>Processes with PID 0 listed as listening — these can indicate kernel-level listeners</li>
+            <li>High volumes of <code>TIME_WAIT</code> states that suggest connection churn or a misbehaving application</li>
+          </ul>
+          <p>To identify the process behind a specific PID, run:<br>
+          <code>Get-Process -Id [PID] | Select-Object Name, Path, StartTime</code></p>
+          <p style="margin-bottom:0;">If you share the actual output, I can identify specific lines that warrant attention.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9.3 -->
+  <h2 id="s93">9.3 Log Analysis</h2>
+
+  <p>Log files are one of the richest sources of diagnostic information in IT — and one of the most time-consuming to read. Claude can process hundreds of log lines in seconds, identify anomalies, correlate events, and summarize findings in plain English.</p>
+
+  <h3>Collecting Logs for Claude</h3>
+
+  <p>The simplest approach is to export log data to a text format and paste it into the conversation. For large logs, extract the relevant time window or most recent entries.</p>
+
+  <div class="code-header">
+    <span>PowerShell — Export Windows Event Log to CSV</span>
+  </div>
+  <pre><code># Export the last 200 Application log events to CSV
+Get-EventLog -LogName Application -Newest 200 |
+  Select-Object TimeGenerated, EntryType, Source, EventID, Message |
+  Export-Csv -Path "$env:DESKTOP\events.csv" -NoTypeInformation
+
+# Then open the CSV, copy the relevant rows, and paste into Claude</code></pre>
+
+  <div class="code-header">
+    <span>PowerShell — Extract System Errors from the Last 24 Hours</span>
+  </div>
+  <pre><code># Get only Error and Warning entries from the past day
+$since = (Get-Date).AddHours(-24)
+Get-EventLog -LogName System -EntryType Error,Warning -After $since |
+  Select-Object TimeGenerated, EntryType, Source, EventID, Message |
+  Format-List | Out-String | Set-Clipboard
+
+# Output is now in your clipboard — paste directly into Claude</code></pre>
+
+  <h3>Asking Claude to Analyze Logs</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F56;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#27C93F;"></div>
+      <span class="claude-ui-title">Claude — IIS Log Analysis</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Here are the last 100 lines of our IIS log from the Acadia portal server. Are there any 4xx or 5xx errors? What's causing them?<br><br>[paste of log lines]</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>From the IIS log you shared, I can see the following HTTP error patterns:</p>
+          <p><strong>404 Not Found — 23 occurrences</strong><br>
+          All requests for <code>/wp-admin/</code> and <code>/wp-login.php</code> — these are automated WordPress scanning attempts hitting a non-WordPress site. Expected noise; no action required unless you want to add a firewall rule to block the source IPs.</p>
+          <p><strong>500 Internal Server Error — 4 occurrences</strong><br>
+          All four errors hit <code>/api/v2/reports/generate</code> at 14:23, 14:31, 14:44, and 14:52. The same request pattern repeating at irregular intervals suggests a background job or scheduled task that's failing. Check the application event log on the server around those timestamps for the underlying exception.</p>
+          <p><strong>503 Service Unavailable — 1 occurrence</strong><br>
+          Single instance at 14:19, before the 500 errors started. A brief application pool crash followed by recovery would explain this sequence.</p>
+          <p style="margin-bottom:0;"><strong>Recommendation:</strong> Focus on the application event log around 14:19 for the root cause. The 500 errors are likely a retry loop failing after the initial pool crash.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Firewall Log Analysis</h3>
+
+  <div class="code-header">
+    <span>PowerShell — Extract Windows Firewall Drop Events</span>
+  </div>
+  <pre><code># Get firewall drop events from the Security log
+Get-WinEvent -FilterHashtable @{
+  LogName   = 'Security'
+  Id        = 5152  # Filtering Platform Packet Drop
+  StartTime = (Get-Date).AddHours(-6)
+} | Select-Object TimeCreated,
+  @{N='SourceIP';E={$_.Properties[3].Value}},
+  @{N='DestPort';E={$_.Properties[11].Value}},
+  @{N='Protocol';E={$_.Properties[7].Value}} |
+  Group-Object SourceIP |
+  Sort-Object Count -Descending |
+  Select-Object -First 20 |
+  Format-Table -AutoSize</code></pre>
+
+  <p>Paste the output to Claude with the prompt: <em>"Identify any IP addresses making unusually high connection attempts. Flag anything that looks like a port scan or brute-force pattern."</em></p>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Before You Share Logs</div>
+    Review logs for sensitive data before pasting. Remove or redact real IP addresses of internal hosts, usernames, and any data that could identify individuals. See Module 10 for anonymization techniques.
+  </div>
+
+  <!-- 9.4 -->
+  <h2 id="s94">9.4 Security Reviews with /security-review</h2>
+
+  <p>The <code>/security-review</code> skill audits code changes against common vulnerability patterns before they reach production. Any time you write or modify a script, configuration file, or application code, running a security review is a fast and low-effort safety check.</p>
+
+  <h3>How to Run a Security Review</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Make your code changes on a branch</strong> — <code>/security-review</code> works by examining the current diff, so your changes need to be staged or committed.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Type <code>/security-review</code> in Claude Code</strong> — no additional arguments needed for a standard review. Claude reads the diff automatically.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Claude analyzes the diff</strong> — it checks against OWASP Top 10 vulnerability categories, looks for exposed credentials, injection risks, insecure patterns, and missing validation.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Review the findings report</strong> — findings are prioritized as Critical, High, Medium, or Low. Each finding includes the file, line, the issue, and a recommended fix.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Address Critical and High findings before merging</strong> — Medium and Low findings should be documented for follow-up. Never merge code with unaddressed Critical findings.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>What /security-review Catches</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="color:var(--color-accent);">Common High-Severity Findings</h3>
+      <ul>
+        <li><strong>Hardcoded credentials</strong> — passwords, API keys, or connection strings written directly in code</li>
+        <li><strong>SQL injection</strong> — string concatenation used to build SQL queries instead of parameterized statements</li>
+        <li><strong>Command injection</strong> — unvalidated user input passed to shell commands or <code>Invoke-Expression</code></li>
+        <li><strong>Missing authentication</strong> — endpoints or functions that skip authorization checks</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--color-warning);">Common Medium-Severity Findings</h3>
+      <ul>
+        <li><strong>Insecure file permissions</strong> — scripts that create files world-writable or leave sensitive files readable by all users</li>
+        <li><strong>Sensitive data in logs</strong> — logging statements that output passwords, tokens, or PII</li>
+        <li><strong>Weak cryptography</strong> — use of MD5, SHA1, or DES where stronger algorithms should be used</li>
+        <li><strong>Missing input validation</strong> — functions that accept user input without length, type, or format checks</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Best Practice</div>
+    Run <code>/security-review</code> on every script you write with Claude's help before deploying it to production. Claude-generated code is generally good but not infallible — the security review adds a second pass with different prompting specifically focused on vulnerabilities.
+  </div>
+
+  <!-- 9.5 -->
+  <h2 id="s95">9.5 Ticket and Issue Summarization</h2>
+
+  <p>IT ticketing systems accumulate dense text — long email threads, verbose incident notes, multi-day comment chains. Claude converts this raw material into structured, actionable summaries in seconds.</p>
+
+  <h3>Effective Summarization Prompts</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Goal</th>
+        <th>Prompt to Use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Incident summary</td>
+        <td>"Here is a thread of 15 emails about a network outage. Summarize what happened, what the root cause was, and what the resolution was."</td>
+      </tr>
+      <tr>
+        <td>Formal post-mortem</td>
+        <td>"Convert this incident description into a formal post-mortem document with sections for: incident summary, timeline, root cause, contributing factors, and action items."</td>
+      </tr>
+      <tr>
+        <td>Vendor escalation</td>
+        <td>"I need to escalate this ticket to the vendor. Write a professional summary of the issue with all the technical details from these notes, including dates, error codes, and steps already taken: [paste]"</td>
+      </tr>
+      <tr>
+        <td>Ticket categorization</td>
+        <td>"Categorize these 50 helpdesk tickets into themes. What are the top 3 issue types and how many tickets fall into each?"</td>
+      </tr>
+      <tr>
+        <td>Status update</td>
+        <td>"Based on these investigation notes, write a brief status update for the affected department explaining what we know and what we're doing next."</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Example: Incident Summarization</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F56;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#27C93F;"></div>
+      <span class="claude-ui-title">Claude — Incident Summary</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Here is the full email thread from the file server outage last Tuesday. Summarize what happened, the root cause, and the resolution. Format it as a post-mortem I can put in the ticketing system.<br><br>[paste of email thread]</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p><strong>Incident Post-Mortem — File Server Outage</strong><br>
+          <em>Incident Date: [Date from thread] &nbsp;|&nbsp; Duration: [X hours] &nbsp;|&nbsp; Severity: High</em></p>
+          <p><strong>Summary</strong><br>
+          The primary file server (FS01) became unavailable to all users from approximately [start time] to [end time], preventing access to mapped network drives university-wide.</p>
+          <p><strong>Root Cause</strong><br>
+          A storage volume ran out of free space due to a backup job that had been writing to the wrong target path for three days. The volume reaching 100% capacity caused the SMB service to stop accepting new connections.</p>
+          <p><strong>Resolution</strong><br>
+          The erroneous backup files were moved to the correct destination volume, freeing 180 GB of space. SMB service was restarted, and drive mappings reconnected automatically for all users within 15 minutes.</p>
+          <p><strong>Action Items</strong></p>
+          <ul style="margin-bottom:0;">
+            <li>Configure disk-space alerts on all file server volumes (threshold: 80%)</li>
+            <li>Audit backup job targets to confirm correct paths are configured</li>
+            <li>Document runbook for SMB service restart procedure</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9.6 -->
+  <h2 id="s96">9.6 Writing Professional IT Communications</h2>
+
+  <p>Drafting communications is often the slowest part of IT work — not because the content is difficult, but because finding the right words for mixed audiences takes time. Claude produces professional first drafts for maintenance windows, vendor escalations, and plain-English explanations far faster than writing from scratch.</p>
+
+  <h3>Communication Prompts That Work Well</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Maintenance Window Announcement</h3>
+      <p style="font-size:0.9rem;color:var(--color-muted);">Tell Claude the system, the window, and the impact:</p>
+      <p style="font-size:0.88rem;font-style:italic;background:var(--color-surface-alt);padding:var(--space-3);border-radius:var(--radius-sm);">"Write a maintenance window announcement for users. We're patching the file server this Saturday from 11 PM to 2 AM. Network drives will be unavailable during this window. The audience is all Acadia staff."</p>
+    </div>
+    <div class="card">
+      <h3>Vendor Escalation</h3>
+      <p style="font-size:0.9rem;color:var(--color-muted);">Give Claude the issue history and let it structure the case:</p>
+      <p style="font-size:0.88rem;font-style:italic;background:var(--color-surface-alt);padding:var(--space-3);border-radius:var(--radius-sm);">"Draft a professional email to [vendor] about a recurring issue with their SSO integration that's been impacting faculty login for three weeks. I've attached our case notes."</p>
+    </div>
+    <div class="card">
+      <h3>Non-Technical Explanations</h3>
+      <p style="font-size:0.9rem;color:var(--color-muted);">Claude excels at translating technical concepts for general audiences:</p>
+      <p style="font-size:0.88rem;font-style:italic;background:var(--color-surface-alt);padding:var(--space-3);border-radius:var(--radius-sm);">"Write a plain-English explanation of this SSL certificate error to send to a non-technical department head who needs to understand why their website is showing a security warning."</p>
+    </div>
+    <div class="card">
+      <h3>Service Disruption Notices</h3>
+      <p style="font-size:0.9rem;color:var(--color-muted);">For unplanned outages, Claude drafts the user-facing notice:</p>
+      <p style="font-size:0.88rem;font-style:italic;background:var(--color-surface-alt);padding:var(--space-3);border-radius:var(--radius-sm);">"Write a brief service disruption notice for the Acadia portal. The issue is a database connection error causing login failures. We're investigating and estimate 30-60 minutes to resolve."</p>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Always Review Before Sending</div>
+    Claude-drafted communications are first drafts. Always review before sending. Add specific names, ticket numbers, contact information, and any details Claude would not know. Confirm the tone matches Acadia University's communication standards, and verify any legal or compliance-related language with the appropriate office before distribution.
+  </div>
+
+  <!-- 9.7 -->
+  <h2 id="s97">9.7 Change Management and Planning</h2>
+
+  <p>Systematic change management reduces risk and improves outcomes. Claude helps create the documentation that makes changes go smoothly — not by replacing the expertise required to plan a change, but by ensuring the documentation is thorough and nothing is overlooked.</p>
+
+  <h3>Change Planning Prompts</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Example Prompt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Change request document</td>
+        <td>"Write a change request document for migrating our file server from Windows Server 2016 to 2022. Include: summary, business justification, scope, risk assessment, rollback plan, and approval requirements."</td>
+      </tr>
+      <tr>
+        <td>Pre-flight checklist</td>
+        <td>"Create a pre-flight checklist for deploying a Windows cumulative update to production servers. Include verification steps, backup confirmation, and communication steps."</td>
+      </tr>
+      <tr>
+        <td>Rollback procedure</td>
+        <td>"What are the rollback steps if this Active Directory schema change causes issues? Include how to verify the rollback was successful."</td>
+      </tr>
+      <tr>
+        <td>Stakeholder identification</td>
+        <td>"List all the stakeholders we should notify before a network maintenance window affecting the main campus building. Include suggested lead times for each group."</td>
+      </tr>
+      <tr>
+        <td>Risk assessment</td>
+        <td>"Identify the risks in this server migration plan and suggest mitigations for each. Rate each risk as High, Medium, or Low."</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Claude Plans, Humans Authorize</div>
+    Change documentation produced by Claude is a starting point. It must be reviewed by the staff member responsible for the change and approved through Acadia Technology Services' change management process. Claude's plan may omit environment-specific steps that only you know about.
+  </div>
+
+  <!-- 9.8 -->
+  <h2 id="s98">9.8 Writing User Help Articles</h2>
+
+  <p>Technology Services produces help content for the Acadia community — setup guides, how-to articles, and troubleshooting instructions for the wide range of systems students, faculty, and staff use. Claude can produce polished first drafts that are structurally sound and clearly written, significantly reducing the time from idea to published article.</p>
+
+  <h3>Help Article Workflow</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Describe the task</strong> — tell Claude what the article should cover: "Explain how to set up Duo two-factor authentication on a new phone."</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Specify the audience</strong> — "Write this for students who may not be technical. Avoid jargon and explain each step in plain language."</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Claude drafts the article</strong> — a structured document with a clear title, introduction, numbered steps, and a troubleshooting section.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Review for accuracy</strong> — Claude does not know your specific Duo configuration, portal URL, or institution-specific steps. Verify every step against the actual system.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Apply theme and naming</strong> — use <code>/theme</code> to apply the Acadia visual theme if publishing as HTML, and <code>/file-naming</code> to generate the correct filename for the Technology Services file naming standard.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Prompts for Different Article Types</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Setup Guide</h3>
+      <p style="font-size:0.88rem;font-style:italic;color:var(--color-muted);">"Write a step-by-step guide for connecting to the Acadia VPN using Cisco AnyConnect on Windows 11. The audience is new students. Include screenshots placeholders and a common errors section."</p>
+    </div>
+    <div class="card">
+      <h3>Troubleshooting Article</h3>
+      <p style="font-size:0.88rem;font-style:italic;color:var(--color-muted);">"Write a troubleshooting article for students who can't log in to Brightspace. Structure it as: check these things first, common causes and fixes, and when to contact IT."</p>
+    </div>
+    <div class="card">
+      <h3>Policy Explainer</h3>
+      <p style="font-size:0.88rem;font-style:italic;color:var(--color-muted);">"Write a plain-language explanation of Acadia's acceptable use policy for AI tools. The audience is faculty. Tone should be collegial and informative, not legalistic."</p>
+    </div>
+    <div class="card">
+      <h3>Quick Reference</h3>
+      <p style="font-size:0.88rem;font-style:italic;color:var(--color-muted);">"Create a one-page quick reference card for Acadia email on mobile devices. Cover iOS and Android setup. Use a two-column layout with screenshots placeholders."</p>
+    </div>
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Time Savings in Practice</div>
+    A well-prompted Claude draft of a help article typically takes 2&ndash;3 minutes to generate and 10&ndash;15 minutes to review and correct for accuracy. Writing the same article from scratch typically takes 45&ndash;90 minutes. The time savings are real &mdash; but accuracy review cannot be skipped.
+  </div>
+
+</main>
+
+<!-- Module Navigation Bar -->
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 8 Documentation - 20260628.html">&#8592; Module 8: Documentation</a>
+    <span style="color:var(--color-muted);font-size:0.85rem;">Module 9 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 10 Best Practices - 20260628.html">Module 10: Best Practices &#8594;</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>Acadia University &mdash; Technology Services &mdash; Claude AI Training Series</span>
+    <span>Module 9 of 10 &mdash; Common IT Workflows &mdash; June 28, 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>

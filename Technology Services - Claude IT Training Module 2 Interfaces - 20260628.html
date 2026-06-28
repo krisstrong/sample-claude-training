@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 2 — Getting Started: Desktop App, Terminal &amp; VS Code | Claude IT Training | Technology Services</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+/* Module 2 extra — desktop UI mockup layout */
+.desktop-mockup{border:1px solid var(--color-border);border-radius:var(--radius-md);overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12);margin:var(--space-6) 0;}
+.mockup-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.mockup-dot{width:10px;height:10px;border-radius:50%;}
+.mockup-title{color:#8A8178;font-size:0.75rem;margin:0 auto;}
+.mockup-body{display:flex;height:420px;}
+.mockup-sidebar{width:220px;background:#1C1B19;flex-shrink:0;display:flex;flex-direction:column;padding:var(--space-3);}
+.mockup-sidebar-section{margin-bottom:var(--space-4);}
+.mockup-sidebar-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5A5751;padding:var(--space-2) var(--space-2) var(--space-1);font-family:var(--font-heading);}
+.mockup-sidebar-item{padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);font-size:0.82rem;color:#C8C4BC;cursor:pointer;margin-bottom:2px;display:flex;align-items:center;gap:var(--space-2);}
+.mockup-sidebar-item.active{background:#2E2C2A;color:#FAF9F5;}
+.mockup-sidebar-item .item-icon{font-size:0.9rem;opacity:0.7;}
+.mockup-sidebar-new{margin:var(--space-3) var(--space-2) 0;background:var(--color-primary);color:#fff;border:none;border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);font-size:0.82rem;font-weight:600;font-family:var(--font-heading);cursor:pointer;width:calc(100% - var(--space-4));text-align:center;}
+.mockup-main{flex:1;background:var(--claude-bg);display:flex;flex-direction:column;}
+.mockup-topbar{background:#FAF9F5;border-bottom:1px solid var(--claude-border);padding:var(--space-3) var(--space-6);display:flex;align-items:center;justify-content:space-between;}
+.mockup-model-pill{background:#fff;border:1px solid var(--claude-border);border-radius:20px;padding:2px 12px;font-size:0.75rem;color:#8A8178;font-family:var(--font-mono);}
+.mockup-chat-area{flex:1;padding:var(--space-6);overflow:hidden;}
+.mockup-input-area{border-top:1px solid var(--claude-border);padding:var(--space-4) var(--space-6);background:#FAF9F5;display:flex;align-items:center;gap:var(--space-3);}
+.mockup-input-box{flex:1;border:1px solid var(--claude-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-size:0.85rem;color:#8A8178;background:#fff;}
+.mockup-attach-btn{font-size:1.2rem;cursor:pointer;color:#8A8178;}
+.mockup-send-btn{background:var(--color-primary);color:#fff;border:none;border-radius:var(--radius-sm);padding:var(--space-2) var(--space-4);font-size:0.82rem;font-weight:600;cursor:pointer;}
+/* VS Code mockup */
+.vscode-mockup{border:1px solid var(--color-border);border-radius:var(--radius-md);overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12);margin:var(--space-6) 0;background:#1E1E1E;}
+.vscode-titlebar{background:#3C3C3C;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:8px;}
+.vscode-title{color:#CCCCCC;font-size:0.75rem;flex:1;text-align:center;}
+.vscode-menu{display:flex;gap:var(--space-4);}
+.vscode-menu-item{color:#CCCCCC;font-size:0.75rem;cursor:pointer;}
+.vscode-body{display:flex;height:380px;}
+.vscode-activity{width:44px;background:#333333;display:flex;flex-direction:column;align-items:center;padding-top:var(--space-4);gap:var(--space-4);}
+.vscode-activity-icon{font-size:1.3rem;cursor:pointer;opacity:0.6;}
+.vscode-activity-icon.active{opacity:1;border-left:2px solid #fff;padding-left:2px;}
+.vscode-sidebar{width:240px;background:#252526;border-right:1px solid #3C3C3C;display:flex;flex-direction:column;}
+.vscode-panel-title{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#BBBBBB;padding:var(--space-3) var(--space-4);border-bottom:1px solid #3C3C3C;}
+.claude-panel{flex:1;padding:var(--space-3) var(--space-4);overflow:hidden;}
+.claude-panel-chat{font-size:0.78rem;}
+.claude-panel-msg{margin-bottom:var(--space-3);}
+.claude-panel-msg .cp-role{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.claude-panel-msg.user .cp-role{color:#9CDCFE;}
+.claude-panel-msg.assistant .cp-role{color:#D97757;}
+.claude-panel-msg .cp-bubble{color:#D4D4D4;line-height:1.4;}
+.vscode-editor{flex:1;background:#1E1E1E;padding:var(--space-4);}
+.vscode-editor-tab{background:#2D2D2D;border-bottom:1px solid #3C3C3C;padding:var(--space-2) var(--space-4);display:flex;gap:var(--space-4);font-size:0.75rem;}
+.vscode-tab{color:#CCCCCC;padding:var(--space-1) var(--space-3);border-radius:var(--radius-sm) var(--radius-sm) 0 0;}
+.vscode-tab.active{background:#1E1E1E;color:#FFFFFF;}
+.vscode-code{font-family:var(--font-mono);font-size:0.8rem;color:#D4D4D4;padding:var(--space-4) var(--space-6);line-height:1.6;}
+.vscode-code .kw{color:#569CD6;}
+.vscode-code .fn{color:#DCDCAA;}
+.vscode-code .str{color:#CE9178;}
+.vscode-code .cm{color:#6A9955;}
+.vscode-code .num{color:#B5CEA8;}
+.hero-intro{background:linear-gradient(135deg,var(--color-primary) 0%,var(--color-primary-dark) 100%);color:#fff;border-radius:var(--radius-md);padding:var(--space-8);margin-bottom:var(--space-8);}
+.hero-intro h2{color:#fff;border-bottom:2px solid rgba(255,255,255,0.2);margin-top:0;}
+.hero-intro p{color:rgba(255,255,255,0.9);margin-bottom:0;}
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     SITE HEADER
+     ============================================================ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia University</div>
+    <h1>Claude AI Training — Technology Services</h1>
+    <span class="module-badge">Module 2 of 10</span>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a> › Module 2 — Getting Started with Each Interface
+  </div>
+</nav>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main class="container">
+
+  <!-- Hero intro panel -->
+  <div class="hero-intro">
+    <h2>Getting Started — Desktop App, Terminal &amp; VS Code</h2>
+    <p>This module gets you operational on all three Claude interfaces. By the end you will have the Desktop App installed, the CLI running from your terminal, and the VS Code extension active in your editor — and you will know which tool to reach for on any given task.</p>
+  </div>
+
+  <!-- Table of contents -->
+  <div class="toc">
+    <h4>In this module</h4>
+    <ol>
+      <li><a href="#desktop-app">The Desktop App — Installation &amp; Navigation</a></li>
+      <li><a href="#terminal-cli">The Terminal / CLI — Installation &amp; Usage</a></li>
+      <li><a href="#vscode">The VS Code Extension — Setup &amp; Features</a></li>
+      <li><a href="#when-to-use">When to Use Each Interface</a></li>
+      <li><a href="#practical-tips">Practical Tips</a></li>
+    </ol>
+  </div>
+
+  <!-- ============================================================
+       SECTION 2.1 — Desktop App
+       ============================================================ -->
+  <h2 id="desktop-app">2.1 The Desktop App</h2>
+
+  <p>The Desktop App is Claude's flagship interface — a full GUI application for Windows and macOS that supports rich conversations, file attachments, Projects, and model selection. It is the best starting point for anyone new to Claude, and it remains the tool of choice for long research tasks, multi-document analysis, and team collaboration through Projects.</p>
+
+  <h3>Installation</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Download the installer.</strong> Navigate to <a href="https://claude.ai/download" target="_blank">claude.ai/download</a> in your browser. Anthropic provides installers for both Windows (.exe) and macOS (.dmg). Select the appropriate version for your machine.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Run the installer.</strong> On Windows, launch the downloaded <code>.exe</code> file. You may see a UAC prompt — click "Yes" to allow installation. On macOS, drag Claude to your Applications folder from the mounted DMG.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Sign in to your Anthropic account.</strong> When the app opens, you will be prompted to sign in. Use your Anthropic account credentials. If your department has a Teams plan, sign in with the account invited to that workspace.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Select your starting model.</strong> On first launch, the app defaults to Claude Sonnet. This is appropriate for most Technology Services work. You can change the model in any conversation using the model picker in the top toolbar.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Start a new conversation.</strong> Click the <strong>"New Chat"</strong> button in the top-left sidebar. Type your first message in the input box at the bottom of the screen and press Enter or click the send button.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Desktop App Interface Overview</h3>
+
+  <!-- Desktop app mockup -->
+  <div class="desktop-mockup">
+    <div class="mockup-titlebar">
+      <div class="mockup-dot" style="background:#FF5F57;"></div>
+      <div class="mockup-dot" style="background:#FFBD2E;"></div>
+      <div class="mockup-dot" style="background:#28C840;"></div>
+      <span class="mockup-title">Claude — Technology Services Workspace</span>
+    </div>
+    <div class="mockup-body">
+      <!-- Sidebar -->
+      <div class="mockup-sidebar">
+        <button class="mockup-sidebar-new">+ New Chat</button>
+        <div style="margin-top:var(--space-4);">
+          <div class="mockup-sidebar-label">Projects</div>
+          <div class="mockup-sidebar-item active">
+            <span class="item-icon">&#128193;</span> Tech Services IT Ops
+          </div>
+          <div class="mockup-sidebar-item">
+            <span class="item-icon">&#128193;</span> Helpdesk Scripts
+          </div>
+          <div class="mockup-sidebar-item">
+            <span class="item-icon">&#128193;</span> Network Config Review
+          </div>
+        </div>
+        <div style="margin-top:var(--space-4);">
+          <div class="mockup-sidebar-label">Recent Chats</div>
+          <div class="mockup-sidebar-item">
+            <span class="item-icon">&#128172;</span> AD group policy audit
+          </div>
+          <div class="mockup-sidebar-item">
+            <span class="item-icon">&#128172;</span> Write backup runbook
+          </div>
+          <div class="mockup-sidebar-item">
+            <span class="item-icon">&#128172;</span> Explain DHCP lease issue
+          </div>
+          <div class="mockup-sidebar-item">
+            <span class="item-icon">&#128172;</span> Firewall rule review
+          </div>
+        </div>
+      </div>
+      <!-- Main area -->
+      <div class="mockup-main">
+        <div class="mockup-topbar">
+          <span style="font-size:0.82rem;color:#5A5751;font-family:var(--font-heading);font-weight:600;">Tech Services IT Ops</span>
+          <div class="mockup-model-pill">claude-sonnet-4-6</div>
+        </div>
+        <div class="mockup-chat-area">
+          <div class="chat-msg user" style="margin-bottom:var(--space-4);">
+            <div class="role">You</div>
+            <div class="bubble" style="font-size:0.85rem;">I've attached the DHCP server log from this morning. Can you identify any unusual lease patterns or errors that might explain the connectivity complaints we've received from Building C?</div>
+          </div>
+          <div class="chat-msg assistant">
+            <div class="role">Claude</div>
+            <div class="bubble" style="font-size:0.85rem;">
+              <p style="margin-bottom:8px;">I can see three patterns in the attached log worth investigating:</p>
+              <ol style="margin:0 0 8px;padding-left:1.2rem;font-size:0.85rem;">
+                <li style="margin-bottom:4px;"><strong>Scope exhaustion at 09:14</strong> — the 10.5.3.0/24 scope hit 100% utilisation for 7 minutes. Any devices connecting during that window would have failed to obtain a lease.</li>
+                <li style="margin-bottom:4px;"><strong>Rogue DHCP discover packets</strong> — 4 DHCPDISCOVER messages from MAC <code>b8:27:eb:*</code> (Raspberry Pi range) are being broadcast repeatedly, suggesting an unauthorised device.</li>
+                <li style="margin-bottom:0;"><strong>Short lease times</strong> — Building C's scope is configured for 1-hour leases. Combined with the scope exhaustion event this will amplify connectivity gaps.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-input-area">
+          <span class="mockup-attach-btn" title="Attach file">&#128206;</span>
+          <div class="mockup-input-box">Ask Claude anything or drag and drop a file...</div>
+          <button class="mockup-send-btn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="caption">The Desktop App layout: Projects and conversation history in the left sidebar, model selector in the top bar, file attachment via the paperclip icon, and the main chat area with full conversation context.</p>
+
+  <h3>Key Desktop App Features</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Projects</h3>
+      <p>A Project is a persistent workspace that maintains a shared system prompt and file context across multiple conversations. Create a "Technology Services IT Ops" Project and give it a system prompt like <em>"You are assisting an IT team at a Canadian university. Our environment includes Windows Server 2022, Active Directory, Cisco networking, and Microsoft 365."</em></p>
+      <p style="margin-bottom:0;">Every new chat you open inside that Project inherits this context automatically — you never have to re-explain your environment.</p>
+    </div>
+    <div class="card">
+      <h3>File Attachments</h3>
+      <p>Drag and drop any file into the chat window, or click the paperclip (&#128206;) icon to browse. Claude can read and reason about:</p>
+      <ul style="margin-bottom:0;">
+        <li>Text files, logs, and CSVs</li>
+        <li>Word documents and PDFs</li>
+        <li>Code and configuration files</li>
+        <li>Images (screenshots of errors, diagrams)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Model Selection</h3>
+      <p>The model picker dropdown in the top bar lets you switch between Haiku, Sonnet, and Opus for any conversation. A rule of thumb for Technology Services use:</p>
+      <ul style="margin-bottom:0;">
+        <li><strong>Haiku</strong> — simple lookups, format conversion</li>
+        <li><strong>Sonnet</strong> — most daily tasks (default)</li>
+        <li><strong>Opus</strong> — complex architecture or deep analysis</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Conversation Management</h3>
+      <p>All conversations are saved and searchable in the left sidebar. You can rename conversations for easy retrieval, star important ones, and scroll back through the full history of any session.</p>
+      <p style="margin-bottom:0;">Note that each conversation has its own context window — starting a new conversation always resets what Claude "knows." Use Projects to share persistent context.</p>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Project System Prompt Tip</div>
+    When you create a new Project, set its system prompt to describe your IT environment. Include: operating systems in use, key software (AD, M365, Cisco IOS version), any standards you follow (ITIL, CIS Benchmarks), and your preferred output style (e.g., "Always include error handling in PowerShell scripts"). Claude will apply this context to every conversation in the Project.
+  </div>
+
+  <!-- ============================================================
+       SECTION 2.2 — Terminal / CLI
+       ============================================================ -->
+  <h2 id="terminal-cli">2.2 The Terminal / CLI</h2>
+
+  <p>The Claude CLI (often called <strong>Claude Code</strong> in documentation) is a command-line tool that brings Claude directly into your shell workflows. For IT professionals already living in PowerShell or Bash, this is often the fastest way to get a quick answer, analyse piped output, or integrate Claude into a script pipeline.</p>
+
+  <h3>Installation</h3>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Prerequisite</div>
+    The Claude CLI requires <strong>Node.js version 18 or later</strong>. Run <code>node --version</code> to check. If Node.js is not installed, download it from <a href="https://nodejs.org" target="_blank">nodejs.org</a> — the LTS version is recommended. You will also need an Anthropic API key, available from your account at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.
+  </div>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Verify Node.js is installed.</strong> Open PowerShell or your terminal and run:</p>
+        <div class="code-header"><span>PowerShell</span><span>Verification</span></div>
+        <pre><code>node --version
+npm --version</code></pre>
+        <p>Both commands should return version numbers. If either returns an error, install Node.js first.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Install the Claude CLI globally.</strong></p>
+        <div class="code-header"><span>PowerShell / npm</span><span>Install</span></div>
+        <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+        <p>The <code>-g</code> flag installs the <code>claude</code> command globally so it is available in any terminal session.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Set your API key as an environment variable.</strong> The CLI authenticates via your Anthropic API key. Set it for your current session, or add it to your profile permanently:</p>
+        <div class="code-header"><span>PowerShell — Current session only</span><span>Auth</span></div>
+        <pre><code>$env:ANTHROPIC_API_KEY = "sk-ant-your-key-here"</code></pre>
+        <div class="code-header"><span>PowerShell — Add permanently to profile</span><span>Auth (persistent)</span></div>
+        <pre><code><span style="color:#79B8FF;"># Open your PowerShell profile in Notepad, then add the line below</span>
+notepad $PROFILE
+
+<span style="color:#79B8FF;"># Add this line to the profile file:</span>
+$env:ANTHROPIC_API_KEY = "sk-ant-your-key-here"</code></pre>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Verify the installation.</strong> Run the following to confirm the CLI is working:</p>
+        <div class="code-header"><span>PowerShell</span><span>Verify</span></div>
+        <pre><code>claude --version</code></pre>
+        <p>You should see the installed version number printed to the console.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Run your first query.</strong></p>
+        <div class="code-header"><span>PowerShell</span><span>First run</span></div>
+        <pre><code>claude "What PowerShell command lists all installed software on this machine?"</code></pre>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Basic Usage Patterns</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command Pattern</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>claude</code></td>
+        <td>Opens an interactive REPL session. You can have a back-and-forth conversation, maintaining context between turns, until you type <code>exit</code>.</td>
+      </tr>
+      <tr>
+        <td><code>claude "your question here"</code></td>
+        <td>Single-shot query. Claude responds once and exits. Ideal for quick lookups in the middle of other work.</td>
+      </tr>
+      <tr>
+        <td><code>cat file.txt | claude "summarise this"</code></td>
+        <td>Pipes file content into Claude as context. Replace <code>cat</code> with any command that produces text output.</td>
+      </tr>
+      <tr>
+        <td><code>Get-Content error.log | claude "identify the root cause"</code></td>
+        <td>PowerShell equivalent of the above — pipe any cmdlet output directly to Claude.</td>
+      </tr>
+      <tr>
+        <td><code>claude --model claude-haiku-4-5 "quick question"</code></td>
+        <td>Force a specific model for this query. Useful when you want Haiku's speed for simple tasks or Opus for complex analysis.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>CLI Session Example</h3>
+
+  <div class="code-header">
+    <span>PowerShell Terminal Session</span>
+    <span>Example</span>
+  </div>
+  <pre><code><span style="color:#79B8FF;">PS C:\Scripts&gt;</span> claude "What PowerShell command lists all installed software on this machine?"
+
+<span style="color:#59A14F;">Claude:</span>
+There are two reliable approaches depending on what you need:
+
+<span style="color:#EDC949;">Option 1 — Registry query (fast, includes most software):</span>
+Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
+    Select-Object DisplayName, DisplayVersion, Publisher, InstallDate |
+    Where-Object { $_.DisplayName } |
+    Sort-Object DisplayName
+
+<span style="color:#EDC949;">Option 2 — WMI query (slower but more complete):</span>
+Get-CimInstance -ClassName Win32_Product |
+    Select-Object Name, Version, Vendor, InstallDate |
+    Sort-Object Name
+
+<span style="color:#6B6B6B;">Note: Win32_Product triggers a Windows Installer consistency check on each
+query which can be slow and generates Application log entries. The registry
+query is preferred for inventory scripts run frequently.</span>
+
+<span style="color:#79B8FF;">PS C:\Scripts&gt;</span> Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
+    Select-Object DisplayName, DisplayVersion | Where-Object { $_.DisplayName } |
+    Export-Csv ".\installed-software.csv" -NoTypeInformation
+
+<span style="color:#79B8FF;">PS C:\Scripts&gt;</span> <span style="color:#6B6B6B;"># CSV exported successfully</span></code></pre>
+
+  <h3>Key CLI Flags</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Flag</th>
+        <th>Purpose</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--model</code></td>
+        <td>Specify which Claude model to use for this query</td>
+        <td><code>claude --model claude-opus-4-8 "analyse this architecture"</code></td>
+      </tr>
+      <tr>
+        <td><code>--output-format</code></td>
+        <td>Control output format: <code>text</code> (default), <code>json</code>, or <code>stream-json</code> for piping to other tools</td>
+        <td><code>claude --output-format json "list 5 AD audit checks"</code></td>
+      </tr>
+      <tr>
+        <td><code>--system</code></td>
+        <td>Provide a system prompt for this session, shaping Claude's behaviour and persona</td>
+        <td><code>claude --system "You are a Windows Server expert. Be concise."</code></td>
+      </tr>
+      <tr>
+        <td><code>--version</code></td>
+        <td>Print the installed version of the Claude CLI</td>
+        <td><code>claude --version</code></td>
+      </tr>
+      <tr>
+        <td><code>--help</code></td>
+        <td>List all available flags and usage information</td>
+        <td><code>claude --help</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">CLI Naming Note</div>
+    In Anthropic's documentation you may see the tool referred to as <strong>Claude Code</strong>, while the actual installed command is simply <code>claude</code>. They are the same tool. When documentation says "run Claude Code," it means run <code>claude</code> from your terminal.
+  </div>
+
+  <!-- ============================================================
+       SECTION 2.3 — VS Code Extension
+       ============================================================ -->
+  <h2 id="vscode">2.3 The VS Code Extension</h2>
+
+  <p>If your IT work involves writing scripts, maintaining configuration management code, developing automation, or doing code-heavy documentation, the VS Code extension is your most powerful option. Claude can see your entire workspace, understand the code you have open, and offer inline suggestions without you ever leaving the editor.</p>
+
+  <h3>Installation</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Open the Extensions sidebar.</strong> In VS Code, press <kbd>Ctrl+Shift+X</kbd> (Windows/Linux) or <kbd>Cmd+Shift+X</kbd> (macOS) to open the Extensions view, or click the Extensions icon in the Activity Bar on the left.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Search for Claude.</strong> In the search box at the top of the Extensions sidebar, type <strong>Claude</strong>. Look for <strong>"Claude for VS Code"</strong> published by <strong>Anthropic</strong>. Verify the publisher name to avoid installing unofficial alternatives.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Click Install.</strong> Click the blue Install button next to the official extension. VS Code will download and activate it automatically — no restart required in most cases.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Sign in or enter your API key.</strong> After installation, click the Claude icon that appears in the Activity Bar (left sidebar). You will be prompted to authenticate with your Anthropic account or paste an API key. Follow the prompts.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Open a project folder.</strong> For best results, open the root folder of your project or scripts repository (<kbd>Ctrl+K, Ctrl+O</kbd>) rather than individual files. Claude reads the workspace structure and can reference any file you have open.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>VS Code Extension Interface</h3>
+
+  <!-- VS Code mockup -->
+  <div class="vscode-mockup">
+    <div class="vscode-titlebar">
+      <div class="vscode-menu">
+        <span class="vscode-menu-item">File</span>
+        <span class="vscode-menu-item">Edit</span>
+        <span class="vscode-menu-item">View</span>
+        <span class="vscode-menu-item">Terminal</span>
+      </div>
+      <span class="vscode-title">backup-script.ps1 — IT-Scripts [Workspace]</span>
+    </div>
+    <div class="vscode-body">
+      <!-- Activity bar -->
+      <div class="vscode-activity">
+        <div class="vscode-activity-icon">&#128196;</div>
+        <div class="vscode-activity-icon">&#128269;</div>
+        <div class="vscode-activity-icon">&#8645;</div>
+        <div class="vscode-activity-icon active" title="Claude">&#129302;</div>
+        <div class="vscode-activity-icon">&#9874;</div>
+      </div>
+      <!-- Claude sidebar panel -->
+      <div class="vscode-sidebar">
+        <div class="vscode-panel-title">Claude — IT-Scripts Workspace</div>
+        <div class="claude-panel">
+          <div class="claude-panel-chat">
+            <div class="claude-panel-msg user">
+              <div class="cp-role">You</div>
+              <div class="cp-bubble">Review the open file for error handling issues</div>
+            </div>
+            <div class="claude-panel-msg assistant" style="margin-top:var(--space-3);">
+              <div class="cp-role">Claude</div>
+              <div class="cp-bubble">
+                <p style="margin-bottom:6px;">Found 3 issues in backup-script.ps1:</p>
+                <p style="margin-bottom:4px;"><strong style="color:#F28E2B;">Line 12</strong> — No try/catch around Robocopy call. If the source path is unavailable, the script exits silently.</p>
+                <p style="margin-bottom:4px;"><strong style="color:#F28E2B;">Line 27</strong> — $ErrorActionPreference not set at script start. Unhandled errors won't terminate execution.</p>
+                <p style="margin-bottom:0;"><strong style="color:#F28E2B;">Line 41</strong> — Log file path uses relative path. Use $PSScriptRoot for reliability when run as scheduled task.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Editor area -->
+      <div class="vscode-editor">
+        <div class="vscode-editor-tab">
+          <span class="vscode-tab active">backup-script.ps1</span>
+          <span class="vscode-tab">server-inventory.ps1</span>
+        </div>
+        <div class="vscode-code">
+<span class="cm">#Requires -RunAsAdministrator</span>
+<span class="cm"># Backup-Script.ps1 — Nightly file server backup</span>
+
+<span class="kw">param</span>(
+    [string]$SourcePath = <span class="str">"\\fileserver\shares"</span>,
+    [string]$DestPath   = <span class="str">"\\backup01\nightly"</span>,
+    [string]$LogFile    = <span class="str">".\backup.log"</span>  <span class="cm">&#8592; Line 41: relative path issue</span>
+)
+
+<span class="cm"># Line 12: No error handling here</span>
+<span class="fn">robocopy</span> $SourcePath $DestPath /MIR /LOG+:$LogFile /NP /NDL
+
+<span class="kw">if</span> ($LASTEXITCODE <span class="kw">-ge</span> <span class="num">8</span>) {
+    <span class="fn">Write-Error</span> <span class="str">"Robocopy failed with exit code $LASTEXITCODE"</span>
+}
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="caption">The VS Code extension adds a Claude panel to the Activity Bar. Claude can see the currently open file and your full workspace — here it has identified three error handling issues in a backup script and cited specific line numbers.</p>
+
+  <h3>Key Extension Features</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Sidebar Chat Panel</h3>
+      <p>Open with <kbd>Ctrl+Shift+A</kbd> or click the Claude icon (&#129302;) in the Activity Bar. Ask questions about your open file, the entire workspace, or general IT topics — Claude's responses appear inline in the panel with full conversation history for the session.</p>
+      <p style="margin-bottom:0;"><strong>Example prompts that work well:</strong></p>
+      <ul style="margin-bottom:0;">
+        <li>"Explain what this function does"</li>
+        <li>"Add parameter validation to the current file"</li>
+        <li>"Find any hardcoded credentials or secrets in this workspace"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Inline Code Assistance</h3>
+      <p>Highlight any block of code in the editor, then press <kbd>Ctrl+Shift+C</kbd> to open an inline prompt. Type your instruction — "add error handling," "convert to a function," "add comment blocks" — and Claude applies the change in context, understanding the surrounding code.</p>
+      <p style="margin-bottom:0;">Inline suggestions also appear automatically as you type in supported file types. Accept a suggestion with <kbd>Tab</kbd>, dismiss with <kbd>Escape</kbd>.</p>
+    </div>
+    <div class="card">
+      <h3>Terminal Integration</h3>
+      <p>Claude can observe your VS Code integrated terminal. When a command fails, you can paste the error into the chat panel and Claude sees both the error and the code you were running — providing more accurate diagnosis than if you described the error in isolation.</p>
+      <p style="margin-bottom:0;">You can also ask Claude to generate a command and it will offer to run it directly in the terminal, with your approval.</p>
+    </div>
+    <div class="card">
+      <h3>/code-review Skill</h3>
+      <p>Type <code>/code-review</code> in the chat panel to trigger a structured code review against your current git diff. Claude analyses changes for bugs, security issues, style inconsistencies, and potential improvements — and can post findings as inline comments or apply fixes directly.</p>
+      <p style="margin-bottom:0;">This is particularly useful before committing a new automation script or pushing a configuration change for peer review.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 2.4 — When to Use Each Interface
+       ============================================================ -->
+  <h2 id="when-to-use">2.4 When to Use Each Interface</h2>
+
+  <p>Choosing the right interface is not about which is "best" — each excels at different things. As you grow comfortable with all three, you will naturally reach for the right one without thinking about it. Use this table as a reference until that instinct develops.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Feature / Scenario</th>
+        <th>Desktop App</th>
+        <th>Terminal (CLI)</th>
+        <th>VS Code Extension</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>File attachments</strong></td>
+        <td>&#10003; Drag-and-drop any file type</td>
+        <td>Pipe text output from commands</td>
+        <td>Workspace files automatically in context</td>
+      </tr>
+      <tr>
+        <td><strong>Conversation history</strong></td>
+        <td>&#10003; Saved permanently, searchable</td>
+        <td>Current session only</td>
+        <td>Current session only</td>
+      </tr>
+      <tr>
+        <td><strong>Persistent context (Projects)</strong></td>
+        <td>&#10003; Full Projects support</td>
+        <td>System prompt per session</td>
+        <td>Workspace-level context</td>
+      </tr>
+      <tr>
+        <td><strong>Code editing assistance</strong></td>
+        <td>Limited — chat-based only</td>
+        <td>No — output to terminal only</td>
+        <td>&#10003; Inline suggestions, apply changes</td>
+      </tr>
+      <tr>
+        <td><strong>Scripting and automation</strong></td>
+        <td>No</td>
+        <td>&#10003; Pipe into scripts, CI/CD integration</td>
+        <td>Partial — via terminal integration</td>
+      </tr>
+      <tr>
+        <td><strong>Log file analysis</strong></td>
+        <td>&#10003; Attach the log file</td>
+        <td>&#10003; <code>Get-Content log.txt | claude "..."</code></td>
+        <td>&#10003; Open file in editor, ask in panel</td>
+      </tr>
+      <tr>
+        <td><strong>Model selection</strong></td>
+        <td>&#10003; GUI dropdown per conversation</td>
+        <td>&#10003; <code>--model</code> flag</td>
+        <td>&#10003; Settings or command palette</td>
+      </tr>
+      <tr>
+        <td><strong>No-install access (browser)</strong></td>
+        <td>Also available at claude.ai in browser</td>
+        <td>Requires npm install</td>
+        <td>Requires VS Code + extension</td>
+      </tr>
+      <tr>
+        <td><strong>Best for</strong></td>
+        <td>Long research tasks, multi-document analysis, onboarding, planning</td>
+        <td>Quick lookups, log piping, scheduled automation, shell scripting</td>
+        <td>Active script development, code review, debugging in the editor</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">You Will Use All Three</div>
+    Most experienced Claude users have a natural pattern: the Desktop App open in one monitor for ongoing research and conversation, the CLI available in any terminal window for quick queries, and the VS Code extension active whenever writing or editing code. They complement rather than replace each other.
+  </div>
+
+  <!-- ============================================================
+       SECTION 2.5 — Practical Tips
+       ============================================================ -->
+  <h2 id="practical-tips">2.5 Practical Tips</h2>
+
+  <h3>Desktop App Tips</h3>
+  <ul>
+    <li><strong>Use the Desktop App for long research or multi-document tasks.</strong> If you are reading through several network diagrams, comparing firewall policies, or summarising a stack of vendor documents — attach them all and work through the analysis in a single conversation.</li>
+    <li><strong>Name your conversations meaningfully.</strong> Click the conversation title to rename it. "AD group audit June 2026" is much more useful than "New Chat" when you need to find it three weeks later.</li>
+    <li><strong>Create one Project per major area of work.</strong> Consider Projects like "Server Infrastructure," "Helpdesk Scripts," and "Network Changes." Each gets its own system prompt describing the relevant context.</li>
+  </ul>
+
+  <h3>CLI Tips</h3>
+  <ul>
+    <li><strong>Pipe log files directly for fast triage.</strong> Do not copy-paste — pipe:</li>
+  </ul>
+
+  <div class="code-header">
+    <span>PowerShell — Pipe event log to Claude</span>
+    <span>Example</span>
+  </div>
+  <pre><code><span style="color:#79B8FF;"># Pipe the last 50 system events to Claude for error identification</span>
+Get-EventLog -LogName System -Newest 50 |
+    Format-List -Property TimeGenerated, EntryType, Source, Message |
+    Out-String |
+    claude "Identify any errors or warnings that need attention. List them by severity."
+
+<span style="color:#79B8FF;"># Check failed login attempts from the last hour</span>
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-1)} |
+    Select-Object TimeCreated, Message |
+    ConvertTo-Json |
+    claude "Summarise these failed login events. Are there any patterns suggesting a brute force attempt?"
+
+<span style="color:#79B8FF;"># Analyse a text log file</span>
+Get-Content "C:\Logs\iis\u_ex260628.log" | claude "Find any 500 errors and summarise the affected URLs"</code></pre>
+
+  <ul>
+    <li><strong>Use the REPL for iterative work.</strong> Run <code>claude</code> (no arguments) to open an interactive session when you need to have a back-and-forth — developing a script step by step, for example.</li>
+    <li><strong>Store useful system prompts in a .txt file.</strong> If you frequently use a particular system prompt (e.g., your IT environment description), save it and reference it: <code>claude --system (Get-Content ".\system-prompt.txt" | Out-String)</code></li>
+  </ul>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Tip</div>
+    The CLI is installed as <code>claude</code>, but Anthropic's documentation may refer to it as <strong>Claude Code</strong>. When you see "run Claude Code" or "use Claude Code" in official materials, that means run the <code>claude</code> command from your terminal. The two names refer to the same installed tool.
+  </div>
+
+  <h3>VS Code Tips</h3>
+  <ul>
+    <li><strong>Open the full project folder, not just a single file.</strong> Claude's power in VS Code comes from workspace context. Use <kbd>Ctrl+K, Ctrl+O</kbd> to open your scripts repository root so Claude can understand how your files relate to each other.</li>
+    <li><strong>Use <code>/code-review</code> before committing.</strong> Make it a habit to run the code review skill after finishing any significant script or configuration file. It catches issues that are easy to miss when you are deep in the implementation details.</li>
+    <li><strong>Describe the goal, not just the fix.</strong> Instead of "fix line 24," try "this script is supposed to sync user accounts from CSV to AD — what's wrong with the logic on line 24 that would cause it to skip disabled accounts?" More context produces better suggestions.</li>
+    <li><strong>Pair with the terminal integration for live debugging.</strong> When a script fails in the VS Code terminal, immediately switch to the Claude panel and paste the error — Claude sees both the error output and the source file and can diagnose across both.</li>
+  </ul>
+
+  <h3>Security Reminders Across All Interfaces</h3>
+
+  <div class="callout">
+    <div class="callout-label">Data Handling — Important</div>
+    <p>Before pasting any content into Claude — in any interface — consider what that content contains:</p>
+    <ul style="margin-bottom:0;">
+      <li><strong>Do not paste passwords, API keys, or credentials</strong> of any kind. Redact them before sharing logs or configs.</li>
+      <li><strong>Student personal data</strong> (names, ID numbers, grades) is governed by FIPPA and institutional policy. Do not paste records that identify individual students.</li>
+      <li><strong>Sensitive system details</strong> (internal IP ranges, AD structure, firewall rules) should only be shared in conversations protected by your institution's approved access tier. Consult the Technology Services data classification policy.</li>
+      <li>Claude conversations on the Pro/Teams plan are not used to train Anthropic's models by default, but always confirm the current policy with Technology Services before sharing sensitive infrastructure details.</li>
+    </ul>
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Ready for Module 3</div>
+    You now know how to install and navigate all three Claude interfaces. Module 3 — Skills — explores the structured skill system built into Claude Code: what skills are, which ones come built-in, and how to write custom skills that automate your most common Technology Services tasks.
+  </div>
+
+</main>
+
+<!-- ============================================================
+     MODULE NAVIGATION BAR
+     ============================================================ -->
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">&#8592; Previous: Module 1 — Introduction</a>
+    <span style="font-size:0.9rem;color:var(--color-muted);">Module 2 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 3 Skills - 20260628.html">Next: Module 3 — Skills &#8594;</a>
+  </div>
+</div>
+
+<!-- ============================================================
+     SITE FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span><strong>Technology Services</strong> &middot; Acadia University</span>
+    <span>Claude IT Training &middot; 2026 &middot; Module 2 of 10</span>
+  </div>
+</footer>
+
+</body>
+</html>

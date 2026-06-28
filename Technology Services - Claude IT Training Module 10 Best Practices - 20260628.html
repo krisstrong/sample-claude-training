@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 10: Best Practices and Security — Claude IT Training | Acadia Technology Services</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+/* Completion card */
+.completion-card{background:var(--color-primary);color:#fff;border-radius:var(--radius-md);padding:var(--space-12) var(--space-8);margin:var(--space-12) 0 var(--space-8);text-align:center;box-shadow:0 4px 24px rgba(0,64,119,.25);}
+.completion-card h2{color:#fff;border:none;margin-top:0;font-size:2rem;}
+.completion-card p{color:var(--color-primary-200);margin-bottom:var(--space-4);}
+.completion-card .completion-icon{font-size:4rem;margin-bottom:var(--space-6);}
+.completion-card .modules-list{list-style:none;padding:0;margin:var(--space-6) auto;max-width:600px;text-align:left;}
+.completion-card .modules-list li{padding:var(--space-2) var(--space-4);border-bottom:1px solid rgba(255,255,255,.1);color:var(--color-primary-200);font-size:0.9rem;display:flex;align-items:center;gap:var(--space-3);}
+.completion-card .modules-list li:last-child{border-bottom:none;}
+.completion-card .modules-list li::before{content:"&#10003;";color:#fff;font-weight:700;font-size:1.1rem;}
+.next-steps-card{background:var(--color-primary-50);border:2px solid var(--color-primary);border-radius:var(--radius-md);padding:var(--space-6);margin-bottom:var(--space-8);}
+.next-steps-card h3{margin-top:0;color:var(--color-primary);}
+</style>
+</head>
+<body>
+
+<!-- Site Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia</div>
+    <h1>Technology Services — Claude AI Training</h1>
+    <span class="module-badge">Module 10 of 10</span>
+  </div>
+</header>
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a>
+    &rsaquo; Module 10: Best Practices and Security
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container">
+
+  <h1>Best Practices and Security</h1>
+  <p style="color:var(--color-muted);font-size:0.95rem;margin-bottom:var(--space-6);">Module 10 of 10 &mdash; Technology Services Claude AI Training Series &mdash; June 28, 2026</p>
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <h4>In This Module</h4>
+    <ol>
+      <li><a href="#s101">Claude Is a Powerful Tool — Use It Responsibly</a></li>
+      <li><a href="#s102">What NOT to Share with Claude</a></li>
+      <li><a href="#s103">Anonymizing Data Before Sharing</a></li>
+      <li><a href="#s104">Always Review Claude's Output</a></li>
+      <li><a href="#s105">Security Testing Context</a></li>
+      <li><a href="#s106">Data Privacy at Acadia University</a></li>
+      <li><a href="#s107">Keeping Claude Up to Date</a></li>
+      <li><a href="#s108">When to Use Claude vs. Escalate</a></li>
+      <li><a href="#s109">Training Completion</a></li>
+    </ol>
+  </div>
+
+  <!-- 10.1 -->
+  <h2 id="s101">10.1 Claude Is a Powerful Tool — Use It Responsibly</h2>
+
+  <p>Throughout this training series you have seen what Claude can do: write production-quality scripts, review security vulnerabilities, analyze logs, draft communications, and manage documentation at a pace and scale that would be impossible alone. That capability is real, and it comes with real responsibility.</p>
+
+  <p>Claude amplifies what you bring to it. A well-formed prompt with accurate context produces genuinely useful output. A prompt that includes bad assumptions, sensitive data, or insufficient context produces output that can be wrong — or worse, output that exposes information that should be protected. With IT-level permissions, Claude can make real changes to real systems. This module covers the discipline that keeps that power safe and effective.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="color:var(--color-primary);">Claude's Output Is Only as Good as Your Input</h3>
+      <p>Claude does not know your network topology, your specific configurations, or your institutional context unless you tell it. The more accurate and complete the information you provide, the more reliable the output.</p>
+      <p style="margin-bottom:0;">Garbage in, garbage out still applies. Test Claude's suggestions before you act on them.</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--color-primary);">Every Output Requires Human Review</h3>
+      <p>Claude is a first draft, not a final authority. Code must be tested. Commands must be verified. Communications must be reviewed. Documentation must be checked for accuracy.</p>
+      <p style="margin-bottom:0;">You are the expert. Claude is the assistant. The authorization to act is always yours.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Core Principle</div>
+    With IT permissions, Claude can make changes to production systems on your behalf. The human in the loop is not a formality — it is the essential safeguard. Always understand what a command or script does before running it, regardless of whether Claude wrote it.
+  </div>
+
+  <!-- 10.2 -->
+  <h2 id="s102">10.2 What NOT to Share with Claude</h2>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Important — Before You Share Anything</div>
+    <strong>Never share the following with Claude unless you are operating under a formal enterprise data privacy agreement.</strong> Conversation text is transmitted to Anthropic's servers and may be retained under standard consumer and professional plan terms. If in doubt, anonymize or omit the sensitive element and describe it in general terms instead.
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Examples</th>
+        <th>Why It Matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Passwords &amp; credentials</strong></td>
+        <td>Admin passwords, API keys, SSH private keys, service account passwords, database connection strings with credentials embedded</td>
+        <td>Claude stores conversation text. Credentials pasted into a conversation can be extracted from conversation history and may be retained by Anthropic under standard plan terms.</td>
+      </tr>
+      <tr>
+        <td><strong>Student personal data</strong></td>
+        <td>Names combined with student IDs, grade records, enrollment status, academic standing, financial aid details</td>
+        <td>FERPA protected. Disclosing student educational records to unauthorized parties — including AI systems without a formal data processing agreement — is a legal violation.</td>
+      </tr>
+      <tr>
+        <td><strong>Employee personal data</strong></td>
+        <td>Social Insurance Numbers, health information, performance reviews, salary details, disciplinary records</td>
+        <td>PIPEDA (Canada's federal privacy law) restricts how personal information about individuals can be collected, used, and disclosed. AI conversations are a disclosure.</td>
+      </tr>
+      <tr>
+        <td><strong>Acadia proprietary configurations</strong></td>
+        <td>Production database connection strings (without credentials removed), internal IP address maps, firewall rule sets, detailed network diagrams</td>
+        <td>Sharing infrastructure details creates security risk. This information could facilitate targeted attacks if conversation data were ever accessed by unauthorized parties.</td>
+      </tr>
+      <tr>
+        <td><strong>Third-party confidential</strong></td>
+        <td>Vendor contracts with non-disclosure clauses, licensed software product keys, supplier pricing agreements</td>
+        <td>Contractual obligations may restrict disclosure of vendor-provided information to third parties. AI services may constitute a third party under those agreements.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 10.3 -->
+  <h2 id="s103">10.3 Anonymizing Data Before Sharing</h2>
+
+  <p>Many legitimate tasks require sharing real data with Claude — log files, configuration snippets, error output. The solution is anonymization: replace sensitive values with realistic-looking placeholders before pasting. Claude works just as effectively with anonymized data.</p>
+
+  <h3>What to Replace and How</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Data Type</th>
+        <th>Original</th>
+        <th>Safe Replacement</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Real names</td>
+        <td>John Smith, Dr. Sarah Chen</td>
+        <td>User A, User B (or "a faculty member")</td>
+      </tr>
+      <tr>
+        <td>Internal IP addresses</td>
+        <td><code>10.42.3.17</code></td>
+        <td><code>10.x.x.x</code> or <code>192.168.x.x</code></td>
+      </tr>
+      <tr>
+        <td>Credentials</td>
+        <td><code>password: SecretPass123!</code></td>
+        <td><code>password: [REDACTED]</code></td>
+      </tr>
+      <tr>
+        <td>Student IDs</td>
+        <td><code>B00123456</code></td>
+        <td><code>B00XXXXXX</code></td>
+      </tr>
+      <tr>
+        <td>API keys / tokens</td>
+        <td><code>sk-ant-api03-abc123...</code></td>
+        <td><code>[API_KEY_REDACTED]</code></td>
+      </tr>
+      <tr>
+        <td>Server hostnames</td>
+        <td><code>db-prod-01.acadiau.ca</code></td>
+        <td><code>db-prod-01.example.com</code></td>
+      </tr>
+      <tr>
+        <td>Email addresses</td>
+        <td><code>jsmith@acadiau.ca</code></td>
+        <td><code>user@example.com</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Before and After: Anonymizing a Configuration File</h3>
+
+  <div class="grid-2" style="align-items:start;">
+    <div>
+      <div class="code-header">
+        <span>BEFORE — Do NOT share this</span>
+        <span class="badge badge--red">Contains PII / Credentials</span>
+      </div>
+      <pre><code>[database]
+host     = db-prod-01.acadiau.ca
+port     = 5432
+name     = student_records
+user     = svc_reports
+password = Acadia$DB2024!
+
+[logging]
+level    = DEBUG
+output   = /var/log/reports.log
+admin    = jsmith@acadiau.ca</code></pre>
+    </div>
+    <div>
+      <div class="code-header">
+        <span>AFTER — Safe to share</span>
+        <span class="badge badge--green">Anonymized</span>
+      </div>
+      <pre><code>[database]
+host     = db-prod-01.example.com
+port     = 5432
+name     = [DB_NAME]
+user     = [SERVICE_ACCOUNT]
+password = [REDACTED]
+
+[logging]
+level    = DEBUG
+output   = /var/log/reports.log
+admin    = admin@example.com</code></pre>
+    </div>
+  </div>
+
+  <p>With the anonymized version, Claude can still help you troubleshoot the configuration structure, identify missing settings, or explain what each parameter does — without any sensitive information leaving your control.</p>
+
+  <!-- 10.4 -->
+  <h2 id="s104">10.4 Always Review Claude's Output</h2>
+
+  <p>Claude's output is consistently high quality, but high quality is not the same as correct. Claude can confidently produce a command that is wrong for your specific environment, a version number that doesn't match your OS, or a configuration option that was deprecated in the release you're running. Review is not optional — it is how the human-AI partnership stays reliable.</p>
+
+  <h3>Code and Scripts</h3>
+
+  <div class="card">
+    <h3 style="color:var(--color-primary);">The Code Review Protocol</h3>
+    <ul>
+      <li><strong>Test in a non-production environment first.</strong> No Claude-generated script should run on a production server without first being validated on a test system or staging environment.</li>
+      <li><strong>Use safety flags.</strong> PowerShell's <code>-WhatIf</code> parameter and bash's <code>--dry-run</code> flags show you what a command would do without actually doing it. Use them.</li>
+      <li><strong>Verify the logic independently.</strong> Read through the script and confirm you understand each step. If you can't explain what a line does, research it before running it.</li>
+      <li><strong>Run <code>/security-review</code> before deploying.</strong> Any Claude-generated code that will run on a production system should pass a security review first. This catches vulnerabilities that were introduced by Claude's suggestions, not just by your own code.</li>
+    </ul>
+  </div>
+
+  <div class="code-header">
+    <span>PowerShell — Test Before You Run</span>
+  </div>
+  <pre><code># Always test destructive operations with -WhatIf first
+Get-ChildItem -Path "C:\Logs" -Recurse -Filter "*.log" |
+  Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-90) } |
+  Remove-Item -WhatIf  # Shows what WOULD be deleted — remove -WhatIf to proceed
+
+# Verify script scope — check what variables and functions are defined
+# before running a Claude-generated script in your session
+Get-Variable   # See all currently defined variables
+Get-Command -CommandType Function  # See all currently defined functions</code></pre>
+
+  <h3>Documentation</h3>
+
+  <div class="card">
+    <h3 style="color:var(--color-primary);">Documentation Review Checklist</h3>
+    <ul>
+      <li><strong>Verify technical accuracy.</strong> Claude may reference commands, paths, or options that are slightly wrong for your specific version. Test every command before including it in a published document.</li>
+      <li><strong>Check version numbers.</strong> Confirm that version numbers, build numbers, and software names match the specific software your users are running. Claude's knowledge has a cutoff date and may describe older versions.</li>
+      <li><strong>Verify file paths and URLs.</strong> Claude generates plausible paths that may not match your actual environment. Confirm every path against the real system.</li>
+      <li><strong>Subject matter expert review.</strong> Before publishing a help article or technical procedure, have someone who performs that task regularly review it for accuracy.</li>
+    </ul>
+  </div>
+
+  <h3>Communications</h3>
+
+  <div class="card">
+    <h3 style="color:var(--color-primary);">Communication Review Checklist</h3>
+    <ul>
+      <li><strong>Add specific details Claude doesn't know.</strong> Ticket numbers, contact names, specific dates, internal system names, and escalation paths must be added by you — Claude uses placeholders.</li>
+      <li><strong>Verify the tone.</strong> Claude defaults to a professional tone that may be slightly more formal or less formal than Acadia University's communication norms for a given context. Adjust accordingly.</li>
+      <li><strong>Legal and compliance language.</strong> Any communication that involves legal obligations, privacy rights, regulatory compliance, or contractual terms should be reviewed by the appropriate office (Privacy Office, Legal Counsel, HR) before sending.</li>
+      <li><strong>Confirm recipients.</strong> Before sending a maintenance announcement, confirm the distribution list is complete and correct. Claude doesn't know who is on your mailing lists.</li>
+    </ul>
+  </div>
+
+  <!-- 10.5 -->
+  <h2 id="s105">10.5 Security Testing Context</h2>
+
+  <p>Claude is a capable assistant for security professionals doing authorized security work. It is not a tool for unauthorized access, malware development, or attacks on systems you do not own. This distinction is both ethical and practical — Claude's guidelines restrict it from assisting with certain types of security work regardless of how the request is framed.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="color:var(--color-success);">Claude Will Help With</h3>
+      <ul>
+        <li>Penetration testing and vulnerability scanning of <strong>your own systems</strong></li>
+        <li>CTF (Capture the Flag) challenge problems</li>
+        <li>Security reviews of your own code (<code>/security-review</code>)</li>
+        <li>Defensive security analysis — hardening configurations, reviewing firewall rules, auditing permissions</li>
+        <li>Explaining how vulnerabilities work conceptually for educational purposes</li>
+        <li>Writing security policy documentation and procedures</li>
+        <li>Analyzing malware behavior from safe, already-captured samples</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--color-accent);">Claude Will Not Help With</h3>
+      <ul>
+        <li>Creating malware, ransomware, or weaponized exploit code</li>
+        <li>Attacking systems you do not own or have explicit written authorization to test</li>
+        <li>Generating working exploits for unpatched vulnerabilities in third-party software</li>
+        <li>Bypassing authentication or access controls on systems without documented authorization</li>
+        <li>Surveillance tools designed to operate without the knowledge of the person being monitored</li>
+        <li>Social engineering scripts designed to deceive specific real individuals</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Authorized Security Testing at Acadia</div>
+    If you are conducting authorized security testing of Acadia University systems — such as a scheduled penetration test or vulnerability assessment — document your authorization in writing before starting. Present that authorization context to Claude at the start of your conversation: <em>"I have written authorization from IT management to conduct a penetration test of [system] today. The authorization document is [reference]. Help me with..."</em> This context helps Claude assist effectively with legitimate security work.
+  </div>
+
+  <!-- 10.6 -->
+  <h2 id="s106">10.6 Data Privacy at Acadia University</h2>
+
+  <p>Acadia University operates under several overlapping privacy frameworks. Technology Services staff working with AI tools need to understand which framework applies to the data they handle and what obligations follow from that.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>FERPA</h3>
+      <p style="font-size:0.9rem;"><strong>Family Educational Rights and Privacy Act</strong></p>
+      <p style="font-size:0.88rem;">US federal law protecting student educational records. Applies to Acadia because the university participates in US federal financial aid programs. Restricts disclosure of personally identifiable information from student records. Includes grades, transcripts, enrollment status, financial aid records, and disciplinary records.</p>
+      <p style="font-size:0.88rem;margin-bottom:0;"><strong>AI implication:</strong> Never paste student records containing personally identifiable information into Claude without a formal data processing agreement.</p>
+    </div>
+    <div class="card">
+      <h3>PIPEDA</h3>
+      <p style="font-size:0.9rem;"><strong>Personal Information Protection and Electronic Documents Act</strong></p>
+      <p style="font-size:0.88rem;">Canada's federal privacy law governing how private-sector organizations collect, use, and disclose personal information. Requires consent for collection and limits use to the stated purpose. Covers employees, vendors, and anyone whose personal data Acadia holds.</p>
+      <p style="font-size:0.88rem;margin-bottom:0;"><strong>AI implication:</strong> Using personal information (employee records, contact details, SINs) in an AI system may constitute a disclosure requiring consent or a data processing agreement.</p>
+    </div>
+    <div class="card">
+      <h3>IT Acceptable Use Policy</h3>
+      <p style="font-size:0.9rem;"><strong>Acadia University AUP</strong></p>
+      <p style="font-size:0.88rem;">Acadia's Acceptable Use Policy governs how staff may use university technology resources, including third-party services accessed through those resources. Review the current policy on the Acadia intranet under Technology Services policies.</p>
+      <p style="font-size:0.88rem;margin-bottom:0;"><strong>AI implication:</strong> Using Claude for university work via personal accounts or non-approved tools may not align with AUP requirements. Use the institutionally-sanctioned Claude access.</p>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Enterprise Privacy Agreements</div>
+    Anthropic's enterprise plans include formal data processing agreements that prevent conversation data from being used for model training and provide commitments about data retention and handling. Contact Technology Services management if your role requires this level of data privacy assurance — for example, if your work regularly involves student records, health data, or employment information that cannot be fully anonymized.
+  </div>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">When in Doubt</div>
+    Before using any AI tool to process personal data about students, employees, or other individuals, consult Acadia's Privacy Office. The cost of a brief consultation is far lower than the cost of a privacy breach.
+  </div>
+
+  <!-- 10.7 -->
+  <h2 id="s107">10.7 Keeping Claude Up to Date</h2>
+
+  <p>Claude Code, the underlying Claude models, and the skills your team uses all evolve over time. Staying current ensures you have the latest capabilities, security fixes, and model improvements.</p>
+
+  <h3>Updating Claude Code CLI</h3>
+
+  <div class="code-header">
+    <span>Terminal — Update Claude Code CLI</span>
+  </div>
+  <pre><code># Update Claude Code CLI to the latest version
+npm update -g @anthropic-ai/claude-code
+
+# Verify the installed version
+claude --version
+
+# Check if there's a newer version available
+npm outdated -g @anthropic-ai/claude-code</code></pre>
+
+  <h3>Update Reference</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>How to Update</th>
+        <th>How Often</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Claude Code CLI</td>
+        <td><code>npm update -g @anthropic-ai/claude-code</code></td>
+        <td>Monthly, or when a new version is announced</td>
+      </tr>
+      <tr>
+        <td>Claude Desktop App</td>
+        <td>Updates automatically on launch; check Help &gt; Check for Updates</td>
+        <td>Automatic</td>
+      </tr>
+      <tr>
+        <td>Skills (<code>.md</code> files)</td>
+        <td>Replace the <code>.md</code> file in your skills directory (<code>~/.claude/skills/</code> or project <code>.claude/skills/</code>)</td>
+        <td>As skills are revised by Technology Services</td>
+      </tr>
+      <tr>
+        <td>Claude model</td>
+        <td>Change via <code>/config</code> in Claude Code, or ask Claude: "What model am I using?"</td>
+        <td>When new models are released; review release notes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Current Model Reference</h3>
+
+  <p>As of June 2026, the following Claude models are available. Model availability and IDs may change as Anthropic releases new versions — always verify via <code>/config</code> or the Anthropic documentation.</p>
+
+  <div class="grid-3">
+    <div class="icon-card">
+      <div class="icon">&#9889;</div>
+      <h3>Haiku 4.5</h3>
+      <p style="font-size:0.85rem;color:var(--color-muted);">Fastest model. Best for high-volume, simple tasks where speed matters more than depth.</p>
+      <span class="badge badge--gray">claude-haiku-4-5</span>
+    </div>
+    <div class="icon-card" style="border-color:var(--color-primary-200);background:var(--color-primary-50);">
+      <div class="icon">&#9878;</div>
+      <h3>Sonnet 4.6</h3>
+      <p style="font-size:0.85rem;color:var(--color-muted);">Default model. Balanced performance and capability — the right choice for most IT tasks.</p>
+      <span class="badge badge--blue">claude-sonnet-4-6 (default)</span>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#127775;</div>
+      <h3>Opus 4.8</h3>
+      <p style="font-size:0.85rem;color:var(--color-muted);">Most capable model. Best for complex analysis, architecture decisions, and nuanced reasoning.</p>
+      <span class="badge badge--gray">claude-opus-4-8</span>
+    </div>
+  </div>
+
+  <!-- 10.8 -->
+  <h2 id="s108">10.8 When to Use Claude vs. Escalate</h2>
+
+  <p>Claude is the right tool for a wide range of IT tasks — but not every task. Part of professional judgment is knowing when to rely on AI assistance and when a situation requires authoritative human expertise, formal processes, or legal guidance.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Situation</th>
+        <th>Use Claude?</th>
+        <th>Rationale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Drafting a script for a known, well-scoped task</td>
+        <td><span class="badge badge--green">Yes</span></td>
+        <td>Claude excels here. Review the output carefully before running in production, but this is exactly the kind of work Claude accelerates.</td>
+      </tr>
+      <tr>
+        <td>Debugging a known error message or log entry</td>
+        <td><span class="badge badge--green">Yes</span></td>
+        <td>Claude's training covers thousands of common error conditions. It's faster than documentation search for known issues.</td>
+      </tr>
+      <tr>
+        <td>Writing routine IT documentation or help articles</td>
+        <td><span class="badge badge--green">Yes</span></td>
+        <td>Claude produces excellent first drafts. Accuracy review is required before publishing, but the time savings are significant.</td>
+      </tr>
+      <tr>
+        <td>Designing a new network architecture or major infrastructure decision</td>
+        <td><span class="badge badge--blue">Partially</span></td>
+        <td>Claude provides useful input on options and trade-offs, but major architectural decisions require human expertise, institutional knowledge, and formal review processes.</td>
+      </tr>
+      <tr>
+        <td>Analyzing logs and interpreting error patterns</td>
+        <td><span class="badge badge--green">Yes</span></td>
+        <td>One of Claude's strongest use cases. Fast, thorough, and good at identifying patterns across large volumes of log data.</td>
+      </tr>
+      <tr>
+        <td>Responding to an active security incident</td>
+        <td><span class="badge badge--red">No (or very limited)</span></td>
+        <td>Active incident response requires authoritative, audited decisions. Use established incident response procedures. Claude can help with reference lookups in parallel, but should not be the primary decision tool.</td>
+      </tr>
+      <tr>
+        <td>Processing or analyzing student personal data</td>
+        <td><span class="badge badge--red">Only with enterprise agreement</span></td>
+        <td>FERPA and PIPEDA restrictions apply. Without a formal data processing agreement, student personal data must not be shared with Claude. Consult the Privacy Office.</td>
+      </tr>
+      <tr>
+        <td>Making production database changes</td>
+        <td><span class="badge badge--blue">Generate SQL only</span></td>
+        <td>Claude can generate and review SQL with high quality. A human must review the generated SQL independently and execute it — never have Claude execute database changes directly in production.</td>
+      </tr>
+      <tr>
+        <td>Interpreting legal obligations or contracts</td>
+        <td><span class="badge badge--red">No</span></td>
+        <td>Legal interpretation requires qualified legal counsel. Claude can summarize documents, but contract interpretation, compliance decisions, and legal advice must come from appropriate professionals.</td>
+      </tr>
+      <tr>
+        <td>Writing vendor communications or escalations</td>
+        <td><span class="badge badge--green">Yes</span></td>
+        <td>Claude drafts excellent professional communications. Review and add specific details before sending. Useful for organizing the case history before a call.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 10.9 — Training Completion -->
+  <div id="s109" class="completion-card">
+    <div class="completion-icon">&#127942;</div>
+    <h2>Congratulations!</h2>
+    <p style="font-size:1.1rem;color:#fff;">You have completed the Claude AI Training for Technology Services.</p>
+    <p>You are now equipped to use Claude Code effectively and responsibly in your IT work at Acadia University.</p>
+
+    <ul class="modules-list">
+      <li>Module 1 &mdash; Introduction to Claude and Claude Code</li>
+      <li>Module 2 &mdash; Interfaces: Desktop, CLI, and claude.ai</li>
+      <li>Module 3 &mdash; Skills and Slash Commands</li>
+      <li>Module 4 &mdash; Permissions and the /allow System</li>
+      <li>Module 5 &mdash; Git Integration and Code Review</li>
+      <li>Module 6 &mdash; Writing and Running Scripts</li>
+      <li>Module 7 &mdash; Data Management Workflows</li>
+      <li>Module 8 &mdash; Documentation with Claude</li>
+      <li>Module 9 &mdash; Common IT Workflows</li>
+      <li>Module 10 &mdash; Best Practices and Security</li>
+    </ul>
+  </div>
+
+  <!-- Next Steps -->
+  <div class="next-steps-card">
+    <h3>Your Next Steps</h3>
+    <ol class="steps" style="margin-bottom:0;">
+      <li>
+        <div class="step-body">
+          <p><strong>Install Claude Code</strong> if you haven't already: <code>npm install -g @anthropic-ai/claude-code</code>. Open a terminal in a project folder and run <code>claude</code> to start your first session.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Try a skill from today's training.</strong> Use <code>/security-review</code> on a recent script you've written, or <code>/theme</code> on a document you need to format. Skills are the fastest way to see Claude's value immediately.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Ask Claude a real question from your work queue.</strong> Pick something you'd normally spend 15&ndash;30 minutes on — a troubleshooting problem, a script you need, a document you need to draft — and see how Claude handles it.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Share findings with the team.</strong> When Claude helps you solve something faster or better, note how you prompted it. Building a shared library of effective prompts is one of the highest-value things the team can do together.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- Contact / Questions -->
+  <div class="callout callout--info" style="margin-top:var(--space-8);">
+    <div class="callout-label">Questions About Claude Adoption</div>
+    If you have questions about using Claude at Acadia University — access, licensing, data privacy agreements, or how to use Claude for a specific task — reach out to Technology Services management. We're building this capability together and your questions help shape how we support it.
+  </div>
+
+</main>
+
+<!-- Module Navigation Bar -->
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 9 IT Workflows - 20260628.html">&#8592; Module 9: IT Workflows</a>
+    <span style="color:var(--color-muted);font-size:0.85rem;">Module 10 of 10 &mdash; Final Module</span>
+    <span style="font-weight:600;font-size:0.9rem;color:var(--color-success);">Training Complete &#10003;</span>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>Acadia University &mdash; Technology Services &mdash; Claude AI Training Series</span>
+    <span>Module 10 of 10 &mdash; Best Practices and Security &mdash; June 28, 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>

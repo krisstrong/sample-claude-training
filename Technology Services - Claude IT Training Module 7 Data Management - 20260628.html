@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 7: Data Management with Claude — Acadia University Technology Services</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+.format-chip{display:inline-block;background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);border-radius:var(--radius-sm);padding:2px 8px;font-size:0.78rem;font-weight:700;font-family:var(--font-mono);margin:2px;}
+</style>
+</head>
+<body>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia</div>
+    <h1>Technology Services — Claude AI Training Series</h1>
+    <span class="module-badge">Module 7 of 10</span>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a>
+    &rsaquo; Module 7: Data Management with Claude
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+
+  <h1>Module 7: Data Management with Claude</h1>
+  <p><span class="badge badge--blue">Data &amp; Analytics</span> &nbsp;<span class="badge badge--gray">Estimated time: 45 minutes</span></p>
+  <p>IT teams handle structured data constantly — server logs, user account exports, asset inventories, audit trails, and ticket exports. This module teaches you to use Claude as a data partner: analyzing files, generating SQL queries, transforming records, and documenting schemas without needing a dedicated data analyst.</p>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h4>In This Module</h4>
+    <ol>
+      <li><a href="#section-71">7.1 — Claude for Data Work in IT</a></li>
+      <li><a href="#section-72">7.2 — Analyzing CSV and JSON Data</a></li>
+      <li><a href="#section-73">7.3 — Writing SQL Queries</a></li>
+      <li><a href="#section-74">7.4 — Data Transformation Scripts</a></li>
+      <li><a href="#section-75">7.5 — Log Analysis</a></li>
+      <li><a href="#section-76">7.6 — Data Documentation and Dictionaries</a></li>
+      <li><a href="#section-77">7.7 — Working with Excel Data</a></li>
+      <li><a href="#section-78">7.8 — Data Safety Rules</a></li>
+    </ol>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 7.1 -->
+  <!-- ============================================================ -->
+  <h2 id="section-71">7.1 Claude for Data Work in IT</h2>
+
+  <p>Every IT team produces and consumes structured data — and the gap between raw exports and actionable insight is usually filled by manual effort or specialized tools you may not have. Claude closes that gap.</p>
+
+  <div class="grid-3">
+    <div class="icon-card">
+      <div class="icon">&#128202;</div>
+      <h3>Analyze</h3>
+      <p>Summarize datasets, find patterns, flag anomalies in exported reports</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128260;</div>
+      <h3>Transform</h3>
+      <p>Reshape, normalize, and clean data with generated scripts</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128196;</div>
+      <h3>Document</h3>
+      <p>Generate data dictionaries, schema descriptions, and field definitions</p>
+    </div>
+  </div>
+
+  <h3>Common IT data sources Claude works with</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Data Source</th>
+        <th>Typical Format</th>
+        <th>What Claude Can Do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Asset inventory exports</td>
+        <td><span class="format-chip">CSV</span></td>
+        <td>Summarize OS breakdown, flag EOL systems, find duplicates</td>
+      </tr>
+      <tr>
+        <td>Active Directory user exports</td>
+        <td><span class="format-chip">CSV</span> <span class="format-chip">JSON</span></td>
+        <td>Identify inactive accounts, normalize fields, generate reports</td>
+      </tr>
+      <tr>
+        <td>Helpdesk ticket exports</td>
+        <td><span class="format-chip">CSV</span> <span class="format-chip">JSON</span></td>
+        <td>Trend analysis, SLA compliance, category breakdowns</td>
+      </tr>
+      <tr>
+        <td>Server and application logs</td>
+        <td><span class="format-chip">TXT</span> <span class="format-chip">CSV</span></td>
+        <td>Error pattern detection, summarization, anomaly detection</td>
+      </tr>
+      <tr>
+        <td>Network configuration files</td>
+        <td><span class="format-chip">YAML</span> <span class="format-chip">XML</span></td>
+        <td>Audit settings, compare configs, generate documentation</td>
+      </tr>
+      <tr>
+        <td>Database schemas</td>
+        <td><span class="format-chip">SQL</span></td>
+        <td>Generate queries, document tables, write migrations</td>
+      </tr>
+      <tr>
+        <td>Audit trail exports</td>
+        <td><span class="format-chip">CSV</span> <span class="format-chip">JSON</span></td>
+        <td>Compliance summaries, access pattern analysis, reporting</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Key Principle</div>
+    Claude does not require you to be a data analyst or know SQL to extract value from your data. Describe what you want in plain English — Claude handles the technical translation.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 7.2 -->
+  <!-- ============================================================ -->
+  <h2 id="section-72">7.2 Analyzing CSV and JSON Data</h2>
+
+  <p>Sharing data files with Claude is straightforward. The method depends on which interface you're using.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>&#128421; Desktop App</h3>
+      <p>Drag and drop CSV or JSON files directly into the chat window. Claude reads the file automatically — no copy-paste required.</p>
+      <p><strong>Best for:</strong> Files up to several MB, interactive analysis sessions</p>
+    </div>
+    <div class="card">
+      <h3>&#9000; Terminal CLI</h3>
+      <p>Pipe file contents directly into Claude using standard shell syntax.</p>
+      <div class="code-header">PowerShell</div>
+      <pre><code>cat data.csv | claude "summarize this dataset"</code></pre>
+      <p><strong>Best for:</strong> Automation, large files, scripted workflows</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#128279; VS Code Extension</h3>
+    <p>Open the data file in the VS Code editor, then reference it in the Claude sidebar panel. Claude can see the active editor's contents in context.</p>
+    <p><strong>Best for:</strong> Developers working alongside code that processes the data</p>
+  </div>
+
+  <h3>Example workflow: Analyzing a server asset inventory</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Export the asset list to CSV</strong> from your asset management tool (e.g., Lansweeper, Snipe-IT, or a custom CMDB). Make sure to anonymize any fields containing personal data before proceeding.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Drop the CSV into Claude Desktop.</strong> Drag the file from File Explorer into the Claude chat window. You'll see a file attachment chip appear above the message field confirming the upload.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Ask your analysis question in plain language.</strong> You don't need to describe the file structure — Claude reads the headers automatically.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Review Claude's structured summary</strong> and follow up with refinements: "Now break that down by building location" or "Export just the EOL systems as a table."</p>
+      </div>
+    </li>
+  </ol>
+
+  <p>Here is how this interaction looks in Claude Desktop:</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude — Technology Services Workspace</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">
+          <strong>&#128206; server_asset_inventory_june2026.csv</strong> &nbsp;<span class="badge badge--gray">847 rows</span><br><br>
+          Summarize this asset inventory. How many Windows vs Linux servers? Which are running end-of-life OS versions? Flag anything that should be prioritized for upgrade.
+        </div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>Here's a summary of the 847 assets in your inventory:</p>
+          <p><strong>Operating System Breakdown</strong></p>
+          <ul>
+            <li><strong>Windows Server:</strong> 512 systems (60.4%)
+              <ul>
+                <li>Windows Server 2022: 198</li>
+                <li>Windows Server 2019: 204</li>
+                <li>Windows Server 2016: 87 <span class="badge badge--red">EOL Jan 2027</span></li>
+                <li>Windows Server 2012 R2: 23 <span class="badge badge--red">EOL Oct 2023 — Critical</span></li>
+              </ul>
+            </li>
+            <li><strong>Linux:</strong> 335 systems (39.6%)
+              <ul>
+                <li>RHEL 9 / CentOS Stream 9: 142</li>
+                <li>Ubuntu 22.04 LTS: 119</li>
+                <li>Ubuntu 20.04 LTS: 58 <span class="badge badge--gray">EOL Apr 2025 — Extended</span></li>
+                <li>CentOS 7: 16 <span class="badge badge--red">EOL Jun 2024 — Critical</span></li>
+              </ul>
+            </li>
+          </ul>
+          <p><strong>Priority Upgrade Targets (39 systems)</strong></p>
+          <ul>
+            <li><strong>Critical — already past EOL:</strong> 23x Windows Server 2012 R2, 16x CentOS 7. These systems should be remediated immediately as they are no longer receiving security patches.</li>
+            <li><strong>High — EOL within 12 months:</strong> 87x Windows Server 2016 (support ends January 12, 2027).</li>
+          </ul>
+          <p>Would you like me to export the critical and high-priority systems as a separate table, or generate a remediation timeline based on the counts?</p>
+        </div>
+      </div>
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">
+          Yes — give me a table of just the critical systems with hostname, OS, and last_patch_date columns.
+        </div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          Here are the 39 critical systems past end-of-life, sorted by last patch date (oldest first):<br><br>
+          <table style="font-size:0.82rem;">
+            <thead>
+              <tr><th>Hostname</th><th>OS Version</th><th>Last Patch Date</th><th>Days Since Patch</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>srv-db-prod-04</td><td>CentOS 7.9</td><td>2024-03-12</td><td>838</td></tr>
+              <tr><td>srv-app-legacy-01</td><td>Windows Server 2012 R2</td><td>2024-04-01</td><td>819</td></tr>
+              <tr><td>srv-print-02</td><td>Windows Server 2012 R2</td><td>2024-06-15</td><td>743</td></tr>
+              <tr><td colspan="4" style="text-align:center;color:var(--color-muted);font-style:italic;">... 36 additional rows ...</td></tr>
+            </tbody>
+          </table>
+          I can also generate a PowerShell or Bash remediation checklist script for these hosts if that would help.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Pro Tip</div>
+    Follow-up questions are free. After getting the initial summary, keep asking: "Which of those are in the Finance department?" or "Create a Jira ticket template for each critical host." Claude holds the entire dataset in context for the session.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 7.3 -->
+  <!-- ============================================================ -->
+  <h2 id="section-73">7.3 Writing SQL Queries</h2>
+
+  <p>Generating correct SQL — especially for joins, subqueries, and aggregations — is one of Claude's strongest data capabilities. You describe what you need in English; Claude writes the query.</p>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Context Tip</div>
+    Always tell Claude your database platform (SQL Server, PostgreSQL, MySQL, SQLite) at the start of the conversation. Syntax differences matter — <code>GETDATE()</code> is SQL Server, <code>NOW()</code> is MySQL/PostgreSQL, <code>datetime('now')</code> is SQLite.
+  </div>
+
+  <h3>Example 1: Inactive account audit query</h3>
+
+  <p><strong>What you say to Claude:</strong></p>
+  <div class="claude-ui" style="margin-bottom:0;">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude</span>
+    </div>
+    <div class="claude-ui-body" style="padding-bottom:var(--space-3);">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">SQL Server. Write a SQL query to find all user accounts that haven't logged in for 180 days, joined with their department from the departments table. Include days inactive and sort by most inactive first.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-header">SQL — SQL Server</div>
+  <pre><code>SELECT
+    u.username,
+    u.email,
+    u.last_login,
+    d.department_name,
+    DATEDIFF(DAY, u.last_login, GETDATE()) AS days_inactive
+FROM users u
+LEFT JOIN departments d ON u.department_id = d.id
+WHERE u.last_login &lt; DATEADD(DAY, -180, GETDATE())
+    AND u.is_active = 1
+ORDER BY days_inactive DESC;</code></pre>
+
+  <h3>Example 2: Query optimization</h3>
+
+  <p>If a query is timing out or running slow, paste it into Claude and ask for help. Claude does not just fix the syntax — it explains why the query is slow and what index would help.</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">This query is timing out on our helpdesk database (PostgreSQL, ~2M rows in tickets). Can you optimize it?<br><br>
+        <code>SELECT * FROM tickets WHERE LOWER(subject) LIKE '%network%' AND created_at &gt; '2026-01-01' ORDER BY created_at DESC;</code></div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>There are two performance problems here:</p>
+          <ol>
+            <li><strong><code>LOWER(subject) LIKE '%network%'</code></strong> — The leading wildcard (<code>%network%</code>) prevents any index on <code>subject</code> from being used. PostgreSQL has to scan every row and apply the function. This is the primary bottleneck.</li>
+            <li><strong><code>SELECT *</code></strong> — Fetching all columns forces a heap fetch on every matching row, even if you only need a few fields.</li>
+          </ol>
+          <p><strong>Optimized approach:</strong></p>
+          <pre style="margin:var(--space-2) 0;"><code>-- 1. Create a GIN index for full-text search (run once)
+CREATE INDEX idx_tickets_subject_fts
+    ON tickets USING GIN(to_tsvector('english', subject));
+
+-- 2. Optimized query using full-text search
+SELECT id, subject, status, assignee_id, created_at
+FROM tickets
+WHERE to_tsvector('english', subject) @@ plainto_tsquery('english', 'network')
+    AND created_at &gt; '2026-01-01'
+ORDER BY created_at DESC;</code></pre>
+          <p>The GIN index enables sub-millisecond full-text matching. Expected improvement: from 8–15 seconds to under 100ms on 2M rows. The index creation itself takes roughly 30–60 seconds and can be done without locking the table using <code>CREATE INDEX CONCURRENTLY</code>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>More SQL prompts that work well</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>What You Want</th>
+        <th>How to Ask Claude</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ticket volume by category per month</td>
+        <td>"Write a SQL query grouping helpdesk tickets by category and month for 2026. Show percentage of total."</td>
+      </tr>
+      <tr>
+        <td>Duplicate detection</td>
+        <td>"Find duplicate email addresses in the users table — show all columns for any email that appears more than once."</td>
+      </tr>
+      <tr>
+        <td>Cross-table report</td>
+        <td>"Join the assets, assignments, and users tables to show which user has each asset and when it was assigned."</td>
+      </tr>
+      <tr>
+        <td>Data migration validation</td>
+        <td>"Write a query to verify that every row in the old_users table has a matching record in new_users by email."</td>
+      </tr>
+      <tr>
+        <td>Stored procedure</td>
+        <td>"Write a stored procedure that takes a department_id parameter and returns all active users with their last login and asset count."</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- 7.4 -->
+  <!-- ============================================================ -->
+  <h2 id="section-74">7.4 Data Transformation Scripts</h2>
+
+  <p>When data arrives from one system in the wrong shape for another, Claude writes the transformation script. This is faster than building it manually and produces clean, commented code you can re-run.</p>
+
+  <h3>Example: Normalizing phone numbers from an AD export</h3>
+
+  <p><strong>Prompt to Claude:</strong> "Write a PowerShell script to read a CSV of Active Directory user exports, normalize all phone numbers to E.164 format (<code>+1XXXXXXXXXX</code>), and output a clean CSV. Handle missing and malformed entries gracefully."</p>
+
+  <div class="code-header">PowerShell — Normalize-PhoneNumbers.ps1</div>
+  <pre><code># Normalize-PhoneNumbers.ps1
+# Reads AD user export CSV and normalizes phone numbers to E.164 format.
+# Usage: .\Normalize-PhoneNumbers.ps1 -InputFile users_export.csv -OutputFile users_normalized.csv
+
+param(
+    [Parameter(Mandatory)][string]$InputFile,
+    [Parameter(Mandatory)][string]$OutputFile,
+    [string]$PhoneColumn = "telephoneNumber"
+)
+
+function ConvertTo-E164 {
+    param([string]$RawPhone)
+    if ([string]::IsNullOrWhiteSpace($RawPhone)) { return "" }
+
+    # Strip all non-digit characters
+    $digits = $RawPhone -replace '\D', ''
+
+    switch ($digits.Length) {
+        10 { return "+1$digits" }                          # North American 10-digit
+        11 { if ($digits[0] -eq '1') { return "+$digits" } }  # Already has country code
+        default { return $RawPhone }                       # Return as-is if unrecognized
+    }
+    return $RawPhone
+}
+
+$data   = Import-Csv -Path $InputFile
+$errors = 0
+$fixed  = 0
+
+$normalized = $data | ForEach-Object {
+    $original = $_.$PhoneColumn
+    $e164     = ConvertTo-E164 -RawPhone $original
+    $_.$PhoneColumn = $e164
+    if ($original -ne $e164 -and $e164 -ne "") { $fixed++ }
+    if ($e164 -eq "" -and $original -ne "") { $errors++ }
+    $_
+}
+
+$normalized | Export-Csv -Path $OutputFile -NoTypeInformation
+Write-Host "Processed $($data.Count) records."
+Write-Host "  Normalized: $fixed"
+Write-Host "  Skipped (empty or unrecognized): $errors"
+Write-Host "Output written to: $OutputFile"</code></pre>
+
+  <h3>Python alternative for larger datasets</h3>
+
+  <p>For datasets above ~50,000 rows, Python with pandas is faster and more memory-efficient than PowerShell CSV processing.</p>
+
+  <div class="code-header">Python — normalize_phones.py</div>
+  <pre><code>import pandas as pd
+import re
+
+def normalize_phone(phone):
+    """Convert phone number to E.164 format (+1XXXXXXXXXX)."""
+    if pd.isna(phone) or str(phone).strip() == "":
+        return ""
+
+    digits = re.sub(r'\D', '', str(phone))
+
+    if len(digits) == 10:
+        return f'+1{digits}'
+    elif len(digits) == 11 and digits[0] == '1':
+        return f'+{digits}'
+
+    return phone  # Return as-is if unrecognized
+
+df = pd.read_csv('users_export.csv')
+
+# Track what changed
+original = df['phone'].copy()
+df['phone_normalized'] = df['phone'].apply(normalize_phone)
+
+changed = (original != df['phone_normalized']).sum()
+empty   = (df['phone_normalized'] == "").sum()
+
+df.to_csv('users_normalized.csv', index=False)
+
+print(f"Processed {len(df):,} records")
+print(f"  Normalized:            {changed:,}")
+print(f"  Empty/unrecognized:    {empty:,}")
+print(f"  Output: users_normalized.csv")</code></pre>
+
+  <h3>Other common transformation tasks Claude handles well</h3>
+
+  <ul>
+    <li><strong>Date format normalization:</strong> Converting mixed date formats (MM/DD/YYYY, YYYY-MM-DD, "June 28 2026") to a consistent ISO 8601 format</li>
+    <li><strong>Column renaming and reordering:</strong> Mapping fields between two system export formats</li>
+    <li><strong>Merging multiple CSVs:</strong> Combining monthly ticket exports into a single file, deduplicating on a key column</li>
+    <li><strong>JSON flattening:</strong> Converting nested JSON API responses to a flat CSV for import into Excel or a database</li>
+    <li><strong>Encoding repair:</strong> Fixing UTF-8 mojibake in legacy exports from older systems</li>
+  </ul>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Iteration Tip</div>
+    Paste the first few lines of your actual CSV (with sensitive data removed) when asking for a transformation script. Claude will match the exact column names and handle edge cases specific to your data.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 7.5 -->
+  <!-- ============================================================ -->
+  <h2 id="section-75">7.5 Log Analysis</h2>
+
+  <p>Server logs, event logs, and application logs are verbose and time-consuming to parse manually. Claude reads log excerpts and extracts what matters: errors, patterns, anomalies, and timelines.</p>
+
+  <h3>Effective log analysis prompts</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Web Server Logs</h3>
+      <p>"Here are the last 500 lines of our Apache access log. Are there any unusual patterns or IP addresses making an unusually high number of requests?"</p>
+      <p class="caption">Claude will group by IP, flag request rates, identify suspicious user agents, and spot 4xx/5xx spikes.</p>
+    </div>
+    <div class="card">
+      <h3>Syslog / System Events</h3>
+      <p>"Find all ERROR and CRITICAL entries in this syslog export and group them by service. Which service has the highest error rate?"</p>
+      <p class="caption">Claude will extract, count, and categorize errors — something that would take grep and awk pipelines manually.</p>
+    </div>
+    <div class="card">
+      <h3>Windows Event Log</h3>
+      <p>"This Windows Event Log export has 2,000 events. Summarize what happened between 2:00 AM and 4:00 AM — I'm investigating a performance incident."</p>
+      <p class="caption">Claude builds a timeline, flags warnings and errors, and correlates events that occurred close together.</p>
+    </div>
+    <div class="card">
+      <h3>Application Traces</h3>
+      <p>"Here is a stack trace from our ticketing system. What caused this exception and what file/line should I look at first?"</p>
+      <p class="caption">Claude reads the full stack trace and points directly to the root cause, not just the surface error.</p>
+    </div>
+  </div>
+
+  <h3>CLI approach: Pipe logs directly from PowerShell</h3>
+
+  <p>You don't need to export to a file first. Pipe live output directly into Claude from the terminal:</p>
+
+  <div class="code-header">PowerShell — Live log analysis</div>
+  <pre><code># Analyze the 100 most recent system errors
+Get-EventLog -LogName System -EntryType Error -Newest 100 |
+    ConvertTo-Csv |
+    claude "summarize these system errors and identify any recurring issues or patterns"</code></pre>
+
+  <div class="code-header">PowerShell — Application log file</div>
+  <pre><code># Send a log file excerpt to Claude for analysis
+Get-Content "C:\Logs\IIS\u_ex260628.log" -Tail 500 |
+    claude "identify any 500 errors, slow responses over 5 seconds, and the top 5 requesting IPs"</code></pre>
+
+  <div class="code-header">Bash (Linux) — Syslog analysis</div>
+  <pre><code># Last 200 lines of syslog, filtered to errors and criticals
+grep -E "ERROR|CRITICAL|WARN" /var/log/syslog | tail -200 | \
+    claude "group these log entries by service and summarize the top issues"</code></pre>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Size Considerations</div>
+    Claude's context window can handle several thousand lines of log data comfortably. For very large log files (100,000+ lines), pre-filter with <code>grep</code> or <code>Select-String</code> before sending to Claude. Always remove or mask IP addresses and usernames from externally shared logs.
+  </div>
+
+  <h3>What Claude produces from log analysis</h3>
+
+  <ul>
+    <li>A structured summary of error types and their frequency</li>
+    <li>A timeline of events with timestamps highlighted</li>
+    <li>Identification of which services or components are most affected</li>
+    <li>Actionable next steps: which log to check next, which service to restart</li>
+    <li>A condensed incident report you can paste into a ticket</li>
+  </ul>
+
+  <!-- ============================================================ -->
+  <!-- 7.6 -->
+  <!-- ============================================================ -->
+  <h2 id="section-76">7.6 Data Documentation and Dictionaries</h2>
+
+  <p>Data without documentation creates institutional knowledge gaps. When staff leave or systems are handed over, undocumented schemas become liabilities. Claude generates data dictionaries in minutes from schemas or sample data.</p>
+
+  <h3>Prompts for data documentation</h3>
+
+  <ul>
+    <li>"Here is the schema for our helpdesk database. Generate a data dictionary with field names, types, nullable status, and plain-English descriptions."</li>
+    <li>"Write descriptions for each column in this CSV — the file is a student enrollment extract from Banner."</li>
+    <li>"Document this API JSON response — what does each field represent? Include the data type and example values."</li>
+    <li>"Generate a README for this database table explaining what it stores, how it relates to the users table, and when records are created vs updated."</li>
+  </ul>
+
+  <h3>Example: Generated data dictionary</h3>
+
+  <p><strong>Prompt to Claude:</strong> "Here is a CREATE TABLE statement for our helpdesk tickets table. Generate a data dictionary."</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Field Name</th>
+        <th>Type</th>
+        <th>Nullable</th>
+        <th>Description</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td>INT</td>
+        <td>No</td>
+        <td>Unique ticket identifier, auto-incremented primary key</td>
+        <td>10482</td>
+      </tr>
+      <tr>
+        <td><code>subject</code></td>
+        <td>VARCHAR(255)</td>
+        <td>No</td>
+        <td>Short summary of the issue entered by the requester at ticket creation</td>
+        <td>"Cannot connect to VPN from off-campus"</td>
+      </tr>
+      <tr>
+        <td><code>requester_id</code></td>
+        <td>INT</td>
+        <td>No</td>
+        <td>Foreign key to <code>users.id</code> — the person who submitted the ticket</td>
+        <td>3847</td>
+      </tr>
+      <tr>
+        <td><code>assignee_id</code></td>
+        <td>INT</td>
+        <td>Yes</td>
+        <td>Foreign key to <code>users.id</code> — the IT staff member currently responsible. NULL if unassigned.</td>
+        <td>1021</td>
+      </tr>
+      <tr>
+        <td><code>status</code></td>
+        <td>ENUM</td>
+        <td>No</td>
+        <td>Current ticket state. Values: <code>open</code>, <code>in_progress</code>, <code>pending</code>, <code>resolved</code>, <code>closed</code></td>
+        <td>in_progress</td>
+      </tr>
+      <tr>
+        <td><code>priority</code></td>
+        <td>ENUM</td>
+        <td>No</td>
+        <td>Urgency level set by IT staff. Values: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code></td>
+        <td>high</td>
+      </tr>
+      <tr>
+        <td><code>created_at</code></td>
+        <td>DATETIME</td>
+        <td>No</td>
+        <td>UTC timestamp when the ticket was first submitted</td>
+        <td>2026-06-28 09:14:22</td>
+      </tr>
+      <tr>
+        <td><code>resolved_at</code></td>
+        <td>DATETIME</td>
+        <td>Yes</td>
+        <td>UTC timestamp when the ticket was moved to <code>resolved</code> status. NULL for open tickets.</td>
+        <td>2026-06-28 11:30:05</td>
+      </tr>
+      <tr>
+        <td><code>sla_breached</code></td>
+        <td>BOOLEAN</td>
+        <td>No</td>
+        <td>TRUE if the ticket was not resolved within the SLA window for its priority level</td>
+        <td>false</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Workflow Tip</div>
+    Keep the generated data dictionary as a living document. When the schema changes, paste the updated <code>CREATE TABLE</code> statement and ask Claude: "Update the data dictionary to reflect these changes." Claude will diff the changes and revise only the affected rows.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 7.7 -->
+  <!-- ============================================================ -->
+  <h2 id="section-77">7.7 Working with Excel Data</h2>
+
+  <p>Excel is ubiquitous in university administration. Claude integrates with Excel workflows in several ways, even without a direct Excel plugin.</p>
+
+  <h3>Methods for using Claude with Excel</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>&#128203; Paste Table Data Directly</h3>
+      <p>Copy cells from Excel and paste into Claude chat. Claude reads tab-separated or space-aligned table text and understands the structure automatically.</p>
+      <p><strong>Best for:</strong> Quick analysis of small to medium tables</p>
+    </div>
+    <div class="card">
+      <h3>&#128196; Export to CSV First</h3>
+      <p>File &rarr; Save As &rarr; CSV. Then drag the CSV into Claude Desktop or pipe it via CLI. No data is lost for flat sheets.</p>
+      <p><strong>Best for:</strong> Large datasets, complex analysis</p>
+    </div>
+    <div class="card">
+      <h3>&#128207; Ask for Excel Formulas</h3>
+      <p>Describe what you want to calculate and Claude writes the formula, including complex nested functions.</p>
+      <p><strong>Best for:</strong> Formula generation without manual lookup</p>
+    </div>
+    <div class="card">
+      <h3>&#129302; Generate Automation Scripts</h3>
+      <p>Ask Claude to write Python (openpyxl or pandas) or PowerShell scripts to process Excel files programmatically.</p>
+      <p><strong>Best for:</strong> Recurring reports, batch processing</p>
+    </div>
+  </div>
+
+  <h3>Excel formula generation examples</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>What You Ask For</th>
+        <th>What Claude Produces</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"VLOOKUP to match employee IDs in column A of Sheet1 against Sheet2 and return the department name"</td>
+        <td><code>=VLOOKUP(A2,Sheet2!$A:$B,2,FALSE)</code></td>
+      </tr>
+      <tr>
+        <td>"Count tickets in column C that are 'Critical' and were created after June 1"</td>
+        <td><code>=COUNTIFS(C2:C1000,"Critical",D2:D1000,"&gt;"&amp;DATE(2026,6,1))</code></td>
+      </tr>
+      <tr>
+        <td>"Average resolution time in hours where status is 'Resolved'"</td>
+        <td><code>=AVERAGEIF(F2:F1000,"Resolved",G2:G1000)*24</code></td>
+      </tr>
+      <tr>
+        <td>"Flag rows where the last login date is more than 180 days ago"</td>
+        <td><code>=IF(TODAY()-B2&gt;180,"Inactive","Active")</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Python script for automated Excel processing</h3>
+
+  <div class="code-header">Python — Generate monthly summary from helpdesk Excel export</div>
+  <pre><code>import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from datetime import datetime
+
+# Load the helpdesk export
+df = pd.read_excel('helpdesk_export_june2026.xlsx', sheet_name='Tickets')
+
+# Parse dates
+df['created_at'] = pd.to_datetime(df['created_at'])
+df['resolved_at'] = pd.to_datetime(df['resolved_at'])
+df['resolution_hours'] = (df['resolved_at'] - df['created_at']).dt.total_seconds() / 3600
+
+# Monthly summary by category
+summary = df.groupby(['category', 'priority']).agg(
+    ticket_count=('id', 'count'),
+    avg_resolution_hrs=('resolution_hours', 'mean'),
+    sla_breaches=('sla_breached', 'sum')
+).round(1).reset_index()
+
+# Write to Excel with formatting
+with pd.ExcelWriter('monthly_summary.xlsx', engine='openpyxl') as writer:
+    summary.to_excel(writer, sheet_name='Summary', index=False)
+
+    ws = writer.sheets['Summary']
+    header_fill = PatternFill("solid", fgColor="004077")  # Acadia Blue
+    for cell in ws[1]:
+        cell.font = Font(bold=True, color="FFFFFF")
+        cell.fill = header_fill
+        cell.alignment = Alignment(horizontal='center')
+
+    for col in ws.columns:
+        ws.column_dimensions[col[0].column_letter].width = 20
+
+print(f"Summary written: {len(summary)} rows across {summary['category'].nunique()} categories")
+print(f"Report saved: monthly_summary.xlsx")</code></pre>
+
+  <!-- ============================================================ -->
+  <!-- 7.8 -->
+  <!-- ============================================================ -->
+  <h2 id="section-78">7.8 Data Safety Rules</h2>
+
+  <div class="callout">
+    <div class="callout-label">Critical — Data Privacy Requirements</div>
+    <p>Claude processes the data you share in your conversation. That data is subject to Acadia University's data handling policies and applicable privacy legislation. Following these rules is mandatory, not optional.</p>
+  </div>
+
+  <h3>What you must never share with Claude</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Data Category</th>
+        <th>Why It's Protected</th>
+        <th>What to Do Instead</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Student academic records (grades, enrollment, transcripts)</td>
+        <td>FERPA, Acadia privacy policy</td>
+        <td>Anonymize: replace student IDs with "Student-001", remove names</td>
+      </tr>
+      <tr>
+        <td>Personal Health Information (PHI)</td>
+        <td>PIPEDA, PHIA (Nova Scotia)</td>
+        <td>Remove all health-related fields before sharing any export</td>
+      </tr>
+      <tr>
+        <td>SINs, financial account numbers, passwords</td>
+        <td>Identity theft risk, PCI DSS</td>
+        <td>Never include. Mask as "***-***-***" before sharing</td>
+      </tr>
+      <tr>
+        <td>Live production credentials (API keys, DB passwords)</td>
+        <td>Security risk</td>
+        <td>Replace with placeholder values like <code>YOUR_API_KEY_HERE</code></td>
+      </tr>
+      <tr>
+        <td>Full names + contact info together</td>
+        <td>PII linkage risk</td>
+        <td>Share names OR contact info, not both — or replace with "User A", "User B"</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Anonymization techniques</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Before sharing — Original</h3>
+      <pre style="margin:0;font-size:0.78rem;"><code>name,email,ip_address,student_id
+Jane Smith,jsmith@acadiau.ca,192.168.4.22,A00123456
+Bob Jones,bjones@acadiau.ca,10.0.0.87,A00234567</code></pre>
+    </div>
+    <div class="card">
+      <h3>After anonymization — Safe to share</h3>
+      <pre style="margin:0;font-size:0.78rem;"><code>name,email,ip_address,student_id
+User A,user_a@example.com,192.168.x.x,A00XXXXX1
+User B,user_b@example.com,10.0.x.x,A00XXXXX2</code></pre>
+    </div>
+  </div>
+
+  <h3>For analysis requiring real sensitive data</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Use Claude Enterprise or on-premises deployment.</strong> Acadia's Enterprise agreement includes data privacy provisions that cover processing of institutional data. Confirm with Technology Services management which tier your use case requires.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Consult the Privacy Officer.</strong> For any use case involving student or employee records, contact Acadia's Privacy Officer before proceeding. They can advise on whether a Privacy Impact Assessment is required.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Review Anthropic's data handling documentation.</strong> Understand the data retention policy for your Claude plan — Consumer, Team, and Enterprise plans have different data residency and retention terms.</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Safe and Still Useful</div>
+    Anonymized data is still analytically useful. Claude can identify patterns, generate scripts, and produce documentation from representative fake data or fully anonymized samples — you don't need real personal information for most IT analysis tasks.
+  </div>
+
+</main>
+
+<!-- MODULE NAVIGATION -->
+<nav class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 6 Scripts - 20260628.html">&larr; Module 6: Script Writing</a>
+    <span style="color:var(--color-muted);font-size:0.85rem;">Module 7 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 8 Documentation - 20260628.html">Module 8: Documentation &rarr;</a>
+  </div>
+</nav>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <strong style="color:var(--color-primary);">Acadia University Technology Services</strong><br>
+      Claude AI Training Series &mdash; Module 7: Data Management &mdash; June 28, 2026
+    </div>
+    <div style="text-align:right;">
+      <div style="margin-bottom:var(--space-2);">
+        <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">M1</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 2 Interfaces - 20260628.html">M2</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 3 Skills - 20260628.html">M3</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 4 Permissions - 20260628.html">M4</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 5 Git - 20260628.html">M5</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 6 Scripts - 20260628.html">M6</a> &middot;
+        <strong>M7</strong> &middot;
+        <a href="Technology Services - Claude IT Training Module 8 Documentation - 20260628.html">M8</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 9 IT Workflows - 20260628.html">M9</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 10 Best Practices - 20260628.html">M10</a>
+      </div>
+      <small>For internal Technology Services use only</small>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

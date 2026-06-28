@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — Git with Claude | Claude IT Training | Technology Services</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+.safety-rule{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--color-border);}
+.safety-rule:last-child{border-bottom:none;}
+.safety-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+.prompt-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4);box-shadow:var(--shadow-card);}
+.prompt-card .prompt-text{font-family:var(--font-mono);font-size:0.85rem;color:var(--color-primary-dark);background:var(--color-primary-50);padding:var(--space-3);border-radius:var(--radius-sm);margin-bottom:var(--space-2);}
+.prompt-card .prompt-desc{font-size:0.88rem;color:var(--color-muted);margin:0;}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia University</div>
+    <h1>Claude AI Training &mdash; Technology Services</h1>
+    <span class="module-badge">Module 5 of 10</span>
+  </div>
+</header>
+
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a>
+    &rsaquo; Module 5 &mdash; Git with Claude
+  </div>
+</nav>
+
+<main class="container">
+
+  <h1>Module 5 &mdash; Git with Claude</h1>
+  <p class="caption">Estimated time: 30 minutes &nbsp;&middot;&nbsp; Audience: Technology Services staff who use version control</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ol>
+      <li><a href="#why-git">Why Use Claude for Git Work?</a></li>
+      <li><a href="#commit-messages">Writing Commit Messages</a></li>
+      <li><a href="#code-review">Code Review with /code-review</a></li>
+      <li><a href="#git-history">Using Git History and Blame</a></li>
+      <li><a href="#merge-conflicts">Resolving Merge Conflicts</a></li>
+      <li><a href="#git-interfaces">Accessing Git Through Each Interface</a></li>
+      <li><a href="#git-safety">Claude's Git Safety Rules</a></li>
+      <li><a href="#git-prompts">Practical Git Prompts for IT Work</a></li>
+    </ol>
+  </div>
+
+  <!-- ─── 5.1 ─────────────────────────────────────────────────────────── -->
+  <h2 id="why-git">5.1 Why Use Claude for Git Work?</h2>
+
+  <p>Git is the foundation of collaborative software and script development at Acadia. Claude understands git&rsquo;s entire workflow &mdash; from staging individual files through branching strategies, pull requests, and merge conflict resolution &mdash; and can act as a knowledgeable collaborator at every stage.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>What Claude can do with git</h3>
+      <ul>
+        <li>Write clear, well-structured commit messages</li>
+        <li>Draft pull request descriptions that explain <em>why</em> changes were made</li>
+        <li>Review your staged diff and flag bugs or improvements</li>
+        <li>Interpret <code>git log</code>, <code>git blame</code>, and <code>git show</code> output</li>
+        <li>Guide you through merge conflict resolution step by step</li>
+        <li>Generate <code>.gitignore</code> files, hooks, and repository configuration</li>
+        <li>Explain what any git command or flag does in plain language</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Where this saves time</h3>
+      <ul>
+        <li>No more staring at a blank commit message field</li>
+        <li>Catch bugs in scripts before they reach production</li>
+        <li>Understand a repository you&rsquo;ve just inherited</li>
+        <li>Decode cryptic merge conflicts without manual line-by-line comparison</li>
+        <li>Onboard teammates by generating repository documentation from history</li>
+        <li>Audit what changed between releases without reading every commit</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Built-in safety</div>
+    Claude never skips git hooks (<code>--no-verify</code>) unless you explicitly ask it to. This keeps your pre-commit checks, linting passes, and secret-scanning hooks intact. If a hook fails, Claude investigates the underlying problem rather than bypassing the check.
+  </div>
+
+  <!-- ─── 5.2 ─────────────────────────────────────────────────────────── -->
+  <h2 id="commit-messages">5.2 Writing Commit Messages</h2>
+
+  <p>A good commit message communicates <em>why</em> a change was made, not just what changed. Claude follows established conventions automatically:</p>
+
+  <ul>
+    <li><strong>Imperative mood</strong> &mdash; "Fix token expiry check" not "Fixed token expiry check"</li>
+    <li><strong>Subject line under 72 characters</strong> &mdash; keeps it readable in terminals and GitHub</li>
+    <li><strong>Blank line between subject and body</strong> &mdash; required by many git tools</li>
+    <li><strong>Body explains the why</strong> &mdash; what problem existed, what the fix does, any tradeoffs</li>
+    <li><strong>Co-Authored-By trailer</strong> &mdash; added automatically when Claude helped write or review the code</li>
+  </ul>
+
+  <h3>Example: Asking Claude for a commit message</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28CA41;"></div>
+      <span class="claude-ui-title">Claude &mdash; Technology Services IT Training</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Write a commit message for my changes &mdash; I fixed the password reset flow to correctly handle expired tokens. The old code was comparing the wrong timestamp field so expired tokens were silently passing validation.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>Here&rsquo;s a commit message for your changes:</p>
+          <pre style="margin:8px 0;font-size:0.82rem;"><code>fix: correct expired-token check in password reset flow
+
+The reset endpoint was comparing `created_at` against the expiry
+window instead of `expires_at`. This caused expired tokens to pass
+validation silently while valid tokens occasionally failed.
+
+Fix the field reference and add a dedicated 422 response for
+expired tokens so callers receive a clear, actionable error
+rather than a generic 400.
+
+Co-Authored-By: Claude Sonnet 4.6 &lt;noreply@anthropic.com&gt;</code></pre>
+          <p style="margin:8px 0 0;font-size:0.85rem;color:var(--color-muted);">Subject line is 51 characters. Body explains what was broken and what the fix does.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>From the Terminal CLI &mdash; pipe your diff directly to Claude</h3>
+
+  <p>Instead of describing your changes by hand, pipe the actual diff so Claude can read what changed:</p>
+
+  <div class="code-header">
+    <span>bash</span>
+    <span>Terminal</span>
+  </div>
+  <pre><code># Review staged changes and generate a commit message
+git diff --staged | claude "write a git commit message for these changes"
+
+# If you want a one-liner subject only
+git diff --staged | claude "write a single-line git commit subject, imperative mood, under 72 chars"
+
+# Include context about the project
+git diff --staged | claude "write a commit message for these changes. this is a PowerShell \
+  automation script repo for Acadia IT administration"</code></pre>
+
+  <h3>From VS Code</h3>
+
+  <p>In VS Code with the Claude extension active, open the <strong>Source Control</strong> panel (Ctrl+Shift+G) to review your staged diff visually, then switch to the Claude sidebar and ask: <em>"Write a commit message for the changes in the Source Control panel."</em> Claude reads the diff from the workspace and drafts the message. Paste it directly into the commit message field.</p>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Tip</div>
+    If you run <code>git commit</code> without a <code>-m</code> flag, git opens your editor. You can paste Claude&rsquo;s message there. Alternatively, use <code>git commit -m "$(git diff --staged | claude 'write a git commit subject')"</code> to generate and commit in one step &mdash; but always review the result first.
+  </div>
+
+  <!-- ─── 5.3 ─────────────────────────────────────────────────────────── -->
+  <h2 id="code-review">5.3 Code Review with /code-review</h2>
+
+  <p>The <code>/code-review</code> skill reads your current git diff &mdash; everything staged and unstaged &mdash; and returns structured findings organized by severity. It is the fastest way to catch bugs in scripts and configurations before they reach a shared repository.</p>
+
+  <h3>How to invoke it</h3>
+
+  <table>
+    <thead>
+      <tr><th>Command</th><th>What it does</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>/code-review</code></td><td>Default review at medium effort &mdash; high-confidence bugs and clear improvements</td></tr>
+      <tr><td><code>/code-review low</code></td><td>Fast scan, only the most obvious issues</td></tr>
+      <tr><td><code>/code-review high</code></td><td>Broader coverage, may surface less-certain findings</td></tr>
+      <tr><td><code>/code-review max</code></td><td>Deep multi-pass review, most thorough</td></tr>
+      <tr><td><code>/code-review --comment</code></td><td>Post findings as inline comments on a GitHub pull request</td></tr>
+      <tr><td><code>/code-review --fix</code></td><td>Apply the recommended fixes to the working tree automatically</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Example /code-review output</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28CA41;"></div>
+      <span class="claude-ui-title">Claude &mdash; /code-review skill</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">/code-review</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p><strong>Code Review &mdash; 3 findings</strong> &nbsp;<span class="badge badge--red">1 bug</span> &nbsp;<span class="badge badge--blue">2 improvements</span></p>
+          <hr style="border:none;border-top:1px solid var(--claude-border);margin:12px 0;">
+          <p><strong>Bug &mdash; src/auth/reset.py, line 47</strong><br>
+          Token expiry comparison uses <code>created_at</code> instead of <code>expires_at</code>. This allows expired tokens to authenticate successfully. An attacker with a previously-captured token can reset any account indefinitely.</p>
+          <p style="margin-bottom:4px;"><em>Fix:</em></p>
+          <pre style="margin:4px 0 12px;font-size:0.82rem;"><code>- if token.created_at + TOKEN_LIFETIME &gt; now:
++ if token.expires_at &gt; now:</code></pre>
+          <p><strong>Improvement &mdash; src/auth/reset.py, line 63</strong><br>
+          Bare <code>except Exception</code> swallows all errors including <code>KeyboardInterrupt</code> and database connection failures. Narrow to <code>TokenExpiredError, TokenInvalidError</code> to preserve specific error paths and improve observability.</p>
+          <p><strong>Improvement &mdash; tests/test_reset.py</strong><br>
+          No test covers the expired-token code path. Consider adding a fixture that sets <code>expires_at = datetime.now() - timedelta(hours=1)</code> and asserts a 422 response is returned.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">When to use --fix</div>
+    <code>/code-review --fix</code> applies Claude&rsquo;s suggested fixes directly to your working tree. This is convenient for clear mechanical fixes (wrong variable name, missing error handling) but you should still review the diff before committing. Use it on a clean branch so you can compare before and after.
+  </div>
+
+  <!-- ─── 5.4 ─────────────────────────────────────────────────────────── -->
+  <h2 id="git-history">5.4 Using Git History and Blame</h2>
+
+  <p>When you&rsquo;ve just inherited a repository, need to audit a recent change, or want to understand why something works a certain way, git history is the primary source of truth. Claude can run the appropriate commands and interpret the results in plain language.</p>
+
+  <h3>Questions you can ask Claude about your repository</h3>
+
+  <ul>
+    <li>&ldquo;What commits changed the authentication module in the last month?&rdquo;</li>
+    <li>&ldquo;Who last modified the config parser and what was their reason?&rdquo;</li>
+    <li>&ldquo;Summarize the changes made between v2.0.0 and v2.1.0&rdquo;</li>
+    <li>&ldquo;Find any commits that mention &lsquo;hotfix&rsquo; or &lsquo;urgent&rsquo; in the last 90 days&rdquo;</li>
+    <li>&ldquo;What changed in the deploy scripts since the last release?&rdquo;</li>
+  </ul>
+
+  <h3>Piping git output to Claude</h3>
+
+  <div class="code-header">
+    <span>bash</span>
+    <span>Terminal</span>
+  </div>
+  <pre><code># Get a plain-language summary of recent team work
+git log --oneline -20 | claude "summarize what the team has been working on based on these commits"
+
+# Understand who owns a file and why it looks the way it does
+git blame src/auth/reset.py | claude "who owns the authentication module and what's the history of changes?"
+
+# Decode a specific commit
+git show a3f9c12 | claude "explain what this commit does and why it was necessary"
+
+# Compare releases
+git log v2.0.0..v2.1.0 --oneline | claude "write release notes for version 2.1.0 based on these commits"
+
+# Find risky changes
+git log --all --oneline --since="30 days ago" | claude "flag any commits that might indicate hotfixes, security patches, or production issues"</code></pre>
+
+  <h3>Understanding blame output</h3>
+
+  <p>Git blame output is notoriously hard to read at a glance. Claude can take the raw output and give you a clear picture of file ownership, identify which areas have had the most churn, and highlight sections that have been touched by many different contributors (often a sign of technical debt or complex logic).</p>
+
+  <div class="code-header">
+    <span>bash</span>
+    <span>Terminal</span>
+  </div>
+  <pre><code># Analyze ownership patterns across an entire file
+git blame --line-porcelain src/network/firewall.py | claude "summarize who owns each section of this file and identify areas of high churn"
+
+# Find the commit that introduced a specific line
+git log -S "password_reset_token" --source --all | claude "explain the history of the password reset token feature"</code></pre>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Claude reads full context</div>
+    When you pipe git output to Claude, it sees the entire history in one pass. You can ask follow-up questions in the same conversation &mdash; Claude remembers the log output and can answer questions like "which of those commits were on the main branch?" without re-running the command.
+  </div>
+
+  <!-- ─── 5.5 ─────────────────────────────────────────────────────────── -->
+  <h2 id="merge-conflicts">5.5 Resolving Merge Conflicts</h2>
+
+  <p>Merge conflicts happen when two branches modify the same region of a file differently. Git marks the conflicted sections and pauses the merge for manual resolution. Claude can read the conflict markers, understand both sides, and propose a resolution &mdash; often explaining the tradeoffs between options.</p>
+
+  <h3>Step-by-step workflow</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Trigger the merge</strong></p>
+        <p>Run <code>git merge feature/timeout-increase</code> (or pull, rebase, cherry-pick). Git stops with a conflict message listing affected files.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Show Claude the conflicted file</strong></p>
+        <p>Open the file &mdash; Claude sees both the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> section (your changes) and the <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> section (incoming changes). Paste the relevant section or ask Claude to read the file directly.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Describe what each side should do</strong></p>
+        <p>Give Claude context: <em>&ldquo;Help me resolve this merge conflict &mdash; preserve both the upstream rate-limiting logic and my new timeout value for slow networks.&rdquo;</em></p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Review Claude&rsquo;s proposed resolution</strong></p>
+        <p>Claude explains what each side was trying to do and proposes a merged version. Read it carefully &mdash; Claude may not know which behavior is correct for your system.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Accept, edit, and complete the merge</strong></p>
+        <p>Apply the resolution to the file, remove all conflict markers, then run <code>git add &lt;file&gt;</code> and <code>git merge --continue</code> (or <code>git commit</code> if not in a rebase).</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Example conflict and resolution</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28CA41;"></div>
+      <span class="claude-ui-title">Claude &mdash; merge conflict resolution</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">
+          <p>Help me resolve this merge conflict. I need to keep both the rate limiting from upstream AND my 60-second timeout for slow-network clients:</p>
+          <pre style="margin:8px 0;font-size:0.82rem;"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+    timeout = 30
+    rate_limit = 100   # upstream: added rate limiting
+=======
+    timeout = 60       # my change: slow-network support
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/slow-network-support</code></pre>
+        </div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>The conflict is straightforward &mdash; your branch only changed <code>timeout</code> while upstream added <code>rate_limit</code>. Both changes are in the same block so git flagged it, but there&rsquo;s no logical conflict. The resolution is to keep both values:</p>
+          <pre style="margin:8px 0;font-size:0.82rem;"><code>    timeout = 60       # slow-network support
+    rate_limit = 100   # upstream rate limiting</code></pre>
+          <p>Remove all three conflict marker lines (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>) and replace the block with the two lines above. Then:</p>
+          <pre style="margin:8px 0;font-size:0.82rem;"><code>git add src/network/client.py
+git merge --continue</code></pre>
+          <p>Double-check that <code>timeout = 60</code> is the correct value for your slow-network use case &mdash; you&rsquo;re the expert on the network characteristics this needs to handle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Always review conflict resolutions</div>
+    Claude proposes a resolution based on what it can read in the conflict markers. It does not know your system's runtime behavior, performance constraints, or business rules. Always verify that the resolved code does what you intend before committing, especially for logic in authentication, networking, or data processing.
+  </div>
+
+  <!-- ─── 5.6 ─────────────────────────────────────────────────────────── -->
+  <h2 id="git-interfaces">5.6 Accessing Git Through Each Interface</h2>
+
+  <p>Claude integrates with git differently depending on which interface you&rsquo;re using. Each has a natural workflow:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Interface</th>
+        <th>How to use git with Claude</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Desktop App</strong></td>
+        <td>Ask Claude to run git commands in your project. Claude uses the Bash tool to execute <code>git log</code>, <code>git diff</code>, <code>git blame</code>, and so on, then shows you the output alongside its interpretation.</td>
+        <td>Requires <code>Bash(git *)</code> permission granted. Claude will ask before running any command that modifies the repository.</td>
+      </tr>
+      <tr>
+        <td><strong>Terminal CLI</strong></td>
+        <td>Pipe git output directly: <code>git log --oneline -20 | claude "summarize"</code> &mdash; or drop into the Claude REPL and ask questions. Claude can also run git commands itself if you give it permission.</td>
+        <td>Most flexible interface for git work. You control exactly what gets piped in and can chain commands freely.</td>
+      </tr>
+      <tr>
+        <td><strong>VS Code</strong></td>
+        <td>Use the Source Control panel to stage files visually, then ask Claude in the sidebar for a commit message or to review the diff. The <code>/code-review</code> skill works particularly well here, with file-level context available.</td>
+        <td>Best for file-level review when you want to see diff and Claude&rsquo;s response side by side. <code>/code-review --comment</code> posts inline PR comments directly to GitHub.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Permissions note</div>
+    If Claude cannot run a git command because Bash permission hasn&rsquo;t been granted, it will tell you the exact command to run yourself. You can paste the output back into the conversation and Claude will interpret it. No access is ever required &mdash; you can always be the one running the command.
+  </div>
+
+  <!-- ─── 5.7 ─────────────────────────────────────────────────────────── -->
+  <h2 id="git-safety">5.7 Claude's Git Safety Rules (Built-In)</h2>
+
+  <p>Claude enforces a set of git safety rules by default. These protect your repository from destructive operations that are difficult or impossible to undo. Technology Services staff should know these rules so they understand when Claude will pause and ask for explicit confirmation.</p>
+
+  <div class="card">
+    <h3 style="color:var(--color-accent);margin-bottom:var(--space-4);">Operations Claude will not perform without explicit instruction</h3>
+
+    <div class="safety-rule">
+      <span class="safety-icon">&#x26D4;</span>
+      <div>
+        <strong>Force push (<code>git push --force</code>)</strong><br>
+        <span style="color:var(--color-muted);font-size:0.9rem;">Rewrites remote history and discards other contributors&rsquo; commits. Claude will warn and refuse unless you explicitly confirm.</span>
+      </div>
+    </div>
+
+    <div class="safety-rule">
+      <span class="safety-icon">&#x26D4;</span>
+      <div>
+        <strong>Hard reset (<code>git reset --hard</code>)</strong><br>
+        <span style="color:var(--color-muted);font-size:0.9rem;">Permanently discards uncommitted changes. Claude will offer safer alternatives (stash, soft reset) and only proceed if you confirm you want to lose the changes.</span>
+      </div>
+    </div>
+
+    <div class="safety-rule">
+      <span class="safety-icon">&#x26D4;</span>
+      <div>
+        <strong>Force delete a branch (<code>git branch -D</code>)</strong><br>
+        <span style="color:var(--color-muted);font-size:0.9rem;">Deletes even unmerged branches without confirmation. Claude prefers <code>-d</code> (safe delete) and will ask before using the force flag.</span>
+      </div>
+    </div>
+
+    <div class="safety-rule">
+      <span class="safety-icon">&#x26D4;</span>
+      <div>
+        <strong>Skip pre-commit hooks (<code>--no-verify</code>)</strong><br>
+        <span style="color:var(--color-muted);font-size:0.9rem;">Bypasses linting, tests, and secret-scanning checks. Claude investigates why a hook failed and fixes the underlying problem rather than skipping the check.</span>
+      </div>
+    </div>
+
+    <div class="safety-rule">
+      <span class="safety-icon">&#x26D4;</span>
+      <div>
+        <strong>Amend published commits (<code>git commit --amend</code> after push)</strong><br>
+        <span style="color:var(--color-muted);font-size:0.9rem;">Rewrites shared history. Claude prefers creating a new commit to correct a mistake, unless you explicitly ask to amend an unpublished commit.</span>
+      </div>
+    </div>
+
+    <div class="safety-rule">
+      <span class="safety-icon">&#x26A0;&#xFE0F;</span>
+      <div>
+        <strong>Force push to main or master</strong><br>
+        <span style="color:var(--color-muted);font-size:0.9rem;">Even if you explicitly ask, Claude will issue an additional warning before force-pushing to a main branch, since this affects all collaborators.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Why this matters for Technology Services</div>
+    Shared repositories for scripts, configurations, and automation tools are especially sensitive &mdash; a force-push or hard reset can delete work from the entire team. Claude&rsquo;s built-in caution means you don&rsquo;t need to worry about accidentally destroying history in a shared repo.
+  </div>
+
+  <!-- ─── 5.8 ─────────────────────────────────────────────────────────── -->
+  <h2 id="git-prompts">5.8 Practical Git Prompts for IT Work</h2>
+
+  <p>A quick-reference library of prompts that Technology Services staff will use repeatedly. Copy, adapt, and build on these in your own workflows.</p>
+
+  <div class="grid-2">
+
+    <div class="prompt-card">
+      <div class="prompt-text">"Create a .gitignore for a PowerShell project on Windows &mdash; include VS Code, JetBrains, and common Windows temp files"</div>
+      <p class="prompt-desc">Generates a comprehensive .gitignore covering editor artifacts, OS files, and PowerShell-specific outputs like transcripts and cached credentials.</p>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-text">"Write a PR description for these changes: [paste diff or summary]"</div>
+      <p class="prompt-desc">Produces a pull request body with a summary, motivation for the change, and a testing checklist. Paste into GitHub or Bitbucket.</p>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-text">"What is the git command to stash my changes, pull the latest from main, and reapply my stash?"</div>
+      <p class="prompt-desc">Useful when you&rsquo;re mid-task and need to sync with the remote. Claude gives you the exact command sequence and explains each step.</p>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-text">"Explain what this commit does: [paste git show output]"</div>
+      <p class="prompt-desc">Translates a raw patch into a plain-language explanation of what the change does and why it was likely needed. Good for code archaeology.</p>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-text">"Set up a git pre-commit hook that runs PSScriptAnalyzer on any staged .ps1 files and blocks the commit if there are errors"</div>
+      <p class="prompt-desc">Claude writes the <code>.git/hooks/pre-commit</code> shell script, handles the staged-file filtering, and explains how to make it executable.</p>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-text">"I need to undo the last commit but keep my changes staged. What&rsquo;s the safest way to do this?"</div>
+      <p class="prompt-desc">Claude suggests <code>git reset --soft HEAD~1</code>, explains what it does, confirms your changes will be preserved, and warns against alternatives that would lose work.</p>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-text">"Help me write a CHANGELOG entry for version 2.3.1 based on these commits: [paste git log]"</div>
+      <p class="prompt-desc">Categorizes commits into Added, Changed, Fixed, and Removed sections in Keep a Changelog format. Ready to paste into CHANGELOG.md.</p>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-text">"Find any commits in the last 60 days that might have introduced the login error we&rsquo;re seeing: [paste error]"</div>
+      <p class="prompt-desc">Claude suggests the right <code>git log -S</code> or <code>git log --grep</code> command, runs it, and interprets which commits are most likely candidates.</p>
+    </div>
+
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Build a prompt library</div>
+    Save prompts that work well for your repositories in a shared document. Over time, your team will accumulate a library of git workflows that consistently produce useful output from Claude, reducing ramp-up time for new staff.
+  </div>
+
+  <div style="margin-top:var(--space-8);padding-top:var(--space-6);border-top:2px solid var(--color-primary-50);">
+    <h2 style="border:none;margin-top:0;">Module 5 Summary</h2>
+    <p>Claude is a capable git collaborator: it writes commit messages and PR descriptions, reviews code for bugs with <code>/code-review</code>, interprets history and blame output, guides conflict resolution, and enforces safety rules that protect shared repositories. The key workflow is always: Claude assists, you review, you approve.</p>
+    <p>The most important rule is the same one that governs all Claude interactions &mdash; <strong>review before you commit</strong>. A commit message that misrepresents a change, or a conflict resolution that silently drops a logic branch, is harder to detect than a code bug. Stay in the loop.</p>
+  </div>
+
+</main>
+
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 4 Permissions - 20260628.html">&#8592; Previous: Module 4 &mdash; Permissions</a>
+    <span>Module 5 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 6 Scripts - 20260628.html">Next: Module 6 &mdash; Script Writing &#8594;</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span><strong>Technology Services</strong> &middot; Acadia University</span>
+    <span>Claude IT Training &middot; 2026 &middot; Module 5 of 10</span>
+  </div>
+</footer>
+
+</body>
+</html>

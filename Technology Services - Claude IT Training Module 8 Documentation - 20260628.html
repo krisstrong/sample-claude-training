@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 8: Documentation with Claude — Acadia University Technology Services</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+.markdown-preview{background:#FDFCFA;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-6);font-family:var(--font-body);margin:var(--space-4) 0 var(--space-6);}
+.markdown-preview h1{font-size:1.6rem;border-bottom:1px solid var(--color-border);padding-bottom:var(--space-2);}
+.markdown-preview h2{font-size:1.2rem;margin-top:var(--space-6);border-bottom:none;}
+.markdown-preview h3{font-size:1rem;margin-top:var(--space-4);}
+.markdown-preview code{background:var(--color-surface-alt);padding:1px 5px;border-radius:3px;font-size:0.85rem;}
+.markdown-preview pre{background:#F0EDE8;padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--color-gray-700);}
+.skill-chip{display:inline-flex;align-items:center;gap:6px;background:var(--color-primary-50);border:1px solid var(--color-primary-200);border-radius:20px;padding:3px 12px;font-size:0.82rem;font-weight:600;color:var(--color-primary);font-family:var(--font-mono);}
+.checklist{list-style:none;padding:0;margin:0 0 var(--space-4);}
+.checklist li{display:flex;align-items:flex-start;gap:var(--space-3);margin-bottom:var(--space-3);font-size:0.95rem;}
+.checklist li::before{content:"☐";font-size:1.1rem;color:var(--color-primary);flex-shrink:0;line-height:1.4;}
+</style>
+</head>
+<body>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia</div>
+    <h1>Technology Services — Claude AI Training Series</h1>
+    <span class="module-badge">Module 8 of 10</span>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a>
+    &rsaquo; Module 8: Documentation with Claude
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+
+  <h1>Module 8: Documentation with Claude</h1>
+  <p><span class="badge badge--blue">Technical Writing</span> &nbsp;<span class="badge badge--gray">Estimated time: 40 minutes</span></p>
+  <p>Documentation is the institutional memory of IT operations. This module shows how Claude accelerates every step of the documentation lifecycle — from first draft to finished deliverable — so that Acadia Technology Services produces more documentation, better documentation, and keeps it maintained over time.</p>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h4>In This Module</h4>
+    <ol>
+      <li><a href="#section-81">8.1 — Why Documentation Matters (And Why It's Hard)</a></li>
+      <li><a href="#section-82">8.2 — README Files and Technical Guides</a></li>
+      <li><a href="#section-83">8.3 — Runbooks and SOPs</a></li>
+      <li><a href="#section-84">8.4 — API and Endpoint Documentation</a></li>
+      <li><a href="#section-85">8.5 — User-Facing Help Articles</a></li>
+      <li><a href="#section-86">8.6 — Applying the Acadia Theme to Deliverables</a></li>
+      <li><a href="#section-87">8.7 — Documentation Workflow Tips</a></li>
+    </ol>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 8.1 -->
+  <!-- ============================================================ -->
+  <h2 id="section-81">8.1 Why Documentation Matters (And Why It's Hard)</h2>
+
+  <p>IT documentation is perpetually underdone. Not because staff don't understand its value — they do — but because writing it manually takes time that engineers don't have in the middle of deployments, incidents, and support queues.</p>
+
+  <div class="grid-3">
+    <div class="icon-card">
+      <div class="icon">&#8987;</div>
+      <h3>The Old Way</h3>
+      <p>Write everything from scratch, after hours, when the system is already in production and you're already exhausted</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#129302;</div>
+      <h3>With Claude</h3>
+      <p>Draft in minutes. Your job shifts from writing to reviewing, refining, and approving</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#9989;</div>
+      <h3>The Result</h3>
+      <p>More documentation, better documentation, updated regularly because the barrier is low</p>
+    </div>
+  </div>
+
+  <h3>The documentation gap Claude closes</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Documentation Type</th>
+        <th>Manual Time Estimate</th>
+        <th>With Claude</th>
+        <th>You Still Do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>README for a script or module</td>
+        <td>1–2 hours</td>
+        <td>3–5 minutes</td>
+        <td>Review accuracy, add internal links</td>
+      </tr>
+      <tr>
+        <td>Runbook for a service restart</td>
+        <td>2–3 hours</td>
+        <td>5–10 minutes</td>
+        <td>Verify step order, test the procedure</td>
+      </tr>
+      <tr>
+        <td>API endpoint documentation</td>
+        <td>1 hour per endpoint</td>
+        <td>Full set in 15 minutes</td>
+        <td>Confirm parameter types, add auth notes</td>
+      </tr>
+      <tr>
+        <td>Student-facing help article</td>
+        <td>45–90 minutes</td>
+        <td>5 minutes</td>
+        <td>Adjust tone, screenshot references</td>
+      </tr>
+      <tr>
+        <td>SOP conversion from informal notes</td>
+        <td>1–2 hours</td>
+        <td>5–10 minutes</td>
+        <td>Approve and add sign-off</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Mindset Shift</div>
+    Stop thinking of Claude as a writing tool you use when you have spare time. Think of it as a documentation partner you involve while the work is happening — draft the README as you write the script, draft the runbook as you build the procedure.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 8.2 -->
+  <!-- ============================================================ -->
+  <h2 id="section-82">8.2 README Files and Technical Guides</h2>
+
+  <p>A README is the entry point for any script, module, or tool. Claude generates READMEs from code or from a brief verbal description — whichever you have available.</p>
+
+  <h3>Generating a README from code</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude — Technology Services Workspace</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">
+          Write a README.md for this PowerShell module — it manages Active Directory user provisioning for new staff and students at Acadia University. Here's the code: [paste of Provision-ADUser.psm1]
+        </div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          Here's a README for the AD User Provisioning module:
+          <div class="markdown-preview" style="margin-top:var(--space-3);">
+            <h1>AD User Provisioning Module</h1>
+            <p>Automates Active Directory user account creation, modification, and deprovisioning for Acadia University Technology Services. Supports bulk imports and integrates with the university's HR data feeds.</p>
+            <h2>Requirements</h2>
+            <ul>
+              <li>Windows PowerShell 5.1 or PowerShell 7+</li>
+              <li>ActiveDirectory module (RSAT: Active Directory Domain Services)</li>
+              <li>Domain admin credentials or delegated OU permissions</li>
+              <li>Write access to <code>\\acadiau.ca\NETLOGON\scripts</code></li>
+            </ul>
+            <h2>Installation</h2>
+            <pre>Import-Module .\Provision-ADUser.psm1</pre>
+            <h2>Usage</h2>
+            <h3>Provision a single user</h3>
+            <pre>New-AcadiaUser -FirstName "Jane" -LastName "Smith" -Role "Faculty" -Department "Computer Science"</pre>
+            <h3>Deprovision a user</h3>
+            <pre>Remove-AcadiaUser -Username "jsmith" -ArchiveHome</pre>
+            <h2>Parameters</h2>
+            <p>See <code>Get-Help New-AcadiaUser -Full</code> for complete parameter documentation.</p>
+            <h2>Logging</h2>
+            <p>All provisioning actions are logged to <code>C:\Logs\AD-Provisioning\</code> with timestamps and the performing account. Log rotation occurs at 30 days.</p>
+          </div>
+          Shall I add a Troubleshooting section or a Parameters table?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Updating a README when code changes</h3>
+
+  <p>READMEs go stale when scripts gain new features. Claude makes updates easy — paste the current README, describe the change, and ask for the update.</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">
+          My provisioning script now supports bulk imports from CSV. Here's the new code for that function: [paste]. Update the README to document the new <code>--BulkImport</code> flag and add a CSV format example.
+        </div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>Updated README with a new Bulk Import section added after the Usage section:</p>
+          <div class="markdown-preview">
+            <h3>Bulk Import from CSV</h3>
+            <p>Use the <code>--BulkImport</code> flag to provision multiple users from a CSV file in a single operation.</p>
+            <pre>New-AcadiaUser --BulkImport users.csv [-WhatIf] [-SendWelcomeEmail]</pre>
+            <h3>CSV Format</h3>
+            <p>The import CSV must include the following columns (headers are case-insensitive):</p>
+            <pre>FirstName,LastName,Role,Department,Email
+Jane,Smith,Faculty,Computer Science,jsmith@acadiau.ca
+Bob,Jones,Staff,Technology Services,bjones@acadiau.ca</pre>
+            <p>Optional columns: <code>OfficePhone</code>, <code>ManagerUsername</code>, <code>StartDate</code></p>
+            <p>Use <code>-WhatIf</code> to validate the CSV and preview changes without making any AD modifications.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>README content Claude generates well</h3>
+
+  <ul>
+    <li><strong>Requirements sections</strong> — OS version, modules, permissions, credentials needed</li>
+    <li><strong>Usage examples</strong> — Common command invocations with realistic parameters</li>
+    <li><strong>Parameter tables</strong> — Name, type, required/optional, description, example</li>
+    <li><strong>Troubleshooting sections</strong> — Common errors and their solutions</li>
+    <li><strong>Changelog summaries</strong> — What changed between versions</li>
+    <li><strong>Contributing guidelines</strong> — How team members should submit changes</li>
+  </ul>
+
+  <!-- ============================================================ -->
+  <!-- 8.3 -->
+  <!-- ============================================================ -->
+  <h2 id="section-83">8.3 Runbooks and SOPs</h2>
+
+  <p>Runbooks and standard operating procedures are critical for incident response — especially when the person who built a system isn't available. Claude produces clear, structured procedures from a verbal description or from informal notes.</p>
+
+  <h3>Example: Email relay service restart runbook</h3>
+
+  <p><strong>Prompt to Claude:</strong> "Write a runbook for restarting the email relay service on our Windows servers. Include pre-checks, step-by-step restart procedure, verification steps, and a rollback procedure."</p>
+
+  <div class="card">
+    <h3 style="color:var(--color-accent);margin-bottom:var(--space-1);">RUNBOOK</h3>
+    <h3 style="margin-top:0;">Email Relay Service Restart — smtp-relay-01 / smtp-relay-02</h3>
+    <p class="caption">Technology Services &mdash; Last updated: 2026-06-28 &mdash; Owner: Infrastructure Team</p>
+
+    <h4 style="color:var(--color-primary);">Pre-Conditions</h4>
+    <ul class="checklist">
+      <li>Confirm the restart is approved — check the change management calendar for active freeze windows</li>
+      <li>Notify <code>#ts-alerts</code> Slack channel: "Restarting smtp-relay-01 at [time] — brief email disruption expected"</li>
+      <li>Verify the backup relay (<code>smtp-relay-02</code>) is healthy: <code>Test-NetConnection smtp-relay-02 -Port 25</code></li>
+      <li>Confirm you have admin credentials for the target server</li>
+    </ul>
+
+    <h4 style="color:var(--color-primary);">Restart Procedure</h4>
+    <ol class="steps" style="margin-top:var(--space-3);">
+      <li>
+        <div class="step-body">
+          <p><strong>Connect to the server via RDP or PowerShell remoting.</strong></p>
+          <pre style="margin:var(--space-1) 0 0;"><code>Enter-PSSession -ComputerName smtp-relay-01 -Credential (Get-Credential)</code></pre>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Check current queue depth before stopping the service.</strong> If the queue exceeds 500 messages, wait for it to drain or escalate before proceeding.</p>
+          <pre style="margin:var(--space-1) 0 0;"><code>Get-Message -Server smtp-relay-01 | Measure-Object | Select-Object Count</code></pre>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Stop the SMTP relay service gracefully.</strong></p>
+          <pre style="margin:var(--space-1) 0 0;"><code>Stop-Service -Name "MSExchangeTransport" -Force
+# Wait for the service to fully stop before proceeding
+(Get-Service "MSExchangeTransport").WaitForStatus('Stopped', '00:01:00')</code></pre>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Start the service.</strong></p>
+          <pre style="margin:var(--space-1) 0 0;"><code>Start-Service -Name "MSExchangeTransport"
+(Get-Service "MSExchangeTransport").WaitForStatus('Running', '00:01:00')</code></pre>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Verify the service is accepting connections on port 25.</strong></p>
+          <pre style="margin:var(--space-1) 0 0;"><code>Test-NetConnection smtp-relay-01 -Port 25</code></pre>
+          <p>Expected result: <code>TcpTestSucceeded : True</code>. If False, proceed to Rollback.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-body">
+          <p><strong>Send a test message to confirm end-to-end delivery.</strong> Use the internal mailflow test account and verify receipt within 2 minutes.</p>
+        </div>
+      </li>
+    </ol>
+
+    <h4 style="color:var(--color-primary);">Verification</h4>
+    <ul class="checklist">
+      <li>Service status shows <code>Running</code> in Services panel</li>
+      <li>Port 25 accepts connections from both internal and relay-authorized IPs</li>
+      <li>Test email delivered successfully</li>
+      <li>Event log shows no errors in the last 5 minutes: <code>Get-EventLog -LogName Application -Source *Transport* -Newest 20</code></li>
+      <li>Post resolution message to <code>#ts-alerts</code>: "smtp-relay-01 restart complete and verified"</li>
+    </ul>
+
+    <h4 style="color:var(--color-primary);">Rollback</h4>
+    <p>If the service does not start or port 25 is not responding after step 5:</p>
+    <ol>
+      <li>Redirect all mail flow to <code>smtp-relay-02</code> via DNS TTL reduction or load balancer configuration</li>
+      <li>Review the Application event log on <code>smtp-relay-01</code> for service start errors</li>
+      <li>Escalate to Infrastructure Team lead if not resolved within 15 minutes</li>
+      <li>Open a P1 incident ticket in the helpdesk with the event log excerpt attached</li>
+    </ol>
+  </div>
+
+  <h3>Converting informal notes to a formal SOP</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">
+          Convert this informal Confluence note into a formal SOP for Acadia Technology Services. The audience is any IT staff member, not just the person who wrote the original note.<br><br>
+          <em>"to provision a new student, go into AD, find the students OU, copy an existing student account. change the name, username, and set the temp password to Welcome1! then email them. also set the office 365 license via the admin portal – need an E1 license. sometimes you need to wait 10 minutes for it to sync."</em>
+        </div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>Here's the formalized SOP. I've also flagged one concern: <code>Welcome1!</code> as a temp password is predictable — I've replaced it with a recommendation to use a random password generator. You may want to review that with your security policy.</p>
+          <hr style="border:none;border-top:1px solid var(--claude-border);margin:var(--space-3) 0;">
+          <p><strong>SOP: New Student Account Provisioning</strong><br>
+          <span class="badge badge--gray">SOP-IT-007</span> &nbsp;
+          <span class="badge badge--blue">Identity &amp; Access Management</span></p>
+          <p><strong>Purpose:</strong> Ensure consistent, secure provisioning of Active Directory and Microsoft 365 accounts for new students.</p>
+          <p><strong>Scope:</strong> All Technology Services staff performing student onboarding.</p>
+          <p><strong>Prerequisites:</strong> Active Directory admin access; Microsoft 365 Admin Center access with license assignment permissions.</p>
+          <p><strong>Procedure:</strong></p>
+          <ol>
+            <li>Open <em>Active Directory Users and Computers</em> and navigate to the Students OU (<code>acadiau.ca &gt; Students &gt; [Year]</code>)</li>
+            <li>Right-click an existing student account &rarr; <em>Copy</em>. This copies group memberships and OU placement.</li>
+            <li>Enter the new student's first name, last name, and username (format: <code>flastname</code>)</li>
+            <li>Set a temporary password using the department password generator. Do not use a predictable default. The password must meet complexity requirements.</li>
+            <li>Check <em>User must change password at next logon</em></li>
+            <li>Email the student their username and temporary password using the provisioning email template in the shared mailbox</li>
+            <li>Assign Microsoft 365 E1 license: open <em>Microsoft 365 Admin Center &rarr; Users &rarr; Active Users &rarr; [student] &rarr; Licenses and apps</em></li>
+            <li>Wait 10–15 minutes for Entra ID synchronization before confirming with the student that the account is active</li>
+          </ol>
+          <p><strong>Verification:</strong> Confirm the student can sign in to <code>office.com</code> with their credentials.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 8.4 -->
+  <!-- ============================================================ -->
+  <h2 id="section-84">8.4 API and Endpoint Documentation</h2>
+
+  <p>API documentation is one of the most tedious writing tasks in IT — and one Claude handles particularly well. It reads route definitions, function signatures, or OpenAPI specs and generates structured documentation automatically.</p>
+
+  <h3>Prompts that work well for API documentation</h3>
+
+  <ul>
+    <li>"Document these REST API endpoints from this Python Flask code — include method, path, description, request parameters, and response schema." [paste routes]</li>
+    <li>"Generate OpenAPI 3.0 YAML documentation for this Express.js router file."</li>
+    <li>"Write usage examples for each endpoint — show curl commands and a Python requests example."</li>
+    <li>"This API returns a complex JSON object. Document every field in the response, including nested objects."</li>
+  </ul>
+
+  <h3>Example: Endpoint documentation table</h3>
+
+  <p><strong>Prompt to Claude:</strong> "Document the REST API endpoints in this Flask router. Here are the routes: [paste]"</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Path</th>
+        <th>Description</th>
+        <th>Parameters</th>
+        <th>Response</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge--green">GET</span></td>
+        <td><code>/api/v1/tickets</code></td>
+        <td>Returns a paginated list of helpdesk tickets</td>
+        <td><code>status</code> (string, optional) &mdash; Filter by status: <code>open</code>, <code>resolved</code>, <code>closed</code><br><code>page</code> (int, default: 1)<br><code>per_page</code> (int, default: 25, max: 100)</td>
+        <td><code>200 OK</code> — Array of ticket objects with pagination metadata</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge--blue">POST</span></td>
+        <td><code>/api/v1/tickets</code></td>
+        <td>Creates a new helpdesk ticket</td>
+        <td>Body (JSON, required): <code>subject</code> (string), <code>description</code> (string), <code>priority</code> (enum: low/medium/high/critical), <code>category_id</code> (int)</td>
+        <td><code>201 Created</code> — Created ticket object<br><code>422 Unprocessable Entity</code> — Validation errors</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge--green">GET</span></td>
+        <td><code>/api/v1/tickets/{id}</code></td>
+        <td>Returns a single ticket by ID, including comments and audit history</td>
+        <td><code>id</code> (int, path, required)</td>
+        <td><code>200 OK</code> — Full ticket object<br><code>404 Not Found</code> — Ticket does not exist</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge--gray" style="background:#FFF3CD;color:#856404;border-color:#FFD966;">PATCH</span></td>
+        <td><code>/api/v1/tickets/{id}</code></td>
+        <td>Updates one or more fields on an existing ticket</td>
+        <td><code>id</code> (int, path, required)<br>Body (JSON, partial): any writable ticket field</td>
+        <td><code>200 OK</code> — Updated ticket<br><code>403 Forbidden</code> — Insufficient permissions</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge--red">DELETE</span></td>
+        <td><code>/api/v1/tickets/{id}</code></td>
+        <td>Soft-deletes a ticket. Sets status to <code>deleted</code>; does not remove the record.</td>
+        <td><code>id</code> (int, path, required)</td>
+        <td><code>204 No Content</code> — Success<br><code>403 Forbidden</code> — Only admins may delete tickets</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge--green">GET</span></td>
+        <td><code>/api/v1/tickets/{id}/comments</code></td>
+        <td>Returns all comments on a ticket in chronological order</td>
+        <td><code>id</code> (int, path, required)<br><code>include_private</code> (bool, default: false) — Requires staff role</td>
+        <td><code>200 OK</code> — Array of comment objects</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Generating OpenAPI YAML</h3>
+
+  <p>If your team uses Swagger UI or Postman, ask Claude to produce the OpenAPI spec directly from your code:</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Generate OpenAPI 3.0 YAML for the GET /api/v1/tickets endpoint above. Include a full response schema.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+<div class="code-header" style="margin:var(--space-2) 0 0;border-radius:var(--radius-sm) var(--radius-sm) 0 0;">openapi.yaml</div>
+<pre style="margin-top:0;border-radius:0 0 var(--radius-sm) var(--radius-sm);"><code>openapi: "3.0.3"
+info:
+  title: Acadia Helpdesk API
+  version: "1.0"
+paths:
+  /api/v1/tickets:
+    get:
+      summary: List helpdesk tickets
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [open, in_progress, pending, resolved, closed]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Ticket'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 8.5 -->
+  <!-- ============================================================ -->
+  <h2 id="section-85">8.5 User-Facing Help Articles</h2>
+
+  <p>Technology Services publishes help articles for students, faculty, and staff. Claude writes clearly for non-technical audiences — you just need to specify who the reader is.</p>
+
+  <h3>The audience specification matters enormously</h3>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Prompt Technique</div>
+    Always state the audience explicitly. "Write for a first-year student with no technical background" produces a fundamentally different document than "Write for a faculty member comfortable with basic technology." Claude adjusts vocabulary, assumed knowledge, and step granularity accordingly.
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>For Students</h3>
+      <p>Use phrases like: "Write for a first-year student who has never connected to a university network before. Avoid jargon. Define any technical term you use."</p>
+      <p>Claude will: use short sentences, include screenshots callouts like "(you'll see a blue button labeled 'Connect')", avoid acronyms, and assume zero prior knowledge.</p>
+    </div>
+    <div class="card">
+      <h3>For Faculty</h3>
+      <p>Use phrases like: "Write for a faculty member comfortable with basic technology but not IT administration. Assume they know what email and VPN mean."</p>
+      <p>Claude will: use intermediate vocabulary, skip basic definitions, focus on the why alongside the how.</p>
+    </div>
+  </div>
+
+  <h3>Example: VPN help article for students</h3>
+
+  <p><strong>Prompt to Claude:</strong> "Write a help article for Acadia students explaining how to connect to the university VPN on Windows 11. Use simple language. The VPN client is Cisco Secure Client."</p>
+
+  <div class="markdown-preview">
+    <h1>Connecting to the Acadia VPN on Windows 11</h1>
+    <p>The Acadia VPN (Virtual Private Network) lets you access university resources — like library databases and internal systems — when you're off campus. Think of it as a secure tunnel between your computer and the Acadia network.</p>
+
+    <h2>Before You Start</h2>
+    <ul>
+      <li>You need the Cisco Secure Client installed. If you don't have it yet, download it from <strong>it.acadiau.ca/vpn</strong> and run the installer.</li>
+      <li>You'll need your Acadia username and password (the same ones you use for email and Moodle).</li>
+      <li>Make sure you have internet access before connecting — the VPN goes through your regular internet connection.</li>
+    </ul>
+
+    <h2>How to Connect</h2>
+    <ol>
+      <li>Click the <strong>Start</strong> button (the Windows logo in the taskbar) and search for <strong>Cisco Secure Client</strong>. Click it to open the app.</li>
+      <li>In the text box, type <code>vpn.acadiau.ca</code> and click <strong>Connect</strong>.</li>
+      <li>A login window will appear. Enter your Acadia username (e.g., <code>jsmith</code>) and your password.</li>
+      <li>If you have two-factor authentication set up, you'll receive a push notification on your phone. Approve it.</li>
+      <li>Once connected, the Cisco icon in your taskbar will show a small padlock symbol. You're now on the Acadia network.</li>
+    </ol>
+
+    <h2>How to Disconnect</h2>
+    <p>Right-click the Cisco Secure Client icon in the taskbar (near the clock) and select <strong>Disconnect</strong>. Always disconnect when you're done — staying connected when you don't need it can slow down your internet.</p>
+
+    <h2>Having Trouble?</h2>
+    <ul>
+      <li><strong>The connection keeps dropping:</strong> Try a different network (e.g., switch from Wi-Fi to a wired connection).</li>
+      <li><strong>Wrong username or password:</strong> Try logging into webmail.acadiau.ca first to confirm your credentials work.</li>
+      <li><strong>Still not working:</strong> Contact the Technology Services Help Desk at helpdesk@acadiau.ca or visit us in the BAC Building, Room 107.</li>
+    </ul>
+  </div>
+
+  <h3>More help article scenarios Claude handles</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Topic</th>
+        <th>Audience</th>
+        <th>Sample Prompt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Setting up multi-factor authentication</td>
+        <td>Students and staff</td>
+        <td>"Write a step-by-step guide for enabling MFA on an Acadia Microsoft 365 account using the Microsoft Authenticator app. Audience: first-year students."</td>
+      </tr>
+      <tr>
+        <td>Accessing shared drives from off-campus</td>
+        <td>Faculty and staff</td>
+        <td>"Write a help article for faculty on how to map the departmental shared drive while connected to the Acadia VPN on Windows 11."</td>
+      </tr>
+      <tr>
+        <td>Connecting to eduroam Wi-Fi</td>
+        <td>Students (new arrivals)</td>
+        <td>"Write an article for new students explaining how to connect to eduroam on an iPhone. Assume they've never heard of eduroam."</td>
+      </tr>
+      <tr>
+        <td>Password reset self-service</td>
+        <td>All users</td>
+        <td>"Write a short guide explaining how to reset an Acadia account password using the self-service portal at password.acadiau.ca. Keep it under 200 words."</td>
+      </tr>
+      <tr>
+        <td>Zoom best practices for instructors</td>
+        <td>Faculty</td>
+        <td>"Write a tips article for instructors on best Zoom practices for hybrid teaching: audio setup, managing participants, screen sharing, breakout rooms."</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- 8.6 -->
+  <!-- ============================================================ -->
+  <h2 id="section-86">8.6 Applying the Acadia Theme to Deliverables</h2>
+
+  <p>All Technology Services documents shared externally or published on internal portals should use the Acadia house visual theme. Claude has skills built specifically for this.</p>
+
+  <h3>The two skills you use</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="skill-chip">/theme</span></h3>
+      <p>Applies the Acadia visual identity to any deliverable: Acadia Blue (<code>#004077</code>), Acadia Red (<code>#C41424</code>), Montserrat headings, Arial body text. Works for HTML pages, Word documents, PDF reports, and slides.</p>
+      <p>Use whenever asked to "make it on-brand," "apply our theme," or "use our colors."</p>
+    </div>
+    <div class="card">
+      <h3><span class="skill-chip">/file-naming</span></h3>
+      <p>Names the output file in the Technology Services standard convention:</p>
+      <p><code>Technology Services - [Short Name] - YYYYMMDD.[ext]</code></p>
+      <p>Consistent file naming makes documents findable in shared drives and archives.</p>
+    </div>
+  </div>
+
+  <h3>Branded HTML report workflow</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Ask Claude to draft the content.</strong> Focus the prompt on what the document should contain, not how it should look.</p>
+        <p>"Write a monthly IT security summary report for June 2026. Include: open vulnerabilities, patches applied, incidents handled, and recommendations."</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Invoke <span class="skill-chip">/theme</span>.</strong> Claude transforms the plain content into a fully styled HTML document using the Acadia color palette, typography, and component library — callouts, tables, cards, and all.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Invoke <span class="skill-chip">/file-naming</span>.</strong> Claude names the output file following the Technology Services convention: <code>Technology Services - IT Security Summary June 2026 - 20260628.html</code></p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Review the file in your browser.</strong> Open it in Chrome or Edge to confirm layout, check for any data errors, and make final adjustments before distributing.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>What the Acadia theme provides</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Element</th>
+        <th>Specification</th>
+        <th>Usage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Primary color</td>
+        <td><span style="display:inline-block;width:14px;height:14px;background:#004077;border-radius:2px;vertical-align:middle;margin-right:6px;"></span><code>#004077</code> — Acadia Blue</td>
+        <td>Headers, nav bars, table headers, primary buttons, links</td>
+      </tr>
+      <tr>
+        <td>Accent color</td>
+        <td><span style="display:inline-block;width:14px;height:14px;background:#C41424;border-radius:2px;vertical-align:middle;margin-right:6px;"></span><code>#C41424</code> — Acadia Red</td>
+        <td>Footer border, module badges, callout highlights, critical alerts</td>
+      </tr>
+      <tr>
+        <td>Heading font</td>
+        <td>Montserrat 600/700</td>
+        <td>H1–H4, table headers, badge labels</td>
+      </tr>
+      <tr>
+        <td>Body font</td>
+        <td>Arial / Helvetica Neue</td>
+        <td>Paragraphs, lists, table body, captions</td>
+      </tr>
+      <tr>
+        <td>Code font</td>
+        <td>Cascadia Code / Consolas</td>
+        <td>Inline code, code blocks, terminal output</td>
+      </tr>
+      <tr>
+        <td>Surface alt</td>
+        <td><code>#F5F6F8</code></td>
+        <td>Alternating table rows, card backgrounds, code chips</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--success">
+    <div class="callout-label">For Word Documents</div>
+    When asking Claude to generate Word document content, specify: "Use Acadia Blue (#004077) for headings, Acadia Red (#C41424) for accent lines, Montserrat for headings, and Arial for body text." Claude will include these as explicit style instructions in the document structure.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 8.7 -->
+  <!-- ============================================================ -->
+  <h2 id="section-87">8.7 Documentation Workflow Tips</h2>
+
+  <p>These techniques make Claude most effective as a documentation partner across the full lifecycle of a document — not just first drafts.</p>
+
+  <h3>Iterating on a draft</h3>
+
+  <p>Claude holds your document in context for the entire session. Iterate conversationally:</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Make section 2 more concise — it's too wordy for a runbook. Cut it to the key action items only.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">Revised section 2 — reduced from 180 words to 62, keeping only the actionable steps. [revised section shown]</div>
+      </div>
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Add a troubleshooting FAQ at the end. Include the three most common failure modes for this service.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">Added a Troubleshooting FAQ section covering: (1) service won't start after restart, (2) port 25 blocked by firewall, (3) queue stuck in retry state. [FAQ section shown]</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Improving existing documentation</h3>
+
+  <p>Paste any existing document and ask Claude to audit or improve it:</p>
+
+  <ul>
+    <li>"This runbook is unclear in places. Rewrite it for clarity and consistency."</li>
+    <li>"What's missing from this disaster recovery procedure? Are there any steps a reader might get stuck on?"</li>
+    <li>"This SOP uses inconsistent terminology — sometimes 'user account', sometimes 'login', sometimes 'identity'. Standardize it to 'user account' throughout."</li>
+    <li>"Rate this document for clarity on a scale of 1–10 and list the three biggest improvements to make."</li>
+  </ul>
+
+  <h3>Format conversion</h3>
+
+  <p>Claude converts documentation between formats without losing structure:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Prompt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Confluence wiki markup</td>
+        <td>Markdown</td>
+        <td>"Convert this Confluence wiki markup to clean Markdown."</td>
+      </tr>
+      <tr>
+        <td>Markdown</td>
+        <td>HTML (themed)</td>
+        <td>"Convert this Markdown README to an HTML page using the Acadia theme. Invoke /theme."</td>
+      </tr>
+      <tr>
+        <td>Bullet point notes</td>
+        <td>Formal SOP</td>
+        <td>"Expand these bullet points into a full SOP with numbered steps and pre/post conditions."</td>
+      </tr>
+      <tr>
+        <td>Technical runbook</td>
+        <td>User guide</td>
+        <td>"Rewrite this technical runbook as a student-facing self-help guide. Remove all IT-specific commands."</td>
+      </tr>
+      <tr>
+        <td>Email thread</td>
+        <td>Decision log</td>
+        <td>"Extract the key decisions and rationale from this email thread and format as a decision log."</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Documentation quality checklist</h3>
+
+  <p>Before publishing any Claude-generated document, review it against this checklist:</p>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Pre-Publication Review</h3>
+    <ul class="checklist">
+      <li>All technical steps have been tested and verified in the actual environment</li>
+      <li>Commands, paths, and server names are correct for the Acadia environment (not generic placeholders)</li>
+      <li>The document has a clear owner and last-updated date</li>
+      <li>Links to internal systems or related documents are accurate</li>
+      <li>Sensitive information (passwords, internal IPs, credentials) has been removed</li>
+      <li>The audience matches the document's language and assumed knowledge level</li>
+      <li>The file is named using the Technology Services naming convention</li>
+      <li>A second pair of eyes has reviewed the procedure, especially for incident response content</li>
+    </ul>
+  </div>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Always Verify Technical Steps</div>
+    Claude generates documentation based on its training data and what you provide. It does not have access to your live systems. Always test every command and procedure in a non-production environment before publishing a runbook or SOP. Claude is excellent at producing the structure and language; you are responsible for the accuracy of the technical content.
+  </div>
+
+  <h3>Summary: Documentation prompting patterns</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Goal</th>
+        <th>Pattern</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Generate from code</td>
+        <td>"Write [doc type] for this [language] [code type]. Here's the code: [paste]"</td>
+        <td>"Write a README for this PowerShell module. Here's the code: [paste]"</td>
+      </tr>
+      <tr>
+        <td>Set audience</td>
+        <td>"Write for [audience description]. Assume [knowledge level]."</td>
+        <td>"Write for a first-year student. Assume no prior IT experience."</td>
+      </tr>
+      <tr>
+        <td>Formalize notes</td>
+        <td>"Convert [informal source] into a formal [doc type] for [audience]."</td>
+        <td>"Convert these Slack messages into a formal incident report."</td>
+      </tr>
+      <tr>
+        <td>Improve existing doc</td>
+        <td>"[Paste doc]. [Specific improvement request]."</td>
+        <td>"This runbook is unclear. Rewrite step 3 and add a rollback procedure."</td>
+      </tr>
+      <tr>
+        <td>Gap analysis</td>
+        <td>"What's missing from this [doc type]? What would a reader get stuck on?"</td>
+        <td>"What's missing from this disaster recovery plan?"</td>
+      </tr>
+      <tr>
+        <td>Apply branding</td>
+        <td>"[Draft content]. Apply the Acadia theme. /theme"</td>
+        <td>"Draft this report, then /theme and /file-naming."</td>
+      </tr>
+    </tbody>
+  </table>
+
+</main>
+
+<!-- MODULE NAVIGATION -->
+<nav class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 7 Data Management - 20260628.html">&larr; Module 7: Data Management</a>
+    <span style="color:var(--color-muted);font-size:0.85rem;">Module 8 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 9 IT Workflows - 20260628.html">Module 9: IT Workflows &rarr;</a>
+  </div>
+</nav>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <strong style="color:var(--color-primary);">Acadia University Technology Services</strong><br>
+      Claude AI Training Series &mdash; Module 8: Documentation &mdash; June 28, 2026
+    </div>
+    <div style="text-align:right;">
+      <div style="margin-bottom:var(--space-2);">
+        <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">M1</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 2 Interfaces - 20260628.html">M2</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 3 Skills - 20260628.html">M3</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 4 Permissions - 20260628.html">M4</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 5 Git - 20260628.html">M5</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 6 Scripts - 20260628.html">M6</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 7 Data Management - 20260628.html">M7</a> &middot;
+        <strong>M8</strong> &middot;
+        <a href="Technology Services - Claude IT Training Module 9 IT Workflows - 20260628.html">M9</a> &middot;
+        <a href="Technology Services - Claude IT Training Module 10 Best Practices - 20260628.html">M10</a>
+      </div>
+      <small>For internal Technology Services use only</small>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

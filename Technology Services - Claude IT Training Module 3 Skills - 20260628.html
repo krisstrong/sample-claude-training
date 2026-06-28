@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — Using Skills | Claude IT Training | Technology Services</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia University</div>
+    <h1>Claude AI Training — Technology Services</h1>
+    <span class="module-badge">Module 3 of 10</span>
+  </div>
+</header>
+
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a> &rsaquo; Module 3 — Using Skills
+  </div>
+</nav>
+
+<main class="container">
+
+  <h1>Module 3 — Using Skills</h1>
+  <p class="caption">Estimated reading time: 20 minutes &nbsp;&middot;&nbsp; Skill level: Beginner to Intermediate</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ol>
+      <li><a href="#section-31">What Are Skills?</a></li>
+      <li><a href="#section-32">Where Skills Live</a></li>
+      <li><a href="#section-33">How to Invoke a Skill</a></li>
+      <li><a href="#section-34">Skills Available for Technology Services</a></li>
+      <li><a href="#section-35">Installing Skills</a></li>
+      <li><a href="#section-36">Creating a Custom Skill</a></li>
+      <li><a href="#section-37">Tips for Using Skills Effectively</a></li>
+    </ol>
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-31">3.1 What Are Skills?</h2>
+
+  <p>Skills are reusable instruction files that extend Claude's behavior for specific tasks. Instead of repeating the same context or instructions every time you start a conversation, you package them once into a skill file — and invoke it with a single slash command whenever you need it.</p>
+
+  <div class="grid-3">
+    <div class="icon-card">
+      <div class="icon">&#128196;</div>
+      <h3>Markdown Files</h3>
+      <p>Skills are plain <code>.md</code> files with YAML frontmatter. No special syntax to learn.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#9889;</div>
+      <h3>Slash Commands</h3>
+      <p>Invoke any skill by typing <code>/skill-name</code> in the Claude chat interface.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128260;</div>
+      <h3>Reusable Workflows</h3>
+      <p>Think of skills as macros or templates — define once, use many times across projects.</p>
+    </div>
+  </div>
+
+  <p>When you type <code>/skill-name</code>, Claude reads that skill file before responding, giving it specialized knowledge or a step-by-step workflow to follow. Skills are version-controllable, shareable with your team, and composable — you can build complex workflows from simple skill building blocks.</p>
+
+  <h3>Anatomy of a Skill File</h3>
+  <p>Every skill is a Markdown file with a YAML frontmatter block at the top, followed by instructions for Claude in plain prose or structured Markdown.</p>
+
+  <div class="code-header">
+    <span>.claude/skills/my-skill/SKILL.md</span>
+    <span>Markdown</span>
+  </div>
+<pre><code>---
+name: my-skill
+description: Brief description of when this skill should fire
+---
+
+# Instructions for Claude
+
+When this skill is invoked, do the following:
+
+1. First, read the relevant files in the project
+2. Apply the specified transformation or analysis
+3. Return results in the format described below
+
+## Output Format
+
+- Use bullet points for findings
+- Highlight critical issues in bold
+- Include a summary section at the end
+</code></pre>
+
+  <p>The <strong>frontmatter</strong> block (between the <code>---</code> delimiters) contains metadata Claude uses to identify and trigger the skill. The <strong>body</strong> of the file is freeform Markdown — write it like you would write instructions to a capable colleague.</p>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Key Concept</div>
+    <strong>Description accuracy matters.</strong> The <code>description</code> field in the frontmatter tells Claude <em>when</em> this skill applies. Claude reads skill descriptions to decide whether to suggest a skill automatically. Write descriptions that clearly state the trigger condition.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-32">3.2 Where Skills Live</h2>
+
+  <p>Claude Code looks for skills in two locations, each with a different scope. Understanding the difference helps you decide where to put each skill.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>&#127758; Global Skills</h3>
+      <p><strong>Path:</strong> <code>C:\Users\USERNAME\.claude\skills\</code></p>
+      <p>Available in <em>every</em> project on your machine. Use this location for general-purpose skills you want everywhere: your standard code review style, your department's file naming convention, your personal preferences.</p>
+    </div>
+    <div class="card">
+      <h3>&#128193; Project Skills</h3>
+      <p><strong>Path:</strong> <code>[Project Root]\.claude\skills\</code></p>
+      <p>Only available when working inside that specific project. Use this location for project-specific workflows: an incident report template for your helpdesk repo, a deployment checklist for a specific app.</p>
+    </div>
+  </div>
+
+  <p>When both a global and a project-level skill share the same name, the <strong>project-level skill takes precedence</strong>. This lets teams override global defaults with project-specific behaviour.</p>
+
+  <h3>Directory Structure</h3>
+
+  <div class="code-header">
+    <span>Skill directory layout (Windows)</span>
+    <span>Directory Tree</span>
+  </div>
+<pre><code>C:\Users\USERNAME\
+└── .claude\
+    └── skills\
+        ├── code-review\          &lt;-- invoked as /code-review
+        │   └── SKILL.md
+        ├── theme\                &lt;-- invoked as /theme
+        │   └── SKILL.md
+        └── file-naming\          &lt;-- invoked as /file-naming
+            └── SKILL.md
+
+C:\Projects\helpdesk-portal\      &lt;-- your project root
+└── .claude\
+    └── skills\
+        └── incident-report\      &lt;-- invoked as /incident-report
+            └── SKILL.md          &lt;-- only available in this project
+</code></pre>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Naming Convention</div>
+    The folder name inside <code>skills\</code> is the invoke name. A folder called <code>incident-report</code> becomes <code>/incident-report</code>. Keep folder names lowercase with hyphens — no spaces, no underscores.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-33">3.3 How to Invoke a Skill</h2>
+
+  <p>Invoking a skill is as simple as typing a slash followed by the skill name in the Claude chat input. You can also pass additional context or arguments after the skill name.</p>
+
+  <ul>
+    <li>Type <code>/skill-name</code> and press Enter to invoke with no arguments</li>
+    <li>Type <code>/skill-name some extra context</code> to pass arguments Claude will incorporate</li>
+    <li><strong>Tab completion</strong> works in both the Claude Desktop App and the CLI REPL — press Tab after the slash to see available skills</li>
+    <li>Skills are case-insensitive: <code>/Code-Review</code> and <code>/code-review</code> both work</li>
+  </ul>
+
+  <h3>Live Example — Invoking /code-review</h3>
+  <p>The following mockup shows what happens when you invoke the <code>/code-review</code> skill in a project with uncommitted changes:</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <span class="claude-ui-dot" style="background:#FF5F57;"></span>
+      <span class="claude-ui-dot" style="background:#FFBD2E;"></span>
+      <span class="claude-ui-dot" style="background:#28C840;"></span>
+      <span class="claude-ui-title">Claude Code &mdash; helpdesk-portal</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">/code-review focus on error handling</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <strong>Code Review &mdash; helpdesk-portal</strong><br><br>
+          I've reviewed your current diff (3 files changed, 87 insertions, 12 deletions). Here are my findings, with particular attention to error handling as requested.<br><br>
+          <strong>&#128308; Issues Found</strong><br><br>
+          <strong>1. Unhandled promise rejection</strong> &mdash; <code>src/api/tickets.js:42</code><br>
+          The <code>fetchTicket()</code> call has no <code>.catch()</code> handler. If the API is unreachable, this will produce an unhandled rejection and silently fail in production.<br><br>
+          <strong>2. Missing null check</strong> &mdash; <code>src/components/TicketDetail.jsx:18</code><br>
+          <code>ticket.assignee.name</code> will throw if <code>assignee</code> is null (unassigned tickets). Use optional chaining: <code>ticket.assignee?.name</code>.<br><br>
+          <strong>&#128994; Looks Good</strong><br><br>
+          Authentication middleware and the new retry logic in <code>src/utils/httpClient.js</code> are well-structured. The exponential backoff implementation is correct.<br><br>
+          <strong>Summary:</strong> 2 issues to fix before merging. No security concerns. Test coverage looks adequate for the changed paths.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Pro Tip</div>
+    You can pass any free-text argument after the skill name. <code>/code-review focus on error handling</code> narrows the review scope. <code>/code-review --comment</code> posts findings as inline GitHub PR comments. Check each skill's documentation for supported arguments.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-34">3.4 Skills Available for Technology Services</h2>
+
+  <p>The following skills are either included with Claude Code or have been configured for Acadia Technology Services staff. They are available globally (once installed to your <code>~\.claude\skills\</code> directory) or on a per-project basis.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Skill</th>
+        <th>Invoke</th>
+        <th>What It Does</th>
+        <th>Scope</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>theme</strong></td>
+        <td><code>/theme</code></td>
+        <td>Applies the Acadia University visual theme to any deliverable — HTML pages, Word documents, PowerPoint presentations, or dashboards. Ensures colours, fonts, and layout conform to brand standards.</td>
+        <td><span class="badge badge--blue">Global</span></td>
+      </tr>
+      <tr>
+        <td><strong>file-naming</strong></td>
+        <td><code>/file-naming</code></td>
+        <td>Names final deliverables using the department convention: <code>DEPARTMENT - Short Name - YYYYMMDD</code>. Ensures consistent file naming across Technology Services outputs.</td>
+        <td><span class="badge badge--blue">Global</span></td>
+      </tr>
+      <tr>
+        <td><strong>code-review</strong></td>
+        <td><code>/code-review</code></td>
+        <td>Reviews the current git diff for correctness bugs, logic errors, and improvement opportunities. Supports effort levels (low / medium / high / ultra) and the <code>--comment</code> flag to post findings as inline PR comments.</td>
+        <td><span class="badge badge--blue">Global</span></td>
+      </tr>
+      <tr>
+        <td><strong>security-review</strong></td>
+        <td><code>/security-review</code></td>
+        <td>Reviews code changes specifically for security vulnerabilities: injection risks, authentication flaws, secrets in code, insecure dependencies, and improper access control.</td>
+        <td><span class="badge badge--blue">Global</span></td>
+      </tr>
+      <tr>
+        <td><strong>simplify</strong></td>
+        <td><code>/simplify</code></td>
+        <td>Refactors changed code for clarity and efficiency. Looks for duplication, unnecessary complexity, and opportunities to use standard library features. Applies fixes directly to the working tree.</td>
+        <td><span class="badge badge--blue">Global</span></td>
+      </tr>
+      <tr>
+        <td><strong>update-config</strong></td>
+        <td><code>/update-config</code></td>
+        <td>Configures Claude Code settings and hooks via natural language. Tell it what you want ("allow npm commands", "run linting after file writes") and it generates the correct <code>settings.json</code> changes.</td>
+        <td><span class="badge badge--blue">Global</span></td>
+      </tr>
+      <tr>
+        <td><strong>init</strong></td>
+        <td><code>/init</code></td>
+        <td>Scans the current project and generates a <code>CLAUDE.md</code> file documenting the codebase — structure, dependencies, key patterns, and how to build and run the project. Ideal for onboarding.</td>
+        <td><span class="badge badge--blue">Global</span></td>
+      </tr>
+      <tr>
+        <td><strong>incident-report</strong></td>
+        <td><code>/incident-report</code></td>
+        <td>Guides staff through generating a structured IT incident report. Asks for date/time, systems affected, description, impact, resolution steps, and follow-up actions, then produces a formatted report.</td>
+        <td><span class="badge badge--gray">Project</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Note</div>
+    Skills marked <span class="badge badge--blue">Global</span> are available in every project once installed to your user-level skills directory. Skills marked <span class="badge badge--gray">Project</span> are installed in a specific project's <code>.claude/skills/</code> folder and are only available there.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-35">3.5 Installing Skills</h2>
+
+  <p>Installing a skill is simply a matter of placing the skill's <code>.md</code> file in the correct directory. No compilation, no package manager, no restart required beyond refreshing your Claude session.</p>
+
+  <h3>Installing a Global Skill (Available Everywhere)</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Obtain the skill file.</strong> Download the <code>.md</code> file from your team's shared repository, or create one from scratch. The file should contain YAML frontmatter and instructions for Claude.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Navigate to your global skills directory.</strong> Open File Explorer or a terminal and go to:</p>
+        <code>C:\Users\USERNAME\.claude\skills\</code>
+        <p style="margin-top:8px;">If the <code>skills</code> folder does not exist yet, create it.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Create a subfolder for the skill.</strong> The folder name becomes the invoke name. For a skill you want to call as <code>/incident-report</code>, create a folder named <code>incident-report</code>.</p>
+        <pre style="margin-top:8px;"><code>mkdir C:\Users\USERNAME\.claude\skills\incident-report</code></pre>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Place the skill file inside the folder.</strong> The file must be named <code>SKILL.md</code> (all caps).</p>
+        <code>C:\Users\USERNAME\.claude\skills\incident-report\SKILL.md</code>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Refresh your Claude session.</strong> Close and reopen the Claude Desktop App, or type <code>/reload</code> in the CLI REPL. The new skill will appear in tab-completion.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Test the skill.</strong> Type <code>/incident-report</code> in the chat to verify the skill loads and Claude responds as expected.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Installing a Project-Level Skill</h3>
+  <p>The process is identical, but the target directory is inside your project root instead of your user home directory:</p>
+
+  <div class="code-header">
+    <span>Project-level skill installation</span>
+    <span>PowerShell</span>
+  </div>
+<pre><code># Navigate to your project root
+cd C:\Projects\helpdesk-portal
+
+# Create the skills directory if it doesn't exist
+mkdir .claude\skills\incident-report -Force
+
+# Copy your skill file into place
+Copy-Item .\downloads\incident-report.md .\.claude\skills\incident-report\SKILL.md
+</code></pre>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Source Control</div>
+    Project-level skill files in <code>.claude/skills/</code> <strong>should be committed to your git repository</strong>. This lets your whole team share the same skills automatically when they clone the project. Consider adding a <code>README.md</code> to the <code>.claude/skills/</code> folder explaining your project's custom skills.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 id="section-36">3.6 Creating a Custom Skill</h2>
+
+  <p>Writing a skill is one of the most valuable things you can do to improve your team's productivity with Claude. Any repeated workflow, standard document format, or specialized analysis your team performs regularly is a good candidate for a skill.</p>
+
+  <h3>Example: The Incident Report Skill</h3>
+
+  <p>Acadia Technology Services staff regularly produce IT incident reports. The following skill guides Claude to collect all required information and produce a consistently formatted report — eliminating the need to remember the required fields or format each time.</p>
+
+  <div class="code-header">
+    <span>.claude/skills/incident-report/SKILL.md</span>
+    <span>Markdown</span>
+  </div>
+<pre><code>---
+name: incident-report
+description: Generate a structured IT incident report from a brief description of what happened
+---
+
+# Incident Report Generator
+
+When invoked, ask the user for the following information, one prompt at a time
+if not already provided:
+
+1. Date and time of the incident
+2. Systems affected (servers, applications, network segments, services)
+3. Description of the problem (what happened, how it was first noticed)
+4. Impact on users (number affected, severity of disruption, duration)
+5. Steps taken to resolve (timeline of actions, who was involved)
+6. Current status and follow-up actions required
+
+Then produce a formatted incident report following Acadia Technology Services
+standards, using the structure below.
+
+## Output Format
+
+# IT Incident Report — [Systems Affected]
+**Date/Time:** [date and time]
+**Status:** [Resolved / Ongoing / Monitoring]
+**Reported by:** [if provided]
+
+## Incident Summary
+[2-3 sentence description of what happened]
+
+## Systems Affected
+[Bullet list of affected systems]
+
+## User Impact
+[Description of impact, including number of users affected and duration]
+
+## Timeline of Events
+| Time | Action |
+|------|--------|
+| HH:MM | Event description |
+
+## Root Cause
+[Root cause if identified, or "Under investigation" if not]
+
+## Resolution
+[Steps taken to resolve the incident]
+
+## Follow-up Actions
+- [ ] Action item 1
+- [ ] Action item 2
+
+---
+*Report generated by Acadia Technology Services*
+</code></pre>
+
+  <h3>Invoking the Skill</h3>
+  <p>Once installed, a staff member simply types <code>/incident-report</code> in Claude. Claude will then walk through the required questions and produce the formatted report:</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <span class="claude-ui-dot" style="background:#FF5F57;"></span>
+      <span class="claude-ui-dot" style="background:#FFBD2E;"></span>
+      <span class="claude-ui-dot" style="background:#28C840;"></span>
+      <span class="claude-ui-title">Claude Code &mdash; helpdesk-portal</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">/incident-report The email server went down this morning and we couldn't receive mail for about two hours.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          I'll help you create a structured incident report. I have a description of the problem — let me gather the remaining required details.<br><br>
+          <strong>1. Date and time:</strong> When exactly did the incident begin? (e.g., 2026-06-28 at 08:15 AST)<br><br>
+          <strong>2. Systems affected:</strong> Which email server or service was impacted? (e.g., Exchange server, Office 365, specific hostname)
+        </div>
+      </div>
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Started at 07:45 AST. It was the on-prem Exchange server, EXCAS01.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          Thank you. A few more questions:<br><br>
+          <strong>3. User impact:</strong> Approximately how many users were affected? Were they unable to send, receive, or both?<br><br>
+          <strong>4. Steps taken to resolve:</strong> What actions were taken, and who was involved?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>After collecting all information, Claude generates the complete formatted report ready for your incident management system or team documentation.</p>
+
+  <h3>Design Principles for Effective Skills</h3>
+
+  <ul>
+    <li><strong>One skill, one job.</strong> A skill that tries to do too much becomes hard to invoke reliably. Split complex workflows into smaller, focused skills.</li>
+    <li><strong>Write for Claude, not for humans.</strong> The skill body is instructions for Claude — be direct and specific. "Ask the user for X, then Y" works better than "the user may provide X or Y."</li>
+    <li><strong>Include an output format.</strong> Specify exactly how you want the output structured. Claude will follow precise format descriptions faithfully.</li>
+    <li><strong>Test with edge cases.</strong> Try invoking the skill with minimal input, maximal input, and unusual inputs to ensure it handles all situations gracefully.</li>
+  </ul>
+
+  <!-- ============================================================ -->
+  <h2 id="section-37">3.7 Tips for Using Skills Effectively</h2>
+
+  <h3>Skills Stack — Use Them Together</h3>
+  <p>You are not limited to one skill per conversation. Invoke a skill, get a result, then invoke another. The conversation context carries forward between invocations.</p>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Workflow Example</div>
+    <ol style="margin-bottom:0;">
+      <li>Use <code>/code-review</code> to identify issues in a pull request</li>
+      <li>Ask Claude to fix the identified issues</li>
+      <li>Use <code>/security-review</code> to check the same diff for vulnerabilities</li>
+      <li>Use <code>/simplify</code> to refactor any complex sections</li>
+    </ol>
+    Each skill adds its perspective to the same conversation — Claude retains full context throughout.
+  </div>
+
+  <h3>Pass Context After the Command</h3>
+  <p>Most skills accept free-text arguments after the command name. Claude incorporates this context when running the skill:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Invocation</th>
+        <th>Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/code-review</code></td>
+        <td>Full review of the current diff</td>
+      </tr>
+      <tr>
+        <td><code>/code-review focus on error handling</code></td>
+        <td>Review emphasising error handling patterns</td>
+      </tr>
+      <tr>
+        <td><code>/code-review --comment</code></td>
+        <td>Posts findings as inline GitHub PR comments</td>
+      </tr>
+      <tr>
+        <td><code>/code-review --fix</code></td>
+        <td>Applies suggested fixes directly to the working tree</td>
+      </tr>
+      <tr>
+        <td><code>/theme apply to the dashboard only</code></td>
+        <td>Applies the Acadia theme to a specific section</td>
+      </tr>
+      <tr>
+        <td><code>/incident-report brief description of outage here</code></td>
+        <td>Pre-populates the problem description and skips that question</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Check Available Skills with /help</h3>
+  <p>To see all skills currently available in your session, type <code>/help</code> in the Claude chat. The response will list every registered skill with its name and description — useful when working in a new project or after adding new skills.</p>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Keep Descriptions Accurate</div>
+    Claude reads skill <code>description</code> fields to decide when to proactively suggest a skill. If a description is too vague or inaccurate, Claude may suggest the skill at the wrong time — or never. When you create or edit a skill, test that the description correctly captures the trigger condition: <em>"when should this skill be used?"</em>
+  </div>
+
+  <h3>Share Skills with Your Team</h3>
+  <p>Project-level skills committed to your git repository are automatically available to every team member who clones the repo. This is the recommended way to distribute Technology Services standard workflows:</p>
+
+  <ol>
+    <li>Create the skill in <code>.claude/skills/skill-name/SKILL.md</code></li>
+    <li>Commit and push to the main branch</li>
+    <li>Team members pull the changes — the skill is immediately available</li>
+    <li>Iterate on the skill by editing the <code>SKILL.md</code> file and committing updates</li>
+  </ol>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Next Steps</div>
+    Now that you understand how skills work, Module 4 covers the <strong>permissions system</strong> — how Claude decides what it is allowed to do on your machine, and how to configure those boundaries safely for Technology Services workflows.
+  </div>
+
+</main>
+
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 2 Interfaces - 20260628.html">&#8592; Previous: Module 2 &mdash; Interfaces</a>
+    <span>Module 3 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 4 Permissions - 20260628.html">Next: Module 4 &mdash; Permissions &#8594;</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span><strong>Technology Services</strong> &middot; Acadia University</span>
+    <span>Claude IT Training &middot; 2026 &middot; Module 3 of 10</span>
+  </div>
+</footer>
+
+</body>
+</html>

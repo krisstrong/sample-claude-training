@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 6 — Script Writing with Claude | Claude IT Training | Technology Services</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+.workflow-arrow{display:flex;align-items:center;gap:var(--space-4);margin:var(--space-6) 0;flex-wrap:wrap;}
+.workflow-step{flex:1;min-width:140px;background:var(--color-primary-50);border:1px solid var(--color-primary-200);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);text-align:center;font-size:0.9rem;font-weight:600;color:var(--color-primary);}
+.workflow-arrow-icon{color:var(--color-primary-200);font-size:1.4rem;flex-shrink:0;}
+.best-practice-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-4) var(--space-4) var(--space-3);}
+.best-practice-card .bp-icon{font-size:1.8rem;margin-bottom:var(--space-2);}
+.best-practice-card h3{font-size:0.95rem;margin:0 0 var(--space-2);color:var(--color-primary);}
+.best-practice-card p{font-size:0.88rem;color:var(--color-muted);margin:0;}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia University</div>
+    <h1>Claude AI Training &mdash; Technology Services</h1>
+    <span class="module-badge">Module 6 of 10</span>
+  </div>
+</header>
+
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a>
+    &rsaquo; Module 6 &mdash; Script Writing with Claude
+  </div>
+</nav>
+
+<main class="container">
+
+  <h1>Module 6 &mdash; Script Writing with Claude</h1>
+  <p class="caption">Estimated time: 40 minutes &nbsp;&middot;&nbsp; Audience: Technology Services staff who write or maintain automation scripts</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ol>
+      <li><a href="#script-partner">Claude as a Script-Writing Partner</a></li>
+      <li><a href="#powershell">PowerShell Scripts</a></li>
+      <li><a href="#bash-scripts">Bash / Shell Scripts</a></li>
+      <li><a href="#python-scripts">Python Scripts for Automation</a></li>
+      <li><a href="#debugging">Debugging Scripts with Claude</a></li>
+      <li><a href="#running-scripts">Running Scripts Through Claude</a></li>
+      <li><a href="#best-practices">Script Writing Best Practices</a></li>
+    </ol>
+  </div>
+
+  <!-- ─── 6.1 ─────────────────────────────────────────────────────────── -->
+  <h2 id="script-partner">6.1 Claude as a Script-Writing Partner</h2>
+
+  <p>Claude excels at writing the structural and boilerplate code that makes up the bulk of IT automation scripts. You bring the knowledge of your environment &mdash; which servers exist, what Active Directory schema you&rsquo;re using, which edge cases matter &mdash; and Claude handles the syntax, error handling patterns, and idiomatic code structure.</p>
+
+  <h3>The core workflow</h3>
+
+  <div class="workflow-arrow">
+    <div class="workflow-step">Describe what you need</div>
+    <span class="workflow-arrow-icon">&#8594;</span>
+    <div class="workflow-step">Claude drafts the script</div>
+    <span class="workflow-arrow-icon">&#8594;</span>
+    <div class="workflow-step">You review for accuracy</div>
+    <span class="workflow-arrow-icon">&#8594;</span>
+    <div class="workflow-step">Test in lab environment</div>
+    <span class="workflow-arrow-icon">&#8594;</span>
+    <div class="workflow-step">Iterate and deploy</div>
+  </div>
+
+  <p>Claude works well for PowerShell, Bash, Python, batch files, and cross-platform automation. The more context you give it &mdash; your Windows version, whether AD module is available, which PowerShell version is installed, what the target servers look like &mdash; the more accurate the first draft will be.</p>
+
+  <h3>What Claude does well</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Strengths</h3>
+      <ul>
+        <li>Generating boilerplate (param blocks, try/catch, logging setup)</li>
+        <li>Knowing the right cmdlets, flags, and module names</li>
+        <li>Adding <code>-WhatIf</code> support, <code>-Verbose</code>, and proper pipeline output</li>
+        <li>Writing idiomatic, readable code that follows community conventions</li>
+        <li>Adapting scripts for PowerShell 5.1 vs 7 differences</li>
+        <li>Explaining every line of a script it generates</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Where you must add context</h3>
+      <ul>
+        <li>Acadia-specific server names, OU structures, and naming conventions</li>
+        <li>Which modules are already installed in your environment</li>
+        <li>Service account permissions and what&rsquo;s available to run as</li>
+        <li>Network topology and reachability constraints</li>
+        <li>Any compliance or audit requirements the script must meet</li>
+        <li>Whether the script runs interactively or as a scheduled task</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Critical: Test before production</div>
+    Never run an untested script on a production server, domain controller, or live database. Always test in a lab environment first. For PowerShell scripts that modify system state, use the <code>-WhatIf</code> flag to preview changes without applying them. For scripts that don&rsquo;t support <code>-WhatIf</code>, run against a single test target before scaling to a full host list.
+  </div>
+
+  <!-- ─── 6.2 ─────────────────────────────────────────────────────────── -->
+  <h2 id="powershell">6.2 PowerShell Scripts</h2>
+
+  <p>PowerShell is the primary scripting language for Windows administration at Acadia. Claude is fluent in both PowerShell 5.1 (included with Windows) and PowerShell 7 (cross-platform). Always specify which version you&rsquo;re targeting.</p>
+
+  <h3>Example 1 &mdash; Inactive AD computer report</h3>
+
+  <p><strong>Prompt used:</strong> <em>&ldquo;Write a PowerShell script that finds all computers in Active Directory that haven&rsquo;t logged in for 90 days and exports the results to a CSV. Target PowerShell 5.1 on Windows Server 2022. The ActiveDirectory module is available.&rdquo;</em></p>
+
+  <div class="code-header">
+    <span>PowerShell 5.1</span>
+    <span>Find-InactiveADComputers.ps1</span>
+  </div>
+  <pre><code>#Requires -Modules ActiveDirectory
+&lt;#
+.SYNOPSIS
+    Reports Active Directory computers inactive for 90 or more days.
+.DESCRIPTION
+    Queries AD for computer objects whose LastLogonDate is older than the
+    specified threshold and exports results to a timestamped CSV file.
+.PARAMETER DaysInactive
+    Number of days of inactivity to flag. Default: 90.
+.PARAMETER OutputPath
+    Directory for the CSV report. Default: current directory.
+.EXAMPLE
+    .\Find-InactiveADComputers.ps1 -DaysInactive 60 -OutputPath C:\Reports
+#&gt;
+[CmdletBinding(SupportsShouldProcess)]
+param(
+    [int]$DaysInactive  = 90,
+    [string]$OutputPath = "."
+)
+
+Import-Module ActiveDirectory -ErrorAction Stop
+
+$cutoffDate   = (Get-Date).AddDays(-$DaysInactive)
+$reportFile   = Join-Path $OutputPath "InactiveComputers_$(Get-Date -Format yyyyMMdd_HHmmss).csv"
+$searchBase   = (Get-ADDomain).DistinguishedName
+
+Write-Verbose "Searching for computers inactive since $($cutoffDate.ToShortDateString())"
+
+try {
+    $inactiveComputers = Get-ADComputer -Filter { LastLogonDate -lt $cutoffDate } `
+        -SearchBase $searchBase `
+        -Properties LastLogonDate, OperatingSystem, OperatingSystemVersion, Description, Enabled |
+        Select-Object Name, LastLogonDate, OperatingSystem,
+                      OperatingSystemVersion, Description, Enabled,
+                      @{Name='DaysSinceLogin';Expression={
+                          if ($_.LastLogonDate) {
+                              [int]((Get-Date) - $_.LastLogonDate).TotalDays
+                          } else { 'Never' }
+                      }} |
+        Sort-Object DaysSinceLogin -Descending
+}
+catch {
+    Write-Error "Failed to query Active Directory: $_"
+    exit 1
+}
+
+if ($inactiveComputers.Count -eq 0) {
+    Write-Host "No computers found inactive for more than $DaysInactive days."
+    exit 0
+}
+
+if ($PSCmdlet.ShouldProcess($reportFile, "Export $($inactiveComputers.Count) inactive computers")) {
+    $inactiveComputers | Export-Csv -Path $reportFile -NoTypeInformation -Encoding UTF8
+    Write-Host "Found $($inactiveComputers.Count) inactive computers." -ForegroundColor Yellow
+    Write-Host "Report saved to: $reportFile"
+}
+</code></pre>
+
+  <h3>Example 2 &mdash; Disk space monitoring across a server list</h3>
+
+  <p><strong>Prompt used:</strong> <em>&ldquo;Write a PowerShell script that reads a list of server names from a text file, checks disk space on each one via WMI, and alerts in the console (and in a CSV report) if any drive is more than 80% full. Handle unreachable servers gracefully.&rdquo;</em></p>
+
+  <div class="code-header">
+    <span>PowerShell 5.1</span>
+    <span>Check-DiskSpace.ps1</span>
+  </div>
+  <pre><code>[CmdletBinding()]
+param(
+    [Parameter(Mandatory)]
+    [string]$ServerListPath,
+    [int]$ThresholdPercent = 80,
+    [string]$ReportPath    = ".\DiskSpaceReport_$(Get-Date -Format yyyyMMdd).csv"
+)
+
+$servers = Get-Content -Path $ServerListPath | Where-Object { $_ -match '\S' }
+$report  = [System.Collections.Generic.List[PSCustomObject]]::new()
+
+foreach ($server in $servers) {
+    Write-Verbose "Checking $server..."
+
+    if (-not (Test-Connection -ComputerName $server -Count 1 -Quiet -ErrorAction SilentlyContinue)) {
+        Write-Warning "[$server] Unreachable — skipping."
+        continue
+    }
+
+    try {
+        $disks = Get-WmiObject -Class Win32_LogicalDisk `
+                     -ComputerName $server `
+                     -Filter "DriveType=3" `
+                     -ErrorAction Stop
+    }
+    catch {
+        Write-Warning "[$server] WMI query failed: $_"
+        continue
+    }
+
+    foreach ($disk in $disks) {
+        $usedPct = [math]::Round((1 - $disk.FreeSpace / $disk.Size) * 100, 1)
+        $entry   = [PSCustomObject]@{
+            Server       = $server
+            Drive        = $disk.DeviceID
+            SizeGB       = [math]::Round($disk.Size / 1GB, 1)
+            FreeGB       = [math]::Round($disk.FreeSpace / 1GB, 1)
+            UsedPercent  = $usedPct
+            Status       = if ($usedPct -ge $ThresholdPercent) { 'ALERT' } else { 'OK' }
+        }
+        $report.Add($entry)
+
+        if ($usedPct -ge $ThresholdPercent) {
+            Write-Warning "ALERT: $server $($disk.DeviceID) is ${usedPct}% full ($([math]::Round($disk.FreeSpace/1GB,1)) GB free)"
+        }
+    }
+}
+
+$report | Export-Csv -Path $ReportPath -NoTypeInformation -Encoding UTF8
+Write-Host "`nReport saved to $ReportPath"
+
+$alerts = $report | Where-Object Status -eq 'ALERT'
+if ($alerts) {
+    Write-Host "`n--- Drives requiring attention ---" -ForegroundColor Red
+    $alerts | Format-Table Server, Drive, SizeGB, FreeGB, UsedPercent -AutoSize
+}
+</code></pre>
+
+  <h3>Tips for better PowerShell output from Claude</h3>
+
+  <table>
+    <thead>
+      <tr><th>What to specify</th><th>Why it matters</th><th>Example</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>PowerShell version</strong></td>
+        <td>5.1 and 7 have different syntax for some features (ternary operators, null coalescing, pipeline chains)</td>
+        <td>"Target PowerShell 5.1 on Windows Server 2022"</td>
+      </tr>
+      <tr>
+        <td><strong>Available modules</strong></td>
+        <td>Claude will only use modules it knows are present — avoiding import failures in production</td>
+        <td>"The ActiveDirectory and ImportExcel modules are installed"</td>
+      </tr>
+      <tr>
+        <td><strong>Execution context</strong></td>
+        <td>Interactive scripts vs scheduled tasks have different requirements (no Read-Host, need logging)</td>
+        <td>"This runs as a scheduled task under a service account"</td>
+      </tr>
+      <tr>
+        <td><strong>WhatIf requirement</strong></td>
+        <td>Scripts that modify AD, files, or services should be dry-run safe</td>
+        <td>"Add -WhatIf support so I can preview changes before running"</td>
+      </tr>
+      <tr>
+        <td><strong>Error handling depth</strong></td>
+        <td>Production scripts need structured error handling with log output, not just Write-Error</td>
+        <td>"Add try/catch around every external call and write errors to a log file"</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─── 6.3 ─────────────────────────────────────────────────────────── -->
+  <h2 id="bash-scripts">6.3 Bash / Shell Scripts</h2>
+
+  <p>Bash scripts are the standard for Linux server administration, WSL environments, and cross-platform automation. Claude generates POSIX-compatible scripts by default and will target a specific shell when asked.</p>
+
+  <h3>Example &mdash; Automated MySQL database backup with retention</h3>
+
+  <p><strong>Prompt used:</strong> <em>&ldquo;Write a bash script that backs up all MySQL databases to /var/backups/mysql with a timestamp in the filename, and deletes backups older than 7 days. The script will run as a cron job so it should log all output.&rdquo;</em></p>
+
+  <div class="code-header">
+    <span>bash</span>
+    <span>mysql-backup.sh</span>
+  </div>
+  <pre><code>#!/usr/bin/env bash
+# mysql-backup.sh — Full MySQL backup with timestamped files and retention cleanup.
+# Intended for cron. Logs to /var/log/mysql-backup.log.
+#
+# Usage: bash mysql-backup.sh
+# Cron:  0 2 * * * /opt/scripts/mysql-backup.sh
+
+set -euo pipefail
+
+readonly BACKUP_DIR="/var/backups/mysql"
+readonly LOG_FILE="/var/log/mysql-backup.log"
+readonly TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+readonly RETENTION_DAYS=7
+
+log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"; }
+
+# Ensure backup directory exists
+mkdir -p "$BACKUP_DIR"
+
+log "=== MySQL backup started ==="
+
+# Get list of databases (exclude system schemas)
+databases=$(mysql --defaults-extra-file=/etc/mysql/backup.cnf \
+    -e "SHOW DATABASES;" 2>>"$LOG_FILE" \
+    | grep -Ev "^(Database|information_schema|performance_schema|sys)$")
+
+if [[ -z "$databases" ]]; then
+    log "ERROR: No databases found or MySQL connection failed."
+    exit 1
+fi
+
+success_count=0
+fail_count=0
+
+for db in $databases; do
+    backup_file="$BACKUP_DIR/${db}_${TIMESTAMP}.sql.gz"
+    log "Backing up database: $db"
+
+    if mysqldump --defaults-extra-file=/etc/mysql/backup.cnf \
+            --single-transaction \
+            --routines \
+            --triggers \
+            "$db" 2>>"$LOG_FILE" | gzip > "$backup_file"; then
+        file_size=$(du -sh "$backup_file" | cut -f1)
+        log "  OK: $backup_file ($file_size)"
+        (( success_count++ ))
+    else
+        log "  FAILED: $db — see log for details"
+        rm -f "$backup_file"   # Remove incomplete file
+        (( fail_count++ ))
+    fi
+done
+
+# Remove backups older than retention period
+log "Removing backups older than $RETENTION_DAYS days..."
+old_count=$(find "$BACKUP_DIR" -name "*.sql.gz" -mtime +"$RETENTION_DAYS" | wc -l)
+find "$BACKUP_DIR" -name "*.sql.gz" -mtime +"$RETENTION_DAYS" -delete
+log "Removed $old_count old backup file(s)."
+
+log "=== Backup complete: $success_count succeeded, $fail_count failed ==="
+
+# Exit non-zero if any database failed
+[[ "$fail_count" -eq 0 ]]
+</code></pre>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Credentials in the backup script</div>
+    The script above uses <code>--defaults-extra-file=/etc/mysql/backup.cnf</code> rather than embedding a username and password in the script. Create <code>/etc/mysql/backup.cnf</code> with <code>chmod 600</code> permissions. Ask Claude: <em>&ldquo;What should my backup.cnf file look like?&rdquo;</em> and it will generate the correct format.
+  </div>
+
+  <h3>Other common Bash script prompts</h3>
+
+  <ul>
+    <li>"Write a bash script that monitors a log file for ERROR lines and sends an email alert when the count exceeds 10 in a minute"</li>
+    <li>"Write a script that checks whether a list of services is running on a remote server via SSH and restarts any that are down"</li>
+    <li>"Create a bash script that syncs a directory to an S3 bucket using the AWS CLI and logs the result"</li>
+    <li>"Write a script that rotates a log file daily, compresses files older than 7 days, and deletes files older than 30 days"</li>
+  </ul>
+
+  <!-- ─── 6.4 ─────────────────────────────────────────────────────────── -->
+  <h2 id="python-scripts">6.4 Python Scripts for Automation</h2>
+
+  <p>Python is well-suited for data processing, REST API integration, cross-platform automation, and scripts that need complex data structures or libraries. Claude generates well-structured Python with proper argument parsing, logging, and error handling.</p>
+
+  <h3>Example &mdash; AD account audit from a CSV</h3>
+
+  <p><strong>Prompt used:</strong> <em>&ldquo;Write a Python script that reads a CSV of employee usernames, checks each one against an AD REST API, and outputs a report of any accounts that no longer exist. Use argparse, proper logging, and handle network errors gracefully. Python 3.10+.&rdquo;</em></p>
+
+  <div class="code-header">
+    <span>Python 3.10+</span>
+    <span>audit_ad_accounts.py</span>
+  </div>
+  <pre><code>#!/usr/bin/env python3
+"""
+audit_ad_accounts.py
+
+Reads a CSV of employee usernames, checks each against the AD REST API,
+and writes a report of accounts not found in Active Directory.
+
+Usage:
+    python audit_ad_accounts.py employees.csv --ad-api https://ad.example.com/api
+    python audit_ad_accounts.py employees.csv --username-col samAccountName --output missing.csv
+"""
+
+import argparse
+import csv
+import logging
+import sys
+import urllib.error
+import urllib.request
+import json
+from datetime import datetime
+from pathlib import Path
+
+# ── Logging setup ──────────────────────────────────────────────────────────────
+def configure_logging(verbose: bool = False) -> None:
+    level = logging.DEBUG if verbose else logging.INFO
+    log_file = f"ad_audit_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s [%(levelname)-8s] %(message)s",
+        handlers=[
+            logging.FileHandler(log_file, encoding="utf-8"),
+            logging.StreamHandler(sys.stdout),
+        ],
+    )
+    logging.info("Log file: %s", log_file)
+
+
+# ── AD API helpers ─────────────────────────────────────────────────────────────
+def check_account_exists(username: str, api_base: str, timeout: int = 10) -> bool:
+    """Return True if the account exists in AD, False if not found or on error."""
+    url = f"{api_base.rstrip('/')}/users/{urllib.request.quote(username)}"
+    req = urllib.request.Request(url)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status == 200
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return False
+        logging.warning("HTTP %s querying %s: %s", exc.code, username, exc.reason)
+        return False
+    except urllib.error.URLError as exc:
+        logging.error("Network error querying %s: %s", username, exc.reason)
+        return False
+
+
+# ── Main ───────────────────────────────────────────────────────────────────────
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Audit AD accounts against a CSV of expected users."
+    )
+    parser.add_argument("csv_file", help="CSV file containing employee usernames")
+    parser.add_argument(
+        "--username-col", default="username",
+        help="Column name for usernames (default: username)"
+    )
+    parser.add_argument(
+        "--ad-api", default="https://ad.example.com/api",
+        help="AD REST API base URL"
+    )
+    parser.add_argument(
+        "--output", default="missing_accounts.csv",
+        help="Output CSV for missing accounts (default: missing_accounts.csv)"
+    )
+    parser.add_argument(
+        "--timeout", type=int, default=10,
+        help="HTTP request timeout in seconds (default: 10)"
+    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable debug logging")
+    args = parser.parse_args()
+
+    configure_logging(args.verbose)
+    log = logging.getLogger(__name__)
+
+    input_path = Path(args.csv_file)
+    if not input_path.exists():
+        log.error("Input file not found: %s", input_path)
+        return 1
+
+    missing_rows: list[dict] = []
+    checked = 0
+    errors  = 0
+
+    with open(input_path, newline="", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+
+        if args.username_col not in (reader.fieldnames or []):
+            log.error(
+                "Column '%s' not found. Available columns: %s",
+                args.username_col, reader.fieldnames
+            )
+            return 1
+
+        for row in reader:
+            username = row.get(args.username_col, "").strip()
+            if not username:
+                continue
+
+            checked += 1
+            log.debug("Checking: %s", username)
+
+            if check_account_exists(username, args.ad_api, args.timeout):
+                log.debug("  Found: %s", username)
+            else:
+                log.warning("  NOT FOUND in AD: %s", username)
+                missing_rows.append(row)
+
+    log.info(
+        "Audit complete. Checked: %d | Missing: %d | Errors: %d",
+        checked, len(missing_rows), errors
+    )
+
+    if missing_rows:
+        output_path = Path(args.output)
+        with open(output_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=missing_rows[0].keys())
+            writer.writeheader()
+            writer.writerows(missing_rows)
+        log.info("Missing accounts written to: %s", output_path)
+
+    return 0 if not missing_rows else 2   # Exit 2 = accounts found missing
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+</code></pre>
+
+  <div class="callout callout--success">
+    <div class="callout-label">What to notice in this script</div>
+    Claude structured this with a <strong>logging setup function</strong> (easy to disable), a <strong>separate API helper</strong> that handles all error cases without crashing, and a <strong>distinct exit code</strong> (0 = all good, 1 = script error, 2 = missing accounts found) so it integrates cleanly into monitoring pipelines.
+  </div>
+
+  <h3>Asking Claude to improve an existing Python script</h3>
+
+  <p>If you have a working but rough script, Claude can refactor it. Try prompts like:</p>
+
+  <ul>
+    <li>"Add argparse to this script so the input path and API URL are configurable"</li>
+    <li>"Refactor this script to use proper logging instead of print statements"</li>
+    <li>"Add retry logic for the API calls with exponential backoff"</li>
+    <li>"Make this script safe to run from a cron job by removing all interactive prompts"</li>
+    <li>"Add type hints and a docstring to each function"</li>
+  </ul>
+
+  <!-- ─── 6.5 ─────────────────────────────────────────────────────────── -->
+  <h2 id="debugging">6.5 Debugging Scripts with Claude</h2>
+
+  <p>When a script fails, Claude can diagnose the error faster than documentation lookups in most cases. The most effective debugging workflow gives Claude the full error message plus the relevant code section.</p>
+
+  <h3>Step-by-step debugging workflow</h3>
+
+  <ol class="steps">
+    <li>
+      <div class="step-body">
+        <p><strong>Paste the full error message</strong></p>
+        <p>Copy the complete error output, including the stack trace or line reference. Partial errors are harder to diagnose. Start with: <em>&ldquo;I got this error running my PowerShell script:&rdquo;</em></p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Claude identifies the cause</strong></p>
+        <p>Claude explains what the error means in plain language, why it&rsquo;s happening, and what the fix is. For common errors it will also tell you what future variations to watch for.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Add script context if needed</strong></p>
+        <p>If Claude&rsquo;s initial analysis doesn&rsquo;t fully match your situation, paste the relevant section of the script: <em>&ldquo;Here&rsquo;s the section around line 47 that it&rsquo;s failing on.&rdquo;</em></p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Ask for better error handling</strong></p>
+        <p>Once the immediate bug is fixed, ask Claude to harden the script: <em>&ldquo;Now add try/catch to each external call and write errors to a log file with a timestamp.&rdquo;</em></p>
+      </div>
+    </li>
+    <li>
+      <div class="step-body">
+        <p><strong>Test the fix</strong></p>
+        <p>Apply the fix, re-run with <code>-WhatIf</code> or against a single test target, and confirm the error is gone before running at scale.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Example debugging session</h3>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28CA41;"></div>
+      <span class="claude-ui-title">Claude &mdash; script debugging session</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">
+          <p>I got this error running my PowerShell script on the management server. It ran fine on my workstation last week:</p>
+          <pre style="margin:8px 0;font-size:0.82rem;"><code>Import-Module : The specified module 'ActiveDirectory' was not loaded
+because no valid module file was found in any module directory.
+At C:\Scripts\Find-InactiveADComputers.ps1:2 char:1
++ Import-Module ActiveDirectory
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (ActiveDirectory:String)
+    + FullyQualifiedErrorId : Modules_ModuleNotFound,Import-Module</code></pre>
+        </div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>This error means the <strong>ActiveDirectory PowerShell module isn&rsquo;t installed</strong> on the management server. It&rsquo;s part of the Remote Server Administration Tools (RSAT) and isn&rsquo;t present by default &mdash; your workstation had it installed separately.</p>
+          <p><strong>Fix depends on the OS:</strong></p>
+          <p><strong>Windows Server 2016/2019/2022</strong> (install the feature directly):</p>
+          <pre style="margin:4px 0 12px;font-size:0.82rem;"><code>Install-WindowsFeature -Name RSAT-AD-PowerShell</code></pre>
+          <p><strong>Windows 10/11 workstation</strong> (install as an optional feature):</p>
+          <pre style="margin:4px 0 12px;font-size:0.82rem;"><code>Add-WindowsCapability -Online `
+    -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0</code></pre>
+          <p>After installing, close and reopen PowerShell &mdash; the module won&rsquo;t be available in the same session. The module connects to AD remotely, so it doesn&rsquo;t need to run on the DC itself; any machine on the domain with RSAT installed will work.</p>
+          <p>If you don&rsquo;t have permission to install features on that server, ask your sysadmin to run the <code>Install-WindowsFeature</code> command for you.</p>
+        </div>
+      </div>
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">That fixed it, but now I&rsquo;m getting "Access is denied" when it tries to query AD. The script runs as my regular account.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>The <code>Get-ADComputer</code> cmdlet needs read access to Active Directory. Regular user accounts can usually run basic AD queries, but "Access is denied" at the script level typically means one of two things:</p>
+          <ol style="margin:8px 0 12px;padding-left:1.2rem;">
+            <li>Your account doesn&rsquo;t have permission to read the specific OU you&rsquo;re searching</li>
+            <li>The <code>-SearchBase</code> OU path is incorrect and AD is refusing the query with an ambiguous error</li>
+          </ol>
+          <p><strong>Quick diagnostic</strong> &mdash; run this interactively under your own account to confirm you can reach AD at all:</p>
+          <pre style="margin:4px 0 12px;font-size:0.82rem;"><code>Get-ADComputer -Filter * -ResultSetSize 1</code></pre>
+          <p>If that works, the issue is the SearchBase. Run <code>(Get-ADDomain).DistinguishedName</code> to get the correct root DN to pass to the script.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Common script errors Claude can diagnose instantly</h3>
+
+  <table>
+    <thead>
+      <tr><th>Error type</th><th>Typical cause</th><th>What to give Claude</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Module not found</td>
+        <td>RSAT, ImportExcel, or other module not installed on target machine</td>
+        <td>Full error + OS version + where the script runs</td>
+      </tr>
+      <tr>
+        <td>Access denied</td>
+        <td>Script running as wrong account, or OU permissions insufficient</td>
+        <td>Error + the cmdlet that failed + service account name</td>
+      </tr>
+      <tr>
+        <td>WMI / CIM query failures</td>
+        <td>Firewall blocking WMI ports, or WMI service not running on target</td>
+        <td>Error message + target server name + network topology</td>
+      </tr>
+      <tr>
+        <td>Encoding errors in CSV</td>
+        <td>Non-UTF8 data or BOM issues between PowerShell versions</td>
+        <td>Error + what the CSV contains + how it was created</td>
+      </tr>
+      <tr>
+        <td>Pipeline object type mismatches</td>
+        <td>Cmdlet output type changed between PowerShell 5.1 and 7</td>
+        <td>Error + the specific pipeline expression that fails</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─── 6.6 ─────────────────────────────────────────────────────────── -->
+  <h2 id="running-scripts">6.6 Running Scripts Through Claude</h2>
+
+  <p>In some interfaces, Claude can write and execute scripts in a single workflow &mdash; you describe what you need, Claude generates the script, and you can ask it to run the script and interpret the results.</p>
+
+  <h3>From the Terminal CLI</h3>
+
+  <p>When Claude has <code>Bash</code> permission in the CLI, it can:</p>
+
+  <ul>
+    <li>Write a script file (<code>backup.sh</code>, <code>CheckAccounts.ps1</code>) directly to disk</li>
+    <li>Execute the script and capture its output</li>
+    <li>Display the output alongside an interpretation of what happened</li>
+    <li>Iterate based on the results &mdash; if an error occurs, Claude reads the output and suggests a fix without you having to re-paste anything</li>
+  </ul>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Permission and confirmation</div>
+    Claude will ask for explicit confirmation before running any script that modifies system state. For read-only scripts (reporting, auditing, querying), Claude can run them without interrupting you if you&rsquo;ve granted the appropriate Bash permission. See <a href="Technology Services - Claude IT Training Module 4 Permissions - 20260628.html">Module 4 &mdash; Permissions</a> for how to set this up correctly.
+  </div>
+
+  <h3>From VS Code</h3>
+
+  <p>With Claude active in VS Code, the write-test-iterate loop becomes tightly integrated:</p>
+
+  <ol>
+    <li>Ask Claude to write the script &mdash; it appears directly in your editor</li>
+    <li>Claude opens the integrated terminal and runs the script</li>
+    <li>Terminal output appears in the VS Code panel and Claude sees it</li>
+    <li>You can ask: <em>&ldquo;The output shows three servers failed &mdash; what went wrong?&rdquo;</em></li>
+    <li>Claude reads the output and responds in the same conversation</li>
+  </ol>
+
+  <h3>What Claude will not do without explicit confirmation</h3>
+
+  <div class="grid-2">
+    <div class="card" style="border-left:4px solid var(--color-accent);">
+      <h3 style="color:var(--color-accent);">Always asks first</h3>
+      <ul>
+        <li>Delete files or directories</li>
+        <li>Modify or disable AD accounts</li>
+        <li>Change system configuration or registry values</li>
+        <li>Restart services or servers</li>
+        <li>Write to locations outside the current project directory</li>
+        <li>Run scripts that would affect more than the current session</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--color-success);">
+      <h3 style="color:var(--color-success);">Can run without prompting (if permitted)</h3>
+      <ul>
+        <li>Query AD for computer or user objects</li>
+        <li>Check disk space, service status, or network connectivity</li>
+        <li>Read log files and generate reports</li>
+        <li>Run scripts with <code>-WhatIf</code> flag active</li>
+        <li>List directory contents or file metadata</li>
+        <li>Query databases in read-only mode</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── 6.7 ─────────────────────────────────────────────────────────── -->
+  <h2 id="best-practices">6.7 Script Writing Best Practices</h2>
+
+  <p>Whether Claude generates the first draft or you write it yourself, every production script at Acadia Technology Services should follow these practices. When prompting Claude, you can ask it to enforce all of them in a single request: <em>&ldquo;Write this script with full error handling, logging, -WhatIf support, and parameter validation.&rdquo;</em></p>
+
+  <div class="grid-3">
+
+    <div class="best-practice-card">
+      <div class="bp-icon">&#x1F9EA;</div>
+      <h3>Start with dry-run mode</h3>
+      <p>Add <code>-WhatIf</code> to PowerShell scripts and <code>--dry-run</code> or an <code>-n</code> flag to Bash/Python scripts. Run with the flag before the first real execution.</p>
+    </div>
+
+    <div class="best-practice-card">
+      <div class="bp-icon">&#x1F4CB;</div>
+      <h3>Always write a log file</h3>
+      <p>Automated scripts run unattended. A log file with timestamps is your only record when something goes wrong at 2&nbsp;am. Use <code>Start-Transcript</code> in PowerShell or redirect stdout in bash.</p>
+    </div>
+
+    <div class="best-practice-card">
+      <div class="bp-icon">&#x26A0;&#xFE0F;</div>
+      <h3>Handle errors explicitly</h3>
+      <p>Every call to an external system (AD, WMI, database, API) can fail. Wrap each in try/catch and log the exception. A script that silently continues after an error produces incorrect results.</p>
+    </div>
+
+    <div class="best-practice-card">
+      <div class="bp-icon">&#x1F527;</div>
+      <h3>Use parameters, not hardcoded values</h3>
+      <p>Replace hardcoded server names, paths, and thresholds with parameters (<code>-Server</code>, <code>-Path</code>, <code>-Threshold</code>). This makes scripts reusable across environments without editing source.</p>
+    </div>
+
+    <div class="best-practice-card">
+      <div class="bp-icon">&#x1F6AB;</div>
+      <h3>Test with non-production data</h3>
+      <p>Never test a script that modifies data on a live dataset. Use a test OU in AD, a staging database, or a non-critical server. Validate with <code>-WhatIf</code> first, then a single real target.</p>
+    </div>
+
+    <div class="best-practice-card">
+      <div class="bp-icon">&#x1F4C2;</div>
+      <h3>Version-control your scripts</h3>
+      <p>Every script that runs in production should live in a git repository. Include a changelog comment block at the top, increment a version number with each change, and commit after every working change.</p>
+    </div>
+
+  </div>
+
+  <h3>Asking Claude to enforce best practices on an existing script</h3>
+
+  <p>If you have a working but rough script that lacks these practices, paste it into Claude and ask:</p>
+
+  <div class="code-header">
+    <span>Example prompts</span>
+    <span></span>
+  </div>
+  <pre><code># Harden a script with full error handling
+"Here's my PowerShell script. Add try/catch to every external call,
+write errors to a log file at C:\Logs\script.log, and add a -WhatIf
+parameter so I can preview changes before running."
+
+# Make a script parameter-driven
+"Refactor this script so all hardcoded values (server names, paths,
+thresholds) become named parameters with sensible defaults and help text."
+
+# Add logging to a bash script
+"Add logging to this bash script. All output should go to both the
+console and /var/log/scripts/backup.log with timestamps."
+
+# Add a changelog header
+"Add a changelog comment block at the top of this script with version 1.0.0,
+today's date, my name as author, and a description of what the script does."</code></pre>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Credentials and secrets</div>
+    Never hardcode passwords, API keys, or service account credentials in a script. Claude will remind you of this and suggest the correct alternative: PowerShell&rsquo;s <code>Get-Credential</code>, a <code>.cnf</code> file with restricted permissions, environment variables, or a secrets manager. If you paste a script that contains credentials, Claude will flag them immediately and suggest how to remove them safely.
+  </div>
+
+  <div style="margin-top:var(--space-8);padding-top:var(--space-6);border-top:2px solid var(--color-primary-50);">
+    <h2 style="border:none;margin-top:0;">Module 6 Summary</h2>
+    <p>Claude is a capable co-author for IT automation scripts in PowerShell, Bash, and Python. The most effective workflow is: describe your environment and requirements clearly, let Claude generate a structured first draft, then review carefully and test in a safe environment before production use. Claude will enforce good practices &mdash; error handling, logging, parameter validation &mdash; if you ask, or you can add them after the fact with a targeted follow-up prompt.</p>
+    <p>The core rule for all script work with Claude: <strong>Claude writes, you validate, you approve.</strong> Claude does not know your production environment, your AD schema, or the edge cases that matter to Acadia IT operations &mdash; you do. Use Claude to handle the syntax and structure, and bring your own expertise to the logic and validation.</p>
+    <p>Continue to <a href="Technology Services - Claude IT Training Module 7 Data Management - 20260628.html">Module 7 &mdash; Data Management</a> to learn how Claude handles structured data, CSVs, and database queries.</p>
+  </div>
+
+</main>
+
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <a href="Technology Services - Claude IT Training Module 5 Git - 20260628.html">&#8592; Previous: Module 5 &mdash; Git with Claude</a>
+    <span>Module 6 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 7 Data Management - 20260628.html">Next: Module 7 &mdash; Data Management &#8594;</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span><strong>Technology Services</strong> &middot; Acadia University</span>
+    <span>Claude IT Training &middot; 2026 &middot; Module 6 of 10</span>
+  </div>
+</footer>
+
+</body>
+</html>

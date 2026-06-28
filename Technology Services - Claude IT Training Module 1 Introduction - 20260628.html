@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 — Introduction to Claude | Claude IT Training | Technology Services</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;700&display=swap');
+:root {
+  --color-primary:#004077;--color-primary-dark:#002F58;--color-primary-200:#B3C6D6;
+  --color-primary-50:#E6EDF3;--color-accent:#C41424;--color-accent-dark:#9E1019;
+  --color-accent-50:#FBE7E9;--color-ink:#1A1A1A;--color-gray-700:#3D3D3D;
+  --color-muted:#6B6B6B;--color-border:#D7DAE0;--color-surface-alt:#F5F6F8;
+  --color-surface:#FFFFFF;--color-success:#59A14F;--color-warning:#EDC949;
+  --color-error:#E15759;--color-info:#4E79A7;
+  --font-heading:"Montserrat","Lato",Arial,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --font-mono:"Cascadia Code","Consolas",monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+  --space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-sm:4px;--radius-md:8px;--shadow-card:0 1px 3px rgba(0,0,0,.12);
+  --claude-bg:#FAF9F5;--claude-accent:#D97757;--claude-border:#E8E4DC;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);font-size:1rem;line-height:1.6;color:var(--color-ink);background:var(--color-surface);}
+h1,h2,h3,h4{font-family:var(--font-heading);color:var(--color-primary);margin:0 0 var(--space-4);line-height:1.2;}
+h1{font-size:2rem;font-weight:700;}
+h2{font-size:1.5rem;font-weight:600;margin-top:var(--space-8);border-bottom:2px solid var(--color-primary-50);padding-bottom:var(--space-2);}
+h3{font-size:1.2rem;font-weight:600;margin-top:var(--space-6);}
+p{margin:0 0 var(--space-4);}
+small,.caption{font-size:0.85rem;color:var(--color-muted);}
+a{color:var(--color-primary);text-decoration:none;}
+a:hover{text-decoration:underline;color:var(--color-primary-dark);}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.5rem;}
+li{margin-bottom:var(--space-2);}
+.container{max-width:960px;margin:0 auto;padding:var(--space-8);}
+.site-header{background:var(--color-primary);color:#fff;padding:var(--space-4) var(--space-8);}
+.site-header h1{color:#fff;margin:0;font-size:1.4rem;}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:var(--space-4);}
+.logo-chip{background:#fff;border-radius:var(--radius-sm);padding:5px 12px;display:inline-flex;flex-shrink:0;font-family:var(--font-heading);font-weight:700;color:#004077;font-size:1.1rem;align-items:center;}
+.module-badge{background:var(--color-accent);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;margin-left:auto;}
+.breadcrumb{background:var(--color-primary-50);padding:var(--space-2) var(--space-8);font-size:0.85rem;color:var(--color-muted);border-bottom:1px solid var(--color-border);}
+.breadcrumb-inner{max-width:960px;margin:0 auto;}
+.breadcrumb a{color:var(--color-primary);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6);margin-bottom:var(--space-4);}
+.card h3{margin-top:0;}
+.callout{border-left:4px solid var(--color-accent);background:var(--color-accent-50);padding:var(--space-4);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:var(--space-6) 0;}
+.callout--info{border-left-color:var(--color-primary);background:var(--color-primary-50);}
+.callout--success{border-left-color:var(--color-success);background:#EFF8EE;}
+.callout--warning{border-left-color:#A07800;background:#FFFBEA;}
+.callout-label{font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--color-accent);}
+.callout--info .callout-label{color:var(--color-primary);}
+.callout--success .callout-label{color:var(--color-success);}
+.callout--warning .callout-label{color:#A07800;}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;margin-bottom:var(--space-6);}
+thead th{background:var(--color-primary);color:#fff;text-align:left;padding:var(--space-3);font-family:var(--font-heading);font-weight:600;}
+tbody td{padding:var(--space-3);border-bottom:1px solid var(--color-border);vertical-align:top;}
+tbody tr:nth-child(even){background:var(--color-surface-alt);}
+pre,code{font-family:var(--font-mono);font-size:0.88rem;}
+code{background:var(--color-surface-alt);padding:2px 6px;border-radius:3px;color:var(--color-gray-700);border:1px solid var(--color-border);}
+pre{background:#1E2433;color:#CDD5E0;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);overflow-x:auto;margin:var(--space-2) 0 var(--space-6);line-height:1.6;}
+pre code{background:none;color:inherit;border:none;padding:0;}
+.code-header{background:#2C3348;color:#8A9BB0;font-size:0.75rem;padding:var(--space-2) var(--space-6);border-radius:var(--radius-md) var(--radius-md) 0 0;font-family:var(--font-mono);display:flex;align-items:center;justify-content:space-between;}
+.code-header+pre{border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:0;}
+.steps{list-style:none;padding:0;margin:0 0 var(--space-6);counter-reset:step;}
+.steps>li{counter-increment:step;display:flex;gap:var(--space-4);margin-bottom:var(--space-4);align-items:flex-start;}
+.steps>li::before{content:counter(step);display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:50%;background:var(--color-primary);color:#fff;font-family:var(--font-heading);font-weight:700;font-size:0.9rem;flex-shrink:0;}
+.step-body{flex:1;padding-top:4px;}
+.step-body p{margin-bottom:var(--space-2);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-6);margin:var(--space-6) 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-4);margin:var(--space-6) 0;}
+.icon-card{text-align:center;padding:var(--space-6);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);}
+.icon-card .icon{font-size:2.5rem;margin-bottom:var(--space-3);}
+.icon-card h3{margin-top:0;font-size:1rem;}
+.claude-ui{background:var(--claude-bg);border:1px solid var(--claude-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-6) 0;}
+.claude-ui-titlebar{background:#2D2B2A;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:6px;}
+.claude-ui-dot{width:10px;height:10px;border-radius:50%;}
+.claude-ui-title{color:#8A8178;font-size:0.75rem;margin-left:var(--space-2);}
+.claude-ui-body{padding:var(--space-6);}
+.chat-msg{margin-bottom:var(--space-4);}
+.chat-msg .role{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.chat-msg.user .role{color:var(--color-muted);}
+.chat-msg.assistant .role{color:var(--claude-accent);}
+.chat-msg .bubble{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:0.92rem;line-height:1.5;}
+.chat-msg.user .bubble{background:#fff;border:1px solid var(--claude-border);}
+.chat-msg.assistant .bubble{background:var(--claude-bg);border-left:3px solid var(--claude-accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.badge{display:inline-block;font-size:0.78rem;font-weight:600;padding:2px 10px;border-radius:20px;}
+.badge--green{background:#EFF8EE;color:var(--color-success);border:1px solid #B8E0B4;}
+.badge--red{background:var(--color-accent-50);color:var(--color-accent);border:1px solid #F0AAAA;}
+.badge--blue{background:var(--color-primary-50);color:var(--color-primary);border:1px solid var(--color-primary-200);}
+.badge--gray{background:var(--color-surface-alt);color:var(--color-gray-700);border:1px solid var(--color-border);}
+.module-nav-bar{background:var(--color-primary-50);border-top:1px solid var(--color-border);padding:var(--space-4) var(--space-8);}
+.module-nav-bar-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.module-nav-bar a{font-weight:600;font-size:0.9rem;color:var(--color-primary);display:flex;align-items:center;gap:var(--space-2);}
+.site-footer{border-top:3px solid var(--color-accent);margin-top:var(--space-12);padding:var(--space-6) var(--space-8);color:var(--color-muted);font-size:0.85rem;background:var(--color-surface-alt);}
+.site-footer .footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.toc{background:var(--color-primary-50);border-left:4px solid var(--color-primary);padding:var(--space-4) var(--space-6);border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:var(--space-8);}
+.toc h4{margin:0 0 var(--space-3);color:var(--color-primary);font-size:0.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.toc ol{margin:0;padding-left:1.2rem;}
+.toc li{margin-bottom:var(--space-1);font-size:0.9rem;}
+.model-row{display:flex;gap:var(--space-4);margin:var(--space-6) 0;flex-wrap:wrap;}
+.model-card{flex:1;min-width:200px;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4);box-shadow:var(--shadow-card);}
+.model-card .model-name{font-family:var(--font-heading);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);}
+.model-card .model-tag{font-size:0.75rem;color:var(--color-muted);margin-bottom:var(--space-3);}
+.model-card.featured{border-color:var(--color-primary);border-top:3px solid var(--color-primary);}
+.hero-intro{background:linear-gradient(135deg,var(--color-primary) 0%,var(--color-primary-dark) 100%);color:#fff;border-radius:var(--radius-md);padding:var(--space-8);margin-bottom:var(--space-8);}
+.hero-intro h2{color:#fff;border-bottom:2px solid rgba(255,255,255,0.2);margin-top:0;}
+.hero-intro p{color:rgba(255,255,255,0.9);margin-bottom:0;}
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     SITE HEADER
+     ============================================================ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-chip">Acadia University</div>
+    <h1>Claude AI Training — Technology Services</h1>
+    <span class="module-badge">Module 1 of 10</span>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="Technology Services - Claude IT Training Module 1 Introduction - 20260628.html">Training Home</a> › Module 1 — Introduction to Claude
+  </div>
+</nav>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main class="container">
+
+  <!-- Hero intro panel -->
+  <div class="hero-intro">
+    <h2>Introduction to Claude</h2>
+    <p>This module gives every Technology Services staff member a solid foundation in what Claude is, how it thinks, where it fits into IT work, and what its real limits are. By the end you will be ready to open any of the three interfaces and get productive immediately.</p>
+  </div>
+
+  <!-- Table of contents -->
+  <div class="toc">
+    <h4>In this module</h4>
+    <ol>
+      <li><a href="#what-is-claude">What is Claude?</a></li>
+      <li><a href="#how-claude-fits">How Claude Fits Into IT Work</a></li>
+      <li><a href="#three-interfaces">The Three Interfaces</a></li>
+      <li><a href="#key-concepts">Key Concepts</a></li>
+      <li><a href="#conversation-example">Claude Conversation Example</a></li>
+      <li><a href="#plans">Claude Plans for Acadia</a></li>
+      <li><a href="#can-cannot">What Claude Can and Cannot Do</a></li>
+    </ol>
+  </div>
+
+  <!-- ============================================================
+       SECTION 1.1 — What is Claude?
+       ============================================================ -->
+  <h2 id="what-is-claude">1.1 What is Claude?</h2>
+
+  <p>Claude is a <strong>large language model (LLM)</strong> built by <strong>Anthropic</strong>, a US AI safety company founded in 2021. Anthropic's research focus is on building AI systems that are reliably safe and understandable — Claude is their flagship product of that mission.</p>
+
+  <p>At its core, Claude is a sophisticated text-processing system trained on enormous amounts of human-written text. It understands natural language instructions, generates coherent prose and structured data, writes and debugs code, and reasons through multi-step problems. You interact with it in plain English (or French, or most other languages), and it responds in kind.</p>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Design Principles</div>
+    Anthropic designed Claude around three properties: <strong>Helpful</strong> — genuinely useful for real tasks; <strong>Harmless</strong> — avoiding content that causes harm; <strong>Honest</strong> — acknowledging uncertainty rather than fabricating confident-sounding answers. These properties shape every response Claude gives.
+  </div>
+
+  <h3>What Claude understands and generates</h3>
+  <ul>
+    <li><strong>Natural language text</strong> — explanations, summaries, drafts, emails, documentation</li>
+    <li><strong>Code</strong> — PowerShell, Python, Bash, SQL, JavaScript, and dozens of other languages</li>
+    <li><strong>Structured data</strong> — CSV, JSON, XML, tables, configuration files</li>
+    <li><strong>Analytical reasoning</strong> — comparing options, diagnosing problems, evaluating trade-offs</li>
+    <li><strong>Formatted output</strong> — Markdown, HTML, numbered lists, step-by-step procedures</li>
+  </ul>
+
+  <h3>Available Claude Models</h3>
+  <p>Anthropic offers Claude in several tiers, each balancing speed, capability, and cost. For Technology Services use, the three you will encounter most often are:</p>
+
+  <div class="model-row">
+    <div class="model-card">
+      <div class="model-name">Claude Haiku 4.5</div>
+      <div class="model-tag">Fast &amp; Lightweight</div>
+      <p style="font-size:0.9rem;margin-bottom:0;">Best for quick, high-volume tasks: classifying a ticket, extracting a field from a log line, answering a simple factual question. Lowest latency, lowest cost per token.</p>
+    </div>
+    <div class="model-card featured">
+      <div class="model-name">Claude Sonnet 4.6 <span class="badge badge--blue">Default</span></div>
+      <div class="model-tag">Balanced Performance</div>
+      <p style="font-size:0.9rem;margin-bottom:0;">The everyday workhorse. Strong at scripting, documentation, data analysis, and code review. Most Technology Services tasks start here. This is the model used to build these training materials.</p>
+    </div>
+    <div class="model-card">
+      <div class="model-name">Claude Opus 4.8</div>
+      <div class="model-tag">Most Capable</div>
+      <p style="font-size:0.9rem;margin-bottom:0;">Reserved for the most complex reasoning tasks: designing a multi-system architecture, deeply analysing a large codebase, or resolving an ambiguous multi-step problem. Slower and more expensive per token.</p>
+    </div>
+  </div>
+
+  <div class="callout callout--warning">
+    <div class="callout-label">Important Limitation</div>
+    Claude is <strong>not connected to the internet by default.</strong> It does not browse the web, check live system status, or query external services unless you explicitly provide it with tools that do so. Its knowledge comes from its training data (with a knowledge cutoff date) plus whatever text you paste into the conversation. Always provide relevant context — logs, config files, error messages — rather than assuming Claude already knows your environment.
+  </div>
+
+  <!-- ============================================================
+       SECTION 1.2 — How Claude Fits Into IT Work
+       ============================================================ -->
+  <h2 id="how-claude-fits">1.2 How Claude Fits Into IT Work</h2>
+
+  <p>The most useful mental model for IT professionals is the <strong>productivity multiplier</strong>: Claude handles the mechanical, time-consuming, or cognitively expensive parts of a task so that you can focus your expertise on judgement, decision-making, and review.</p>
+
+  <p>Think of it this way: you still own every output. Claude drafts, you approve. Claude generates the first version of a script, you test and sign off. Claude summarises a pile of tickets, you decide what to escalate. The expertise never leaves the team — Claude just removes the friction around applying it.</p>
+
+  <div class="grid-3">
+    <div class="icon-card">
+      <div class="icon">&#128187;</div>
+      <h3>Write Code</h3>
+      <p style="font-size:0.9rem;">Generate PowerShell, Python, Bash, and SQL scripts from plain-English descriptions. Debug errors, refactor messy code, add comments and documentation.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128202;</div>
+      <h3>Analyse Data</h3>
+      <p style="font-size:0.9rem;">Paste log excerpts, CSV exports, or event viewer output and ask Claude to identify patterns, flag anomalies, or summarise what it sees.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128196;</div>
+      <h3>Create Docs</h3>
+      <p style="font-size:0.9rem;">Draft runbooks, KB articles, change requests, incident summaries, and user guides. Claude adapts tone for technical or non-technical audiences.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128270;</div>
+      <h3>Troubleshoot</h3>
+      <p style="font-size:0.9rem;">Describe a problem or paste an error. Claude walks through likely causes, asks clarifying questions, and suggests diagnostic steps.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#128202;</div>
+      <h3>Review Config</h3>
+      <p style="font-size:0.9rem;">Paste firewall rules, Group Policy settings, or YAML files and ask Claude to check for common misconfigurations or security issues.</p>
+    </div>
+    <div class="icon-card">
+      <div class="icon">&#127881;</div>
+      <h3>Draft Tickets</h3>
+      <p style="font-size:0.9rem;">Paste raw notes from a support call and ask Claude to structure them into a properly formatted incident or change ticket.</p>
+    </div>
+  </div>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Key Principle</div>
+    Claude does not replace IT expertise — it amplifies it. A junior team member with Claude still needs an experienced reviewer. An experienced team member with Claude can move significantly faster and produce more consistent outputs. <strong>Always review and test Claude's output before applying it in production.</strong>
+  </div>
+
+  <!-- ============================================================
+       SECTION 1.3 — The Three Interfaces
+       ============================================================ -->
+  <h2 id="three-interfaces">1.3 The Three Interfaces</h2>
+
+  <p>Claude is available through three distinct interfaces, each suited to different workflows. You will use all three as your comfort grows — Module 2 covers installation and hands-on use of each one. For now, understand what each interface is best at.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Interface</th>
+        <th>Best For</th>
+        <th>Key Feature</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Desktop App</strong><br><small>claude.ai/download</small></td>
+        <td>Rich research tasks, long conversations, multi-document work, team projects</td>
+        <td>File attachments (drag-and-drop), Projects that persist context across sessions, visual conversation management</td>
+      </tr>
+      <tr>
+        <td><strong>Terminal / CLI</strong><br><small><code>claude</code> command</small></td>
+        <td>Scripting, piping log output, quick lookups without leaving the shell, CI/CD integration</td>
+        <td>Pipe any command output directly to Claude; integrate into PowerShell and Bash workflows; no GUI required</td>
+      </tr>
+      <tr>
+        <td><strong>VS Code Extension</strong><br><small>VS Code Marketplace</small></td>
+        <td>Active software development, code review, inline suggestions, debugging in the editor</td>
+        <td>Full workspace context (Claude can see all your open files), inline code assistance, terminal integration, <code>/code-review</code> skill</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================
+       SECTION 1.4 — Key Concepts
+       ============================================================ -->
+  <h2 id="key-concepts">1.4 Key Concepts</h2>
+
+  <p>You will encounter these terms constantly in Claude documentation, in error messages, and in conversations with colleagues. Understand them now and the rest of the training will make considerably more sense.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Term</th>
+        <th>Definition</th>
+        <th>Practical Implication</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Context Window</strong></td>
+        <td>The total amount of text Claude can "see" at one time — both your inputs and its own outputs count against this limit. Think of it as Claude's short-term working memory.</td>
+        <td>Very long conversations or very large file attachments can approach the limit. Break big tasks into chunks, or start a fresh conversation for a new topic.</td>
+      </tr>
+      <tr>
+        <td><strong>Conversation</strong></td>
+        <td>A session in which Claude maintains context of everything that has been said so far. Each new conversation starts with a blank slate — Claude does not remember previous separate conversations.</td>
+        <td>Within a conversation you can refer to "the script you wrote earlier." In a new conversation you must re-provide that context.</td>
+      </tr>
+      <tr>
+        <td><strong>Prompt</strong></td>
+        <td>Your message or instruction to Claude. Prompts can be a single sentence or several paragraphs with pasted file contents, examples, and explicit instructions.</td>
+        <td>The quality of your prompt directly determines the quality of Claude's response. More context and clearer instructions consistently produce better output. Later modules cover prompt writing in depth.</td>
+      </tr>
+      <tr>
+        <td><strong>Token</strong></td>
+        <td>The unit Claude uses to measure text. Roughly three-quarters of a word, or about four characters of English text. A typical paragraph is around 100 tokens.</td>
+        <td>Context limits and plan usage are measured in tokens. A 200 KB log file pasted directly will consume a large portion of a typical context window.</td>
+      </tr>
+      <tr>
+        <td><strong>System Prompt</strong></td>
+        <td>A set of instructions provided to Claude before the conversation begins, shaping its persona, tone, and constraints for the entire session. Used by developers and administrators to customise behaviour.</td>
+        <td>In the desktop app, Projects can have a system prompt. In the CLI, you can pass a system prompt via flags. This is how you bake in IT-specific context ("You are a Tier 2 support analyst at a Canadian university") that persists across every message.</td>
+      </tr>
+      <tr>
+        <td><strong>Model</strong></td>
+        <td>The specific version of Claude being used — Haiku, Sonnet, or Opus, each with different capability and speed trade-offs.</td>
+        <td>You select the model in the desktop app's model picker, with the <code>--model</code> flag in the CLI, or by setting a default in VS Code. When in doubt, start with Sonnet.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Memory vs Context</div>
+    A common point of confusion: Claude does not have persistent memory between separate conversations. What it <em>does</em> have is excellent recall of everything within the current conversation's context window. Use <strong>Projects</strong> (desktop app) or well-crafted system prompts (CLI/API) when you need consistent context across multiple sessions.
+  </div>
+
+  <!-- ============================================================
+       SECTION 1.5 — Conversation Example
+       ============================================================ -->
+  <h2 id="conversation-example">1.5 Claude Conversation Example</h2>
+
+  <p>Here is a representative IT conversation showing how Claude handles a real scripting request. Notice how it immediately produces a working script, explains its choices, and suggests improvements — without needing to be asked for each part separately.</p>
+
+  <div class="claude-ui">
+    <div class="claude-ui-titlebar">
+      <div class="claude-ui-dot" style="background:#FF5F57;"></div>
+      <div class="claude-ui-dot" style="background:#FFBD2E;"></div>
+      <div class="claude-ui-dot" style="background:#28C840;"></div>
+      <span class="claude-ui-title">Claude — Technology Services Workspace</span>
+    </div>
+    <div class="claude-ui-body">
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Write a PowerShell script to list all services that have failed in the last 24 hours and export the results to a CSV file. I want the service name, display name, status, and the last time the status changed.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>Here's a PowerShell script that queries the Windows event log for service control manager events and correlates them with current service status:</p>
+          <div class="code-header">
+            <span>PowerShell — Export-FailedServices.ps1</span>
+            <span>Script</span>
+          </div>
+<pre><code><span style="color:#79B8FF;">#Requires -RunAsAdministrator</span>
+<span style="color:#FDAEB7;">&lt;#
+.SYNOPSIS
+    Lists services that have failed in the last 24 hours and exports to CSV.
+.OUTPUTS
+    CSV file at the path specified by $OutputPath
+#&gt;</span>
+
+param(
+    [string]$OutputPath = ".\Failed-Services-$(Get-Date -Format 'yyyyMMdd-HHmm').csv",
+    [int]$HoursBack = 24
+)
+
+$cutoff = (Get-Date).AddHours(-$HoursBack)
+
+<span style="color:#79B8FF;"># Query Service Control Manager events for failures (Event ID 7034/7031)</span>
+$failEvents = Get-WinEvent -FilterHashtable @{
+    LogName   = 'System'
+    Id        = 7034, 7031
+    StartTime = $cutoff
+} -ErrorAction SilentlyContinue
+
+$results = foreach ($event in $failEvents) {
+    $svcName = ($event.Properties[0].Value -as [string])
+    $svc     = Get-Service -Name $svcName -ErrorAction SilentlyContinue
+
+    [PSCustomObject]@{
+        ServiceName  = $svcName
+        DisplayName  = if ($svc) { $svc.DisplayName } else { 'N/A' }
+        CurrentStatus = if ($svc) { $svc.Status }     else { 'Not Found' }
+        EventTime    = $event.TimeCreated
+        EventId      = $event.Id
+        EventMessage = $event.Message -replace '\r?\n',' '
+    }
+}
+
+if ($results) {
+    $results | Export-Csv -Path $OutputPath -NoTypeInformation -Encoding UTF8
+    Write-Host "Exported $($results.Count) events to $OutputPath" -ForegroundColor Green
+    $results | Format-Table -AutoSize
+} else {
+    Write-Host "No service failures found in the last $HoursBack hours." -ForegroundColor Yellow
+}</code></pre>
+          <p><strong>How to use it:</strong></p>
+          <ul style="margin-bottom:0;">
+            <li>Run as Administrator (required for WinEvent log access)</li>
+            <li><code>.\Export-FailedServices.ps1</code> — default 24 hours, auto-named CSV in current directory</li>
+            <li><code>.\Export-FailedServices.ps1 -HoursBack 48 -OutputPath "C:\Logs\failures.csv"</code> — custom range and path</li>
+          </ul>
+          <p style="margin-top:12px;margin-bottom:0;"><strong>Note:</strong> Event IDs 7034 (unexpected termination) and 7031 (terminated on crash) cover most failure scenarios. Want me to add 7023 (terminated with error) or filter to specific service names?</p>
+        </div>
+      </div>
+      <div class="chat-msg user">
+        <div class="role">You</div>
+        <div class="bubble">Yes — add 7023 and also add a column for whether the service is set to auto-restart on failure.</div>
+      </div>
+      <div class="chat-msg assistant">
+        <div class="role">Claude</div>
+        <div class="bubble">
+          <p>Done. I've added event ID 7023 to the filter and queried the service's failure recovery configuration via <code>sc.exe qfailure</code> to populate an <code>AutoRestart</code> column. I'll include the updated script in my next message — just say the word.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="caption">Example conversation — Claude produces a working, parameterised script, explains its design choices, and offers to refine based on follow-up questions. Notice it does not wait to be asked for clarification — it proactively flags the event ID options.</p>
+
+  <!-- ============================================================
+       SECTION 1.6 — Plans for Acadia
+       ============================================================ -->
+  <h2 id="plans">1.6 Claude Plans for Acadia</h2>
+
+  <p>Claude is offered through Anthropic's subscription tiers. Understanding the tiers helps you choose the right access level for individual staff members and departmental deployments.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Free Tier</h3>
+      <span class="badge badge--gray">Personal use</span>
+      <p style="margin-top:var(--space-3);">Limited daily usage, access to Sonnet and Haiku models, no persistent Projects. Suitable for occasional exploration and personal learning. Not recommended for production IT work — usage limits will interrupt workflows.</p>
+    </div>
+    <div class="card">
+      <h3>Pro Plan</h3>
+      <span class="badge badge--blue">Recommended — Power users</span>
+      <p style="margin-top:var(--space-3);">Significantly higher usage limits, priority access during peak periods, access to all models including Opus 4.8, full Projects support. Recommended for individual Technology Services staff members who use Claude daily.</p>
+    </div>
+    <div class="card">
+      <h3>Teams Plan</h3>
+      <span class="badge badge--green">Recommended — Departments</span>
+      <p style="margin-top:var(--space-3);">Shared workspace with team-level Projects, centralised billing, higher context windows, and admin controls for managing members. The right choice for a Technology Services shared workspace where multiple staff collaborate on the same Projects.</p>
+    </div>
+    <div class="card">
+      <h3>Enterprise Plan</h3>
+      <span class="badge badge--blue">Large deployments</span>
+      <p style="margin-top:var(--space-3);">SSO integration (SAML/OIDC), advanced admin controls, audit logging, custom data retention policies, and dedicated support. Appropriate if Acadia pursues institution-wide deployment or needs compliance-level data governance.</p>
+    </div>
+  </div>
+
+  <div class="callout callout--info">
+    <div class="callout-label">Getting Access</div>
+    Contact <strong>Technology Services</strong> to arrange departmental or individual Pro/Teams access. Do not use personal free accounts for work that involves university data, student records, or systems credentials — consult the data classification policy before pasting any sensitive content into Claude.
+  </div>
+
+  <!-- ============================================================
+       SECTION 1.7 — Can and Cannot Do
+       ============================================================ -->
+  <h2 id="can-cannot">1.7 What Claude Can and Cannot Do</h2>
+
+  <p>Setting accurate expectations is critical. Claude is remarkably capable in many areas, but it has genuine limitations that matter for IT work. Knowing both sides prevents both under-use (not reaching for it when it would help) and over-trust (accepting output without appropriate validation).</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Claude <span class="badge badge--green">CAN</span> do this</th>
+        <th>Claude <span class="badge badge--red">CANNOT</span> do this (by default)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Write, debug, and explain code in most languages</td>
+        <td>Access the internet, browse websites, or check live data</td>
+      </tr>
+      <tr>
+        <td>Draft technical documentation, runbooks, and KB articles</td>
+        <td>Remember anything from a previous separate conversation</td>
+      </tr>
+      <tr>
+        <td>Analyse log files, event exports, and CSV data you paste in</td>
+        <td>Execute code or run commands on any system</td>
+      </tr>
+      <tr>
+        <td>Explain concepts — networking, security, Group Policy, Active Directory</td>
+        <td>Connect to Acadia systems, databases, or network resources</td>
+      </tr>
+      <tr>
+        <td>Review configuration files for common issues and misconfigurations</td>
+        <td>Guarantee its output is correct — all code must be tested</td>
+      </tr>
+      <tr>
+        <td>Summarise and categorise support tickets from pasted text</td>
+        <td>Access files on your computer unless you explicitly paste or attach them</td>
+      </tr>
+      <tr>
+        <td>Compare options and recommend approaches based on provided context</td>
+        <td>Provide real-time pricing, version numbers, or release notes beyond its training cutoff</td>
+      </tr>
+      <tr>
+        <td>Transform data formats — JSON to CSV, YAML to TOML, etc.</td>
+        <td>Authenticate to services or act as a user in external systems</td>
+      </tr>
+      <tr>
+        <td>Generate realistic test data for development environments</td>
+        <td>Replace human judgement on policy, security approvals, or change management decisions</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">The Golden Rule</div>
+    Claude produces <em>drafts and suggestions</em>, not final authoritative outputs. Every script it writes needs to be read and tested. Every document it drafts needs to be reviewed for accuracy. Every recommendation it makes needs to be evaluated against your knowledge of the actual environment. Treat Claude as an expert colleague who does not know your specific organisation — smart enough to produce good starting points, but needing your local knowledge to get to the finish line.
+  </div>
+
+  <h3>When Claude Makes Mistakes</h3>
+  <p>Claude can confidently state things that are wrong — a phenomenon called <em>hallucination</em>. For IT work this most often appears as:</p>
+  <ul>
+    <li>Incorrect or invented PowerShell/Python syntax that looks plausible but does not run</li>
+    <li>Wrong default values for configuration settings</li>
+    <li>Outdated information about software versions, deprecated APIs, or changed behaviour</li>
+    <li>Plausible-sounding but fabricated event IDs, registry keys, or file paths</li>
+  </ul>
+  <p>The remedy is always the same: test in a non-production environment first, verify against official documentation, and use your expertise to catch what looks off. Claude is aware of this limitation and will often flag uncertainty — but not always, so do not rely on it to self-report errors.</p>
+
+  <div class="callout callout--success">
+    <div class="callout-label">Ready for Module 2</div>
+    You now understand what Claude is, how it fits into Technology Services workflows, what its key concepts mean, and where its limits are. Module 2 walks through installing and using each of the three interfaces — Desktop App, Terminal CLI, and VS Code Extension — with hands-on examples for each.
+  </div>
+
+</main>
+
+<!-- ============================================================
+     MODULE NAVIGATION BAR
+     ============================================================ -->
+<div class="module-nav-bar">
+  <div class="module-nav-bar-inner">
+    <span style="color:var(--color-muted);font-size:0.9rem;">&#8592; Start of series</span>
+    <span style="font-size:0.9rem;color:var(--color-muted);">Module 1 of 10</span>
+    <a href="Technology Services - Claude IT Training Module 2 Interfaces - 20260628.html">Next: Module 2 — Interfaces &#8594;</a>
+  </div>
+</div>
+
+<!-- ============================================================
+     SITE FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span><strong>Technology Services</strong> &middot; Acadia University</span>
+    <span>Claude IT Training &middot; 2026 &middot; Module 1 of 10</span>
+  </div>
+</footer>
+
+</body>
+</html>
